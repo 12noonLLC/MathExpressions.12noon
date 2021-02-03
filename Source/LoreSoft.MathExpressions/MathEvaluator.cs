@@ -477,7 +477,7 @@ namespace LoreSoft.MathExpressions
 
             if (_calculationStack.Any())
             {
-                throw new ParseException(String.Format("{0}Items '{1}' were remaining on calculation stack.", Resources.InvalidSymbolOnStack, string.Join(", ", _calculationStack)));
+				    throw new ParseException(string.Format(CultureInfo.InvariantCulture, "{0}Items '{1}' were remaining on calculation stack.", Resources.InvalidSymbolOnStack, string.Join(", ", _calculationStack)));
             }
 
             return result;

@@ -25,27 +25,27 @@ namespace LoreSoft.MathExpressions
             {
                 case "+":
                     base.Evaluate = new MathEvaluate(Add);
-                    _mathOperator = MathOperators.Add;
+                    _mathOperator = MathOperator.Add;
                     break;
                 case "-":
                     base.Evaluate = new MathEvaluate(Subtract);
-                    _mathOperator = MathOperators.Subtract;
+                    _mathOperator = MathOperator.Subtract;
                     break;
                 case "*":
                     base.Evaluate = new MathEvaluate(Multiple);
-                    _mathOperator = MathOperators.Multiple;
+                    _mathOperator = MathOperator.Multiple;
                     break;
                 case "/":
                     base.Evaluate = new MathEvaluate(Divide);
-                    _mathOperator = MathOperators.Divide;
+                    _mathOperator = MathOperator.Divide;
                     break;
                 case "%":
                     base.Evaluate = new MathEvaluate(Modulo);
-                    _mathOperator = MathOperators.Modulo;
+                    _mathOperator = MathOperator.Modulo;
                     break;
                 case "^":
                     base.Evaluate = new MathEvaluate(Power);
-                    _mathOperator = MathOperators.Power;
+                    _mathOperator = MathOperator.Power;
                     break;
 
                 default:
@@ -53,11 +53,11 @@ namespace LoreSoft.MathExpressions
             }
         }
 
-        private MathOperators _mathOperator;
+        private MathOperator _mathOperator;
 
         /// <summary>Gets the math operator.</summary>
         /// <value>The math operator.</value>
-        public MathOperators MathOperator
+        public MathOperator MathOperator
         {
             get { return _mathOperator; }
         }

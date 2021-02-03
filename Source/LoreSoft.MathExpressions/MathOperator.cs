@@ -1,7 +1,7 @@
 namespace LoreSoft.MathExpressions
 {
     /// <summary>Math Operators</summary>
-    public enum MathOperators
+    public enum MathOperator
     {
         /// <summary>Add Operator</summary>
         Add,
