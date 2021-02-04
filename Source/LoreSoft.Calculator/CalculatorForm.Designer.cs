@@ -1005,7 +1005,7 @@ namespace LoreSoft.Calculator
       this.statusStrip.PerformLayout();
       this.ResumeLayout(false);
       this.PerformLayout();
-
+		this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
         }
 
         #endregion
