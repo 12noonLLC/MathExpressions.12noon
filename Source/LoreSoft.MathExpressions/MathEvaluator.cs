@@ -434,7 +434,7 @@ namespace LoreSoft.MathExpressions
             }
             else if (FunctionExpression.IsFunction(p))
             {
-                e = new FunctionExpression(p, false);
+                e = new FunctionExpression(p);
                 _expressionCache.Add(p, e);
             }
             else if (ConvertExpression.IsConvertExpression(p))
