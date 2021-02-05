@@ -9,11 +9,11 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-[assembly: System.Reflection.AssemblyTitle("LoreSoft.MathExpressions")]
-[assembly: System.Reflection.AssemblyProduct("LoreSoft.MathExpressions")]
-[assembly: System.Reflection.AssemblyDescription("Math Expression Parser.")]
-[assembly: System.Reflection.AssemblyCompany("LoreSoft")]
-[assembly: System.Reflection.AssemblyCopyright("Copyright © 2015 Paul Welter")]
+[assembly: System.Reflection.AssemblyTitle("MathExpressions")]
+[assembly: System.Reflection.AssemblyProduct("CalculateX")]
+[assembly: System.Reflection.AssemblyDescription("Math expression parser")]
+[assembly: System.Reflection.AssemblyCompany("12noon")]
+[assembly: System.Reflection.AssemblyCopyright("© 2021 12noon, Stefan K.S. Tucker, © 2015 Paul Welter")]
 [assembly: System.Runtime.InteropServices.Guid("348985f4-3fcf-4ec3-b207-6f09e918b297")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.CLSCompliant(true)]
@@ -25,25 +25,25 @@
 
 internal sealed partial class ThisAssembly {
     
-    internal const string AssemblyTitle = "LoreSoft.MathExpressions";
+    internal const string AssemblyTitle = "MathExpressions";
     
-    internal const string AssemblyProduct = "LoreSoft.MathExpressions";
+    internal const string AssemblyProduct = "CalculateX";
     
-    internal const string AssemblyDescription = "Math Expression Parser.";
+    internal const string AssemblyDescription = "Math expression parser";
     
-    internal const string AssemblyCompany = "LoreSoft";
+    internal const string AssemblyCompany = "12noon";
     
-    internal const string AssemblyCopyright = "Copyright © 2015 Paul Welter";
+    internal const string AssemblyCopyright = "© 2021 12noon, Stefan K.S. Tucker, © 2015 Paul Welter";
     
     internal const string Guid = "348985f4-3fcf-4ec3-b207-6f09e918b297";
     
     internal const string AssemblyConfiguration = "Release";
     
-    internal const string AssemblyVersion = "1.2.0.0";
+    internal const string AssemblyVersion = "2.0.0.0";
     
-    internal const string AssemblyFileVersion = "1.2.0.0";
+    internal const string AssemblyFileVersion = "2.0.0.0";
     
-    internal const string AssemblyInformationalVersion = "1.2.0.0";
+    internal const string AssemblyInformationalVersion = "2.0.0.0";
     
     private ThisAssembly() {
     }

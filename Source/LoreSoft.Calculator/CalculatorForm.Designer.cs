@@ -669,7 +669,7 @@ namespace LoreSoft.Calculator
 			// 
 			this.aboutToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Help;
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
+			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.aboutToolStripMenuItem.Text = "&About...";
 			this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
 			// 
@@ -1003,7 +1003,7 @@ namespace LoreSoft.Calculator
 			this.MinimumSize = new System.Drawing.Size(400, 360);
 			this.Name = "CalculatorForm";
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Calculator.NET";
+			this.Text = "CalculateX";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.CalculatorForm_FormClosing);
 			this.Load += new System.EventHandler(this.CalculatorForm_Load);
 			this.mainMenuStrip.ResumeLayout(false);

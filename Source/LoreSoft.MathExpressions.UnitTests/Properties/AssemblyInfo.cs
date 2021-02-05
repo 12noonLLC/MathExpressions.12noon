@@ -2,12 +2,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("LoreSoft.MathExpressions.UnitTests")]
+[assembly: AssemblyTitle("MathExpressions.UnitTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("12noon")]
-[assembly: AssemblyProduct("LoreSoft.MathExpressions.UnitTests")]
-[assembly: AssemblyCopyright("©  2021 12noon, Stefan K.S. Tucker")]
+[assembly: AssemblyProduct("CalculateX")]
+[assembly: AssemblyCopyright("© 2021 12noon, Stefan K.S. Tucker")]
 [assembly: AssemblyTrademark("12noon")]
 [assembly: AssemblyCulture("")]
 

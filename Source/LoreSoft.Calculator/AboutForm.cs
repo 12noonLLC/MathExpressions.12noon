@@ -53,9 +53,10 @@ namespace LoreSoft.Calculator
             }
         }
 
-        private void loresoftLinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        private void loresoftLinkLabel_LinkClicked(object /*LinkLabel*/ sender, LinkLabelLinkClickedEventArgs e)
         {
-            System.Diagnostics.Process.Start("http://www.loresoft.com");
+            LinkLabel label = (LinkLabel)sender;
+            System.Diagnostics.Process.Start(label.Text);
         }
     }
 }
