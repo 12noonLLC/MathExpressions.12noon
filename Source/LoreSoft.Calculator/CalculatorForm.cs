@@ -64,9 +64,16 @@ namespace LoreSoft.Calculator
             cutToolStripButton.Enabled = cutToolStripMenuItem.Enabled;
             cutContextStripMenuItem.Enabled = cutToolStripMenuItem.Enabled;
 
-            pasteToolStripMenuItem.Enabled = inputTextBox.ContainsFocus && Clipboard.ContainsText();
-            pasteToolStripButton.Enabled = pasteToolStripMenuItem.Enabled;
-            pasteContextStripMenuItem.Enabled = pasteToolStripMenuItem.Enabled;
+			   try
+			   {
+				   pasteToolStripMenuItem.Enabled = inputTextBox.ContainsFocus && Clipboard.ContainsText();
+			   }
+			   catch (Exception)
+			   {
+               pasteToolStripMenuItem.Enabled = false;
+            }
+				pasteToolStripButton.Enabled = pasteToolStripMenuItem.Enabled;
+				pasteContextStripMenuItem.Enabled = pasteToolStripMenuItem.Enabled;
         }
 
         private void SetInputFromHistory()
