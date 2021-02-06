@@ -74,28 +74,32 @@ namespace LoreSoft.MathExpressions
 		static FunctionExpression()
 		{
 			// Note: The keys must be uppercase for <see cref="FunctionExpression"/>.
+
+			// Basic functions
+			MathFunctions.Add("SQRT",		new MathFunction(nameof(Math.Sqrt),		typeof(Double)));
 			MathFunctions.Add("ABS",		new MathFunction(nameof(Math.Abs),		typeof(Double)));
-			MathFunctions.Add("ACOS",		new MathFunction(nameof(Math.Acos),		typeof(Double)));
-			MathFunctions.Add("ASIN",		new MathFunction(nameof(Math.Asin),		typeof(Double)));
-			MathFunctions.Add("ATAN",		new MathFunction(nameof(Math.Atan),		typeof(Double)));
+			MathFunctions.Add("POW",		new MathFunction(nameof(Math.Pow),		typeof(Double), typeof(Double)));
+			MathFunctions.Add("MIN",		new MathFunction(nameof(Math.Min),		typeof(Double), typeof(Double)));
+			MathFunctions.Add("MAX",		new MathFunction(nameof(Math.Max),		typeof(Double), typeof(Double)));
+			MathFunctions.Add("ROUND",		new MathFunction(nameof(Math.Round),	typeof(Double), typeof(Int32)));
+			MathFunctions.Add("FLOOR",		new MathFunction(nameof(Math.Floor),	typeof(Double)));
 			MathFunctions.Add("CEILING",	new MathFunction(nameof(Math.Ceiling),	typeof(Double)));
+
+			// Trigonometric functions
 			MathFunctions.Add("COS",		new MathFunction(nameof(Math.Cos),		typeof(Double)));
 			MathFunctions.Add("COSH",		new MathFunction(nameof(Math.Cosh),		typeof(Double)));
-			MathFunctions.Add("EXP",		new MathFunction(nameof(Math.Exp),		typeof(Double)));
-			MathFunctions.Add("FLOOR",		new MathFunction(nameof(Math.Floor),	typeof(Double)));
-			MathFunctions.Add("LOG",		new MathFunction(nameof(Math.Log),		typeof(Double)));
-			MathFunctions.Add("LOG10",		new MathFunction(nameof(Math.Log10),	typeof(Double)));
+			MathFunctions.Add("ACOS",		new MathFunction(nameof(Math.Acos),		typeof(Double)));
 			MathFunctions.Add("SIN",		new MathFunction(nameof(Math.Sin),		typeof(Double)));
 			MathFunctions.Add("SINH",		new MathFunction(nameof(Math.Sinh),		typeof(Double)));
-			MathFunctions.Add("SQRT",		new MathFunction(nameof(Math.Sqrt),		typeof(Double)));
+			MathFunctions.Add("ASIN",		new MathFunction(nameof(Math.Asin),		typeof(Double)));
 			MathFunctions.Add("TAN",		new MathFunction(nameof(Math.Tan),		typeof(Double)));
 			MathFunctions.Add("TANH",		new MathFunction(nameof(Math.Tanh),		typeof(Double)));
+			MathFunctions.Add("ATAN",		new MathFunction(nameof(Math.Atan),		typeof(Double)));
 
-			MathFunctions.Add("MAX", new MathFunction(nameof(Math.Max), typeof(Double), typeof(Double)));
-			MathFunctions.Add("MIN", new MathFunction(nameof(Math.Min), typeof(Double), typeof(Double)));
-			MathFunctions.Add("POW", new MathFunction(nameof(Math.Pow), typeof(Double), typeof(Double)));
-
-			MathFunctions.Add("ROUND", new MathFunction(nameof(Math.Round), typeof(Double), typeof(Int32)));
+			// Logarithmic functions
+			MathFunctions.Add("EXP",		new MathFunction(nameof(Math.Exp),		typeof(Double)));
+			MathFunctions.Add("LOG",		new MathFunction(nameof(Math.Log),		typeof(Double)));
+			MathFunctions.Add("LOG10",		new MathFunction(nameof(Math.Log10),	typeof(Double)));
 		}
 
 
