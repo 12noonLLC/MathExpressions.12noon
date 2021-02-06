@@ -1,7 +1,9 @@
-Calculator.NET
+CalculateX
 ==========
 
-Calculator.NET - Calculator that evaluates math expressions
+CalculateX - Calculator that evaluates math expressions
+
+This project was forked from Calculator.NET.
 
 [![Build Status](https://ci.appveyor.com/api/projects/status/i4vqogfwurshk6ff?svg=true)](https://ci.appveyor.com/project/LoreSoft/calculator)
 
@@ -28,12 +30,12 @@ The library supports math expressions, functions unit conversion and variables. 
     
 Calculator that evaluates math expressions. 
 
-![Calculator.NET](https://raw.githubusercontent.com/loresoft/Calculator/master/Documentation/Calculator.NET.png)
+![CalculateX](https://raw.githubusercontent.com/skst/CalculateX/master/Documentation/CalculateX.png)
 
-### Calculator.NET Features
+### CalculateX Features
 
 * Evaluate math expressions including grouping
-* Support trigonometry and other function
+* Support trigonometry and other functions
 * Common unit conversion of the following types
     * Length
     * Mass
