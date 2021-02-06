@@ -115,7 +115,6 @@ namespace LoreSoft.MathExpressions.UnitTests
          double result = eval.Evaluate("sin(45)");
 
          Assert.AreEqual(expected, result);
-
       }
 
       [TestMethod]
@@ -125,7 +124,6 @@ namespace LoreSoft.MathExpressions.UnitTests
          double result = eval.Evaluate("sin(45) + 45");
 
          Assert.AreEqual(expected, result);
-
       }
 
       [TestMethod]
@@ -133,6 +131,7 @@ namespace LoreSoft.MathExpressions.UnitTests
       {
          double expected = Math.Pow(45, 2);
          double result = eval.Evaluate("pow(45, 2)");
+
          Assert.AreEqual(expected, result);
       }
 
@@ -143,7 +142,6 @@ namespace LoreSoft.MathExpressions.UnitTests
          double result = eval.Evaluate("min(45, 50)");
 
          Assert.AreEqual(expected, result);
-
       }
 
       [TestMethod]
@@ -151,6 +149,7 @@ namespace LoreSoft.MathExpressions.UnitTests
       {
          double expected = Math.Round(1.23456789, 4);
          double result = eval.Evaluate("round(1.23456789, 4)");
+
          Assert.AreEqual(expected, result);
       }
 
@@ -236,7 +235,6 @@ namespace LoreSoft.MathExpressions.UnitTests
          double result = eval.Evaluate("max(45, 50) + 45");
 
          Assert.AreEqual(expected, result);
-
       }
 
       [TestMethod]
@@ -263,7 +261,6 @@ namespace LoreSoft.MathExpressions.UnitTests
          double result = eval.Evaluate("i^2+5*i+14");
 
          Assert.AreEqual(expected, result);
-
       }
 
       [TestMethod]
@@ -313,28 +310,16 @@ namespace LoreSoft.MathExpressions.UnitTests
 
       class MultiplyBy10Expr : IExpression
       {
-         public int ArgumentCount
-         {
-            get
-            {
-               return 1;
-            }
-         }
+			public int ArgumentCount => 1;
 
-         private double Test(double[] numbers)
-         {
-            return 10 * numbers[0];
-         }
+			private double Test(double[] numbers) => 10 * numbers[0];
 
-         public MathEvaluate Evaluate
-         {
-            get { return Test; }
-            set
-            {
-               throw new NotImplementedException();
-            }
-         }
-      }
+			public MathEvaluate Evaluate
+			{
+				get => Test;
+				set => throw new NotImplementedException();
+			}
+		}
 
       [DataTestMethod]
       [DataRow("MB10(5)", 50d)]
@@ -352,14 +337,11 @@ namespace LoreSoft.MathExpressions.UnitTests
       {
 			public int ArgumentCount => 3;
 
-			private double AddThem(double[] numbers)
-         {
-            return numbers[0] + numbers[1] + numbers[2];
-         }
+			private double Test(double[] numbers) => numbers[0] + numbers[1] + numbers[2];
 
-         public MathEvaluate Evaluate
+			public MathEvaluate Evaluate
 			{
-				get => AddThem;
+				get => Test;
 				set => throw new NotImplementedException();
 			}
 		}
