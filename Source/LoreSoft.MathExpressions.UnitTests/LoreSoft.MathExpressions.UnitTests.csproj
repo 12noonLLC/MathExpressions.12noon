@@ -7,8 +7,8 @@
     <ProjectGuid>{28F172FF-144A-4016-AFE4-55B28FD1D902}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LoreSoft.MathExpressions.UnitTests</RootNamespace>
-    <AssemblyName>LoreSoft.MathExpressions.UnitTests</AssemblyName>
+    <RootNamespace>MathExpressions.UnitTests</RootNamespace>
+    <AssemblyName>MathExpressions.UnitTests</AssemblyName>
     <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -42,11 +42,12 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AttributeReaderTest.cs" />
     <Compile Include="ConvertExpressionTest.cs" />
     <Compile Include="MathEvaluatorTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Metadata\AttributeReaderTest.cs" />
     <Compile Include="UnitConversion.cs" />
+    <Compile Include="BasicMathEvaluationTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="MSTest.TestAdapter">

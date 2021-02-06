@@ -191,6 +191,62 @@ namespace LoreSoft.MathExpressions.UnitTests
          Assert.AreEqual(expected, result);
       }
 
+
+      [TestMethod]
+      public void TestAbsolute()
+      {
+         double expected = Math.Abs(2.4);
+         double result = eval.Evaluate("Abs(2.4)");
+         Assert.AreEqual(expected, result);
+
+         expected = Math.Abs(-2.5);
+         result = eval.Evaluate("Abs(-2.5)");
+         Assert.AreEqual(expected, result);
+      }
+
+      [TestMethod]
+      public void TestSquareRoot()
+      {
+         double expected = Math.Sqrt(26.4);
+         double result = eval.Evaluate("Sqrt(26.4)");
+         Assert.AreEqual(expected, result);
+
+         expected = Math.Sqrt(-2.5);
+         result = eval.Evaluate("Sqrt(-2.5)");
+         Assert.AreEqual(expected, result);
+      }
+
+      [TestMethod]
+      public void TestCeiling()
+      {
+         double expected = Math.Ceiling(2.4);
+         double result = eval.Evaluate("Ceiling(2.4)");
+         Assert.AreEqual(expected, result);
+
+         expected = Math.Ceiling(2.5);
+         result = eval.Evaluate("Ceiling(2.5)");
+         Assert.AreEqual(expected, result);
+
+         expected = Math.Ceiling(2.6);
+         result = eval.Evaluate("Ceiling(2.6)");
+         Assert.AreEqual(expected, result);
+      }
+
+      public void TestFloor()
+      {
+         double expected = Math.Floor(2.4);
+         double result = eval.Evaluate("Floor(2.4)");
+         Assert.AreEqual(expected, result);
+
+         expected = Math.Floor(2.5);
+         result = eval.Evaluate("Floor(2.5)");
+         Assert.AreEqual(expected, result);
+
+         expected = Math.Floor(2.6);
+         result = eval.Evaluate("Floor(2.6)");
+         Assert.AreEqual(expected, result);
+      }
+
       [TestMethod]
       public void EvaluateFunctionMax()
       {
