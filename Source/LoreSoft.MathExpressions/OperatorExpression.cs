@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using LoreSoft.MathExpressions.Properties;
 using System.Diagnostics.CodeAnalysis;
 
@@ -10,13 +11,20 @@ namespace LoreSoft.MathExpressions
     public class OperatorExpression : ExpressionBase
     {
         /// <summary>The supported math operators by this class.</summary>
-        private static readonly char[] operatorSymbols = new char[] {'+', '-', '*', '/', '%', '^'};
+        private static readonly char[] operatorSymbols = new char[] { '+', '-', '*', 'x', '/', '%', '^' };
 
-        /// <summary>Initializes a new instance of the <see cref="OperatorExpression"/> class.</summary>
-        /// <param name="operator">The operator to use for this class.</param>
-        /// <exception cref="ArgumentNullException">When the operator is null or empty.</exception>
-        /// <exception cref="ArgumentException">When the operator is invalid.</exception>
-        public OperatorExpression(string @operator)
+      /// <summary>
+      /// Determine whether the passed operator has higher or lower precedence.
+      /// </summary>
+      /// <param name="c">Operator to check</param>
+      /// <returns>Returns 2 if if the passed operator has a higher precedence; 1 if it is lower.</returns>
+      public static int Precedence(string c) => (c.Length == 1) && ((c[0] == '*') || (c[0] == 'x') || (c[0] == '/') || (c[0] == '%')) ? 2 : 1;
+
+      /// <summary>Initializes a new instance of the <see cref="OperatorExpression"/> class.</summary>
+      /// <param name="operator">The operator to use for this class.</param>
+      /// <exception cref="ArgumentNullException">When the operator is null or empty.</exception>
+      /// <exception cref="ArgumentException">When the operator is invalid.</exception>
+      public OperatorExpression(string @operator)
         {
             if (string.IsNullOrEmpty(@operator))
                 throw new ArgumentNullException("operator");
@@ -32,6 +40,7 @@ namespace LoreSoft.MathExpressions
                     _mathOperator = MathOperator.Subtract;
                     break;
                 case "*":
+                case "x":
                     base.Evaluate = new MathEvaluate(Multiple);
                     _mathOperator = MathOperator.Multiple;
                     break;
@@ -180,13 +189,10 @@ namespace LoreSoft.MathExpressions
             return IsSymbol(c);
         }
 
-        /// <summary>Determines whether the specified char is a math symbol.</summary>
-        /// <param name="c">The char to check.</param>
-        /// <returns><c>true</c> if the specified char is a math symbol; otherwise, <c>false</c>.</returns>
-        public static bool IsSymbol(char c)
-        {
-            return Array.Exists(operatorSymbols, delegate(char s) { return s == c; });
-        }
+		/// <summary>Determines whether the specified char is a math symbol.</summary>
+		/// <param name="c">The char to check.</param>
+		/// <returns><c>true</c> if the specified char is a math symbol; otherwise, <c>false</c>.</returns>
+		public static bool IsSymbol(char c) => operatorSymbols.Contains(c);
 
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

@@ -80,6 +80,49 @@ namespace MathExpressions.UnitTests
 		}
 
 		[TestMethod]
+		public void TestMultiplicationAlternate()
+		{
+			double expected = 128 * 45;
+			Assert.AreEqual(expected, eval.Evaluate("128 x 45"));
+			Assert.AreEqual(expected, eval.Evaluate("128x45"));
+
+			expected = 45 * 128;
+			Assert.AreEqual(expected, eval.Evaluate("45 x 128"));
+			Assert.AreEqual(expected, eval.Evaluate("45x128"));
+
+			expected = 10 + (45 * 128);
+			Assert.AreEqual(expected, eval.Evaluate("10 + 45 x 128"));
+			Assert.AreEqual(expected, eval.Evaluate("10+45x128"));
+
+			expected = (45 * 128) + 10;
+			Assert.AreEqual(expected, eval.Evaluate("45 x 128 + 10"));
+			Assert.AreEqual(expected, eval.Evaluate("45x128+10"));
+
+			expected = 45 * Math.Sqrt(25);
+			Assert.AreEqual(expected, eval.Evaluate("45 x sqrt(25)"));
+			Assert.AreEqual(expected, eval.Evaluate("45x sqrt(25)"));
+
+			expected = (45 * 128);
+			Assert.AreEqual(expected, eval.Evaluate("(45 x 128)"));
+			Assert.AreEqual(expected, eval.Evaluate("(45x128)"));
+
+			expected = 45 * (128 + 14);
+			Assert.AreEqual(expected, eval.Evaluate("45 x (128 + 14)"));
+			Assert.AreEqual(expected, eval.Evaluate("45x(128+14)"));
+
+			expected = (45 * (128 + 14));
+			Assert.AreEqual(expected, eval.Evaluate("(45 x (128 + 14))"));
+			Assert.AreEqual(expected, eval.Evaluate("(45x(128+14))"));
+		}
+
+		[TestMethod]
+		[ExpectedException(typeof(ParseException))]
+		public void TestMultiplicationX()
+		{
+			eval.Evaluate("(45xor(26))");
+		}
+
+		[TestMethod]
 		public void TestDivision()
 		{
 			double expected = 128d / 45d;

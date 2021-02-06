@@ -170,6 +170,10 @@ namespace LoreSoft.MathExpressions
                 if (TryNumber(lastChar))
                     continue;
 
+                // "x" performs multiplication so we have to check for it BEFORE strings.
+                if (TryOperator())
+                    continue;
+
                 if (TryString())
                     continue;
 
@@ -177,9 +181,6 @@ namespace LoreSoft.MathExpressions
                     continue;
 
                 if (TryComma())
-                    continue;
-
-                if (TryOperator())
                     continue;
 
                 if (TryEndGroup())
@@ -348,36 +349,48 @@ namespace LoreSoft.MathExpressions
             return true;
         }
 
-        private bool TryOperator()
-        {
-            if (!OperatorExpression.IsSymbol(_currentChar))
-                return false;
+		private bool TryOperator()
+		{
+			if (!OperatorExpression.IsSymbol(_currentChar))
+				return false;
 
-            bool repeat;
-            string s = _currentChar.ToString();
+         // Special case to allow 'x' to be a multiplication operator.
+         if ((_currentChar == 'x') && char.IsLetter((char)_expressionReader.Peek()))
+         {
+            return false;
+         }
 
-            do
-            {
-                string p = _symbolStack.Count == 0 ? string.Empty : _symbolStack.Peek();
-                repeat = false;
-                if (_symbolStack.Count == 0)
-                    _symbolStack.Push(s);
-                else if (p == "(")
-                    _symbolStack.Push(s);
-                else if (Precedence(s) > Precedence(p))
-                    _symbolStack.Push(s);
-                else
-                {
-                    IExpression e = GetExpressionFromSymbol(_symbolStack.Pop());
-                    _expressionQueue.Enqueue(e);
-                    repeat = true;
-                }
-            } while (repeat);
+         bool repeat;
+			string s = _currentChar.ToString();
 
-            return true;
-        }
+			do
+			{
+				string p = _symbolStack.Count == 0 ? string.Empty : _symbolStack.Peek();
+				repeat = false;
+				if (!_symbolStack.Any())
+				{
+					_symbolStack.Push(s);
+				}
+				else if (p == "(")
+				{
+					_symbolStack.Push(s);
+				}
+				else if (OperatorExpression.Precedence(s) > OperatorExpression.Precedence(p))
+				{
+					_symbolStack.Push(s);
+				}
+				else
+				{
+					IExpression e = GetExpressionFromSymbol(_symbolStack.Pop());
+					_expressionQueue.Enqueue(e);
+					repeat = true;
+				}
+			} while (repeat);
 
-        private bool TryNumber(char lastChar)
+			return true;
+		}
+
+		private bool TryNumber(char lastChar)
         {
             bool isNumber = NumberExpression.IsNumber(_currentChar);
             // only negative when last char is group start or symbol
@@ -448,15 +461,7 @@ namespace LoreSoft.MathExpressions
             return e;
         }
 
-        private static int Precedence(string c)
-        {
-            if (c.Length == 1 && (c[0] == '*' || c[0] == '/' || c[0] == '%'))
-                return 2;
-
-            return 1;
-        }
-
-        private double CalculateFromQueue()
+		  private double CalculateFromQueue()
         {
             double result;
             _calculationStack.Clear();
