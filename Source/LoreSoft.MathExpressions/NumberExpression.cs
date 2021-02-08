@@ -41,6 +41,7 @@ namespace LoreSoft.MathExpressions
         public static bool IsNumber(char c)
         {
             NumberFormatInfo f = CultureInfo.CurrentUICulture.NumberFormat;
+            //BUG: This will not work for a multi-character decimal separator.
             return char.IsDigit(c) || f.NumberDecimalSeparator.IndexOf(c) >= 0;
         }
 
@@ -50,6 +51,7 @@ namespace LoreSoft.MathExpressions
         public static bool IsNegativeSign(char c)
         {
             NumberFormatInfo f = CultureInfo.CurrentUICulture.NumberFormat;
+            //BUG: This will not work for a multi-character negative sign.
             return f.NegativeSign.IndexOf(c) >= 0;
         }
 
