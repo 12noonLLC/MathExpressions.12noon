@@ -59,6 +59,9 @@ namespace LoreSoft.MathExpressions.UnitTests
       {
          double result = eval.Evaluate("log10(10)");
          Assert.AreEqual(1d, result);
+
+         result = eval.Evaluate("log10(100)");
+         Assert.AreEqual(2d, result);
       }
 
       [TestMethod]
@@ -165,10 +168,8 @@ namespace LoreSoft.MathExpressions.UnitTests
       [TestMethod]
       public void EvaluateFunctionMinNested()
       {
-         double expected = Math.Min(3, Math.Min(45, 50));
-         double result = eval.Evaluate("min(3, min(45,50))");
-
-         Assert.AreEqual(expected, result);
+         Assert.AreEqual(Math.Min(3, Math.Min(45, 50)), eval.Evaluate("min(3, min(45,50))"));
+         Assert.AreEqual(Math.Min(Math.Min(45, 50), 3), eval.Evaluate("min(min(45,50), 3)"));
       }
 
       [TestMethod]
@@ -176,18 +177,40 @@ namespace LoreSoft.MathExpressions.UnitTests
       {
          double expected = Math.Min(3, (45 + 50));
          double result = eval.Evaluate("min(3, (45+50))");
+         Assert.AreEqual(expected, result);
 
+         expected = Math.Max((5), 3 * Math.Min(45, 50));
+         result = eval.Evaluate("Max((5), 3 * Min(45, 50))");
          Assert.AreEqual(expected, result);
       }
 
+      /// <summary>
+      /// The parser needs to track whether commas are at the same depth as a function.
+      /// </summary>
+      /// <see cref="MathEvaluator.TryComma"/>
+      /// <seealso cref="MathEvaluator.CountFunctionArguments"/>
       [TestMethod]
+      /// BUG: We would like these to work.
       [Ignore]
-      public void EvaluateFunctionMinWithinParenthesis()
+      public void EvaluateFunctionsWithinParenthesis()
       {
-         // TODO: This should work... but doesn't.
-         double expected = (3 * Math.Min(45, 50));
-         double result = eval.Evaluate("(3 * Min(45,50))");
+         double expected;
+         double result;
 
+			expected = (3 * Math.Min(45, 50));
+			result = eval.Evaluate("(3 * Min(45, 50))");
+			Assert.AreEqual(expected, result);
+
+			expected = Math.Sqrt((3 * Math.Min(45,50)));
+			result = eval.Evaluate("Sqrt((3 * Min(45,50)))");
+			Assert.AreEqual(expected, result);
+
+			expected = Math.Max((5), (3 * Math.Min(45, 50)));
+         result = eval.Evaluate("Max((5), (3 * Min(45, 50)))");
+         Assert.AreEqual(expected, result);
+
+         expected = (3 * Math.Min(45, 50)) + Math.Sqrt((3 * Math.Min(45, 50)));
+         result = eval.Evaluate("(3 * Min(45, 50)) + Sqrt((3 * Min(45,50)))");
          Assert.AreEqual(expected, result);
       }
 
@@ -266,23 +289,46 @@ namespace LoreSoft.MathExpressions.UnitTests
       }
 
       [DataTestMethod]
+      [DataRow("(1,2)")]
+      [ExpectedException(typeof(ParseException))]
+      public void EvaluateBadSyntax(string expr)
+      {
+         eval.Evaluate(expr);
+      }
+
+
+      [DataTestMethod]
       [DataRow("2*45,")]
       [DataRow("min(,2,3)")]
       [DataRow("sin(3,)")]
       [DataRow("min(min(3,4),,4)")]
-      [DataRow("min((1,2))")]
       [ExpectedException(typeof(ParseException))]
       public void EvaluateMisplacedComma(string expr)
       {
          eval.Evaluate(expr);
       }
 
-      [TestMethod, ExpectedException(typeof(ParseException))]
-      public void EvaluateFunctionHasTooManyArguments()
+
+      [DataTestMethod]
+      // This results in 3 things being added to expression queue, when only 2 are expected by MIN function
+      [DataRow("min((1,2),3)")]
+      // This results in 4 things being added to expression queue, when only 2 are expected by MAX function
+      [DataRow("max(1,2,3,4)")]
+      [ExpectedException(typeof(ParseException))]
+      public void EvaluateBadArguments(string expr)
       {
-         // This will result in 4 things being added to expression queue, when only 2 are expected by max function
-         eval.Evaluate("max(1,2,3,4)");
+         eval.Evaluate(expr);
       }
+
+
+      [DataTestMethod, ExpectedException(typeof(ParseException))]
+      [DataRow("min((1,2))")]
+      [DataRow("min((1))")]
+      public void EvaluateFunctionHasTooFewArguments(string expr)
+      {
+         eval.Evaluate(expr);
+      }
+
 
       [TestMethod]
       public void EvaluateFunctionMaxMath()
@@ -342,17 +388,14 @@ namespace LoreSoft.MathExpressions.UnitTests
       {
          double expected = 12;
          double result = eval.Evaluate("1 [ft->in]");
-
          Assert.AreEqual(expected, result);
 
          expected = 12;
          result = eval.Evaluate("1 [ft -> in]");
-
          Assert.AreEqual(expected, result);
       }
 
       [TestMethod]
-      [Ignore]
       public void EvaluateFunctionOverFunction()
       {
          double expected = Math.Sin(5) / Math.Sin(2);

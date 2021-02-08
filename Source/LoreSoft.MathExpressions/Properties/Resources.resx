@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="InvalidLengthOfArray" xml:space="preserve">
     <value>Invalid length of array.</value>
@@ -147,8 +147,8 @@
   <data name="InvalidOperator" xml:space="preserve">
     <value>Invalid operator: </value>
   </data>
-  <data name="InvalidArgumentCount" xml:space="preserve">
-    <value>Invalid number of arguments: </value>
+  <data name="InvalidArgumentCount1" xml:space="preserve">
+    <value>Invalid number of arguments for {0}</value>
   </data>
   <data name="VariableNameConflict" xml:space="preserve">
     <value>The variable name conflicts with function '{0}'.</value>

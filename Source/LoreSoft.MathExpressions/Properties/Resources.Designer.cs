@@ -79,11 +79,11 @@ namespace LoreSoft.MathExpressions.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid number of arguments: .
+        ///   Looks up a localized string similar to Invalid number of arguments for {0}.
         /// </summary>
-        internal static string InvalidArgumentCount {
+        internal static string InvalidArgumentCount1 {
             get {
-                return ResourceManager.GetString("InvalidArgumentCount", resourceCulture);
+                return ResourceManager.GetString("InvalidArgumentCount1", resourceCulture);
             }
         }
         

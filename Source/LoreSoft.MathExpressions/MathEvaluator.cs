@@ -1,11 +1,11 @@
+using LoreSoft.MathExpressions.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Text;
-using LoreSoft.MathExpressions.Properties;
 using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace LoreSoft.MathExpressions
 {
@@ -37,13 +37,11 @@ namespace LoreSoft.MathExpressions
         private Stack<string> _symbolStack;
         private Queue<IExpression> _expressionQueue;
         private Dictionary<string, IExpression> _expressionCache;
-        private StringBuilder _buffer;
-        private Stack<double> _calculationStack;
-        private Stack<double> _parameters;
         private List<string> _innerFunctions;
         private uint _nestedFunctionDepth;
         private uint _nestedGroupDepth;
         private StringReader _expressionReader;
+      private StringBuilder _expressionBuilder;   // We need a copy to validate function arguments.
         private VariableDictionary _variables;
         private ReadOnlyCollection<string> _functions;        
         private char _currentChar;
@@ -61,9 +59,6 @@ namespace LoreSoft.MathExpressions
             _expressionCache = new Dictionary<string, IExpression>(StringComparer.OrdinalIgnoreCase);
             _symbolStack = new Stack<string>();
             _expressionQueue = new Queue<IExpression>();
-            _buffer = new StringBuilder();
-            _calculationStack = new Stack<double>();
-            _parameters = new Stack<double>(2);
             _nestedFunctionDepth = 0;
             _nestedGroupDepth = 0;
         }
@@ -105,6 +100,7 @@ namespace LoreSoft.MathExpressions
                 throw new ArgumentNullException("expression");
 
             _expressionReader = new StringReader(expression);
+            _expressionBuilder = new StringBuilder(expression);
             _symbolStack.Clear();
             _nestedFunctionDepth = 0;
             _nestedGroupDepth = 0;
@@ -163,6 +159,7 @@ namespace LoreSoft.MathExpressions
                     lastChar = _currentChar;
 
                 _currentChar = (char)_expressionReader.Read();
+               _expressionBuilder.Remove(0, 1);
 
                 if (char.IsWhiteSpace(_currentChar))
                     continue;
@@ -200,16 +197,17 @@ namespace LoreSoft.MathExpressions
             if (_currentChar != '[')
                 return false;
 
-            _buffer.Length = 0;
-            _buffer.Append(_currentChar);
+            StringBuilder buffer = new StringBuilder();
+            buffer.Append(_currentChar);
 
             char p = (char)_expressionReader.Peek();
             while (char.IsLetter(p) || char.IsWhiteSpace(p) || p == '-' || p == '>' || p == ']')
             {
                 if (!char.IsWhiteSpace(p))
-                    _buffer.Append((char)_expressionReader.Read());
+                    buffer.Append((char)_expressionReader.Read());
                 else
                     _expressionReader.Read();
+               _expressionBuilder.Remove(0, 1);
 
                 if (p == ']')
                     break;
@@ -217,14 +215,14 @@ namespace LoreSoft.MathExpressions
                 p = (char)_expressionReader.Peek();
             }
 
-            if (ConvertExpression.IsConvertExpression(_buffer.ToString()))
+            if (ConvertExpression.IsConvertExpression(buffer.ToString()))
             {
-                IExpression e = GetExpressionFromSymbol(_buffer.ToString());
+                IExpression e = GetExpressionFromSymbol(buffer.ToString());
                 _expressionQueue.Enqueue(e);
                 return true;
             }
 
-            throw new ParseException(Resources.InvalidConvertionExpression + _buffer);
+            throw new ParseException(Resources.InvalidConvertionExpression + buffer);
         }
 
         private bool TryString()
@@ -232,34 +230,119 @@ namespace LoreSoft.MathExpressions
             if (!char.IsLetter(_currentChar))
                 return false;
 
-            _buffer.Length = 0;
-            _buffer.Append(_currentChar);
+            StringBuilder buffer = new StringBuilder();
+            buffer.Append(_currentChar);
 
             char p = (char)_expressionReader.Peek();
-            while (char.IsLetter(p) || char.IsNumber(p))
+            while (char.IsLetterOrDigit(p))
             {
-                _buffer.Append((char)_expressionReader.Read());
+                buffer.Append((char)_expressionReader.Read());
+               _expressionBuilder.Remove(0, 1);
                 p = (char)_expressionReader.Peek();
             }
 
-            if (_variables.ContainsKey(_buffer.ToString()))
+   			string name = buffer.ToString();
+	   		if (_variables.ContainsKey(name))
             {
-                double value = _variables[_buffer.ToString()];
+                double value = _variables[name];
                 NumberExpression expression = new NumberExpression(value);
                 _expressionQueue.Enqueue(expression);
-
                 return true;
             }
 
-            if (IsFunction(_buffer.ToString()))
+            if (IsFunction(name))
             {
-                _symbolStack.Push(_buffer.ToString());
+   				_symbolStack.Push(name);
                 _nestedFunctionDepth++;
+
+               // Verify the number of arguments is correct.
+               var nArgs = CountFunctionArguments(name, _expressionBuilder.ToString());
+               var fexpr = GetExpressionFromSymbol(name);
+               if (nArgs != fexpr.ArgumentCount)
+	   			{
+                  throw new ParseException(String.Format(Resources.InvalidArgumentCount1, name));
+			   	}
                 return true;
             }
 
-            throw new ParseException(Resources.InvalidVariableEncountered + _buffer);
+            throw new ParseException(Resources.InvalidVariableEncountered + buffer);
         }
+
+		/// <summary>
+		/// Count the number of commas--at the SAME "group" level.
+		/// Add one to get the number of arguments to this function.
+		/// </summary>
+		/// <example>
+		/// (1)
+		/// (1, 2)
+		/// (1, sin(4))
+		/// (max(4, 5), min(4, 7))
+		/// (max(4, 5), 7 + 3)
+		/// (max(4, 5), (7 + 3))
+		/// </example>
+		/// <param name="name">The name of the function for exceptions.</param>
+		/// <param name="subExpression">The rest of the expression, beginning with the first character after the function name.</param>
+		/// <returns>The number of arguments in the function.</returns>
+		/// <exception cref="ParseException"/>
+		private int CountFunctionArguments(string name, string subExpression)
+		{
+			int nArgs = 1; // BUG: We assume one arg, but there could be zero. See below.
+
+			var feeder = subExpression.AsEnumerable();
+			// Read whitespace until (
+			feeder = feeder.SkipWhile(c => char.IsWhiteSpace(c));
+			if (feeder.First() != '(')
+			{
+				throw new ParseException(String.Format(Resources.InvalidArgumentCount1, name));
+			}
+			feeder = feeder.Skip(1);
+
+			int nGroupLevel = 0;
+
+         // If the groups are matched, we should finish before the end of the string.
+			while (feeder.Any())
+			{
+				//read until start-group, end-group, or argument separator: "(),"
+				feeder = feeder.SkipWhile(c => (c != '(') && (c != ')') && (c != ','));
+				switch (feeder.First())
+				{
+					case '(':
+                  feeder = feeder.Skip(1);
+                  ++nGroupLevel;
+						break;
+
+					case ')':
+						if (nGroupLevel == 0)
+						{
+							// same level as function, so we're done.
+							// BUG: Could be ZERO arguments. (If no non-whitespace found before this.)
+							return nArgs;
+						}
+                  feeder = feeder.Skip(1);
+                  --nGroupLevel;
+						break;
+
+					case ',':
+                  feeder = feeder.Skip(1);
+                  // If we're at the same level as the function, this is another argument.
+                  if (nGroupLevel == 0)
+                  {
+                     ++nArgs;
+                  }
+						else // The comma is NOT inside this function, which is invalid.
+						{
+                     // Unless we have nested functions, which IS valid.
+                     //throw new ParseException(String.Format(Resources.InvalidArgumentCount1, name));
+                  }
+                  break;
+
+					default:
+						throw new ParseException(String.Format(Resources.InvalidArgumentCount1, name));
+				}
+			}
+
+			throw new ParseException(String.Format(Resources.InvalidArgumentCount1, name));
+		}
 
         private bool TryStartGroup()
         {
@@ -281,8 +364,11 @@ namespace LoreSoft.MathExpressions
             if (_currentChar != ',')
                 return false;
 
-            if (_nestedFunctionDepth <= 0 ||
-                _nestedFunctionDepth < _nestedGroupDepth)
+            // If we are not inside a function, commas are invalid.
+            // OR if we are inside fewer functions than groups.
+            if ((_nestedFunctionDepth <= 0) ||
+                //This fails for "(3 * Min(45,50))" because the function is INSIDE a group. [fctDepth = 1; grpDepth = 2]
+                (_nestedFunctionDepth < _nestedGroupDepth))
             {
                 throw new ParseException(Resources.InvalidCharacterEncountered + _currentChar);
             }
@@ -302,6 +388,7 @@ namespace LoreSoft.MathExpressions
             while (next != -1 && char.IsWhiteSpace((char)next))
             {
                 _expressionReader.Read();
+               _expressionBuilder.Remove(0, 1);
                 next = _expressionReader.Peek();
             }
             return (char)next;
@@ -335,7 +422,6 @@ namespace LoreSoft.MathExpressions
                     }
 
                     _nestedGroupDepth--; 
-
                     break;
                 }
 
@@ -400,20 +486,21 @@ namespace LoreSoft.MathExpressions
             if (!isNumber && !isNegative)
                 return false;
 
-            _buffer.Length = 0;
-            _buffer.Append(_currentChar);
+            StringBuilder buffer = new StringBuilder();
+            buffer.Append(_currentChar);
 
             char p = (char)_expressionReader.Peek();
             while (NumberExpression.IsNumber(p))
             {
                 _currentChar = (char) _expressionReader.Read();
-                _buffer.Append(_currentChar);
+               _expressionBuilder.Remove(0, 1);
+                buffer.Append(_currentChar);
                 p = (char)_expressionReader.Peek();
             }
 
             double value;
-            if (!(double.TryParse(_buffer.ToString(), out value)))
-                throw new ParseException(Resources.InvalidNumberFormat + _buffer);
+            if (!(double.TryParse(buffer.ToString(), out value)))
+                throw new ParseException(Resources.InvalidNumberFormat + buffer);
 
             NumberExpression expression = new NumberExpression(value);
             _expressionQueue.Enqueue(expression);
@@ -463,29 +550,25 @@ namespace LoreSoft.MathExpressions
 
 		  private double CalculateFromQueue()
         {
-            double result;
-            _calculationStack.Clear();
+			Stack<double> calculationStack = new Stack<double>();
 
             foreach (IExpression expression in _expressionQueue)
             {
-                if (_calculationStack.Count < expression.ArgumentCount)
+				if (calculationStack.Count < expression.ArgumentCount)
                     throw new ParseException(Resources.NotEnoughNumbers + expression);
 
-                _parameters.Clear();
+               Stack<double> parameters = new Stack<double>(capacity: 2);
                 for (int i = 0; i < expression.ArgumentCount; i++)
-                    _parameters.Push(_calculationStack.Pop());
+                  parameters.Push(calculationStack.Pop());
 
-                _calculationStack.Push(expression.Evaluate.Invoke(_parameters.ToArray()));
+				calculationStack.Push(expression.Evaluate.Invoke(parameters.ToArray()));
             }
 
-            result = _calculationStack.Pop();
-
-            if (_calculationStack.Any())
-            {
-				    throw new ParseException(string.Format(CultureInfo.InvariantCulture, "{0}Items '{1}' were remaining on calculation stack.", Resources.InvalidSymbolOnStack, string.Join(", ", _calculationStack)));
-            }
-
-            return result;
+			/// Normally there would be only one value left on the stack.
+			/// However, since we now allow implied multiplication,
+			/// we multiply all remaining values to get the final result.
+			/// This places a greater burden on the parser.
+			return calculationStack.Aggregate(1.0, (accumulate, value) => accumulate * value);
         }
 
         #region IDisposable Members

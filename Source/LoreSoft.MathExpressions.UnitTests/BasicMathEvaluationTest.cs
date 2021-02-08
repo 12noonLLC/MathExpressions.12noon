@@ -77,6 +77,14 @@ namespace MathExpressions.UnitTests
 			expected = 45 * 128;
 			result = eval.Evaluate("(45 * 128)");
 			Assert.AreEqual(expected, result);
+
+			expected = 45 * 128;
+			result = eval.Evaluate("45 * (128)");
+			Assert.AreEqual(expected, result);
+
+			expected = 45 * 128;
+			result = eval.Evaluate("(45 * (128))");
+			Assert.AreEqual(expected, result);
 		}
 
 		[TestMethod]
@@ -116,10 +124,21 @@ namespace MathExpressions.UnitTests
 		}
 
 		[TestMethod]
-		[ExpectedException(typeof(ParseException))]
 		public void TestMultiplicationX()
 		{
-			eval.Evaluate("(45xor(26))");
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate("(45xor(26))"));
+		}
+
+		[TestMethod]
+		public void TestMultiplicationNoOperator()
+		{
+			double expected = 3 * 5;
+			Assert.AreEqual(expected, eval.Evaluate("3*(5)"));
+			Assert.AreEqual(expected, eval.Evaluate("3(5)"));
+
+			expected = (1+2)*(3+4);
+			Assert.AreEqual(expected, eval.Evaluate("(1+2)*(3+4)"));
+			Assert.AreEqual(expected, eval.Evaluate("(1+2)(3+4)"));
 		}
 
 		[TestMethod]
