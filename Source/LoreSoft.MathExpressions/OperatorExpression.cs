@@ -41,8 +41,8 @@ namespace LoreSoft.MathExpressions
                     break;
                 case "*":
                 case "x":
-                    base.Evaluate = new MathEvaluate(Multiple);
-                    _mathOperator = MathOperator.Multiple;
+                    base.Evaluate = new MathEvaluate(Multiply);
+                    _mathOperator = MathOperator.Multiply;
                     break;
                 case "/":
                     base.Evaluate = new MathEvaluate(Divide);
@@ -116,7 +116,7 @@ namespace LoreSoft.MathExpressions
         /// <returns>The result of the operation.</returns>
         /// <exception cref="ArgumentNullException">When numbers is null.</exception>
         /// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-        public double Multiple(double[] numbers)
+        public double Multiply(double[] numbers)
         {
             base.Validate(numbers);
             double? result = null;
