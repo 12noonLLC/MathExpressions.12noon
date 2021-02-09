@@ -120,37 +120,37 @@
   <data name="InvalidLengthOfArray" xml:space="preserve">
     <value>Invalid length of array.</value>
   </data>
-  <data name="InvalidFunctionName" xml:space="preserve">
+  <data name="InvalidFunctionName1" xml:space="preserve">
     <value>Invalid function name '{0}'.</value>
   </data>
   <data name="EvaluatePropertyCanNotBeNull" xml:space="preserve">
     <value>The IExpression.Evaluate property can not be null.</value>
   </data>
-  <data name="FunctionNameRegistered" xml:space="preserve">
+  <data name="FunctionNameRegistered1" xml:space="preserve">
     <value>The function name '{0}' is already registered.</value>
   </data>
-  <data name="InvalidCharacterEncountered" xml:space="preserve">
-    <value>Invalid character: </value>
+  <data name="InvalidCharacterEncountered1" xml:space="preserve">
+    <value>Invalid character: {0}</value>
   </data>
-  <data name="InvalidVariableEncountered" xml:space="preserve">
-    <value>Invalid function or variable: </value>
+  <data name="InvalidVariableEncountered1" xml:space="preserve">
+    <value>Invalid function or variable: {0}</value>
   </data>
   <data name="UnbalancedParentheses" xml:space="preserve">
     <value>Unbalanced parentheses.</value>
   </data>
-  <data name="InvalidNumberFormat" xml:space="preserve">
-    <value>Invalid number format: </value>
+  <data name="InvalidNumberFormat1" xml:space="preserve">
+    <value>Invalid number format: {0}</value>
   </data>
-  <data name="InvalidSymbolOnStack" xml:space="preserve">
-    <value>Invalid symbol on stack: </value>
+  <data name="InvalidSymbolOnStack1" xml:space="preserve">
+    <value>Invalid symbol on stack: {0}</value>
   </data>
-  <data name="InvalidOperator" xml:space="preserve">
-    <value>Invalid operator: </value>
+  <data name="InvalidOperator1" xml:space="preserve">
+    <value>Invalid operator: {0}</value>
   </data>
   <data name="InvalidArgumentCount1" xml:space="preserve">
     <value>Invalid number of arguments for {0}</value>
   </data>
-  <data name="VariableNameConflict" xml:space="preserve">
+  <data name="VariableNameConflict1" xml:space="preserve">
     <value>The variable name conflicts with function '{0}'.</value>
   </data>
   <data name="VariableNameContainsLetters" xml:space="preserve">
@@ -159,10 +159,10 @@
   <data name="InvalidMathExpression" xml:space="preserve">
     <value>Invalid math expression.</value>
   </data>
-  <data name="InvalidConvertionExpression" xml:space="preserve">
-    <value>Invalid convertion expression: </value>
+  <data name="InvalidConversionExpression1" xml:space="preserve">
+    <value>Invalid convertion expression: {0}</value>
   </data>
-  <data name="NotEnoughNumbers" xml:space="preserve">
-    <value>Invalid number for expression: </value>
+  <data name="NotEnoughNumbers1" xml:space="preserve">
+    <value>Invalid number for expression: {0}</value>
   </data>
 </root>

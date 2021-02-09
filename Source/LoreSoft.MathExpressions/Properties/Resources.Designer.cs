@@ -72,9 +72,9 @@ namespace LoreSoft.MathExpressions.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The function name &apos;{0}&apos; is already registered..
         /// </summary>
-        internal static string FunctionNameRegistered {
+        internal static string FunctionNameRegistered1 {
             get {
-                return ResourceManager.GetString("FunctionNameRegistered", resourceCulture);
+                return ResourceManager.GetString("FunctionNameRegistered1", resourceCulture);
             }
         }
         
@@ -88,29 +88,29 @@ namespace LoreSoft.MathExpressions.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid character: .
+        ///   Looks up a localized string similar to Invalid character: {0}.
         /// </summary>
-        internal static string InvalidCharacterEncountered {
+        internal static string InvalidCharacterEncountered1 {
             get {
-                return ResourceManager.GetString("InvalidCharacterEncountered", resourceCulture);
+                return ResourceManager.GetString("InvalidCharacterEncountered1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid convertion expression: .
+        ///   Looks up a localized string similar to Invalid convertion expression: {0}.
         /// </summary>
-        internal static string InvalidConvertionExpression {
+        internal static string InvalidConversionExpression1 {
             get {
-                return ResourceManager.GetString("InvalidConvertionExpression", resourceCulture);
+                return ResourceManager.GetString("InvalidConversionExpression1", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Invalid function name &apos;{0}&apos;..
         /// </summary>
-        internal static string InvalidFunctionName {
+        internal static string InvalidFunctionName1 {
             get {
-                return ResourceManager.GetString("InvalidFunctionName", resourceCulture);
+                return ResourceManager.GetString("InvalidFunctionName1", resourceCulture);
             }
         }
         
@@ -133,47 +133,47 @@ namespace LoreSoft.MathExpressions.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid number format: .
+        ///   Looks up a localized string similar to Invalid number format: {0}.
         /// </summary>
-        internal static string InvalidNumberFormat {
+        internal static string InvalidNumberFormat1 {
             get {
-                return ResourceManager.GetString("InvalidNumberFormat", resourceCulture);
+                return ResourceManager.GetString("InvalidNumberFormat1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid operator: .
+        ///   Looks up a localized string similar to Invalid operator: {0}.
         /// </summary>
-        internal static string InvalidOperator {
+        internal static string InvalidOperator1 {
             get {
-                return ResourceManager.GetString("InvalidOperator", resourceCulture);
+                return ResourceManager.GetString("InvalidOperator1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid symbol on stack: .
+        ///   Looks up a localized string similar to Invalid symbol on stack: {0}.
         /// </summary>
-        internal static string InvalidSymbolOnStack {
+        internal static string InvalidSymbolOnStack1 {
             get {
-                return ResourceManager.GetString("InvalidSymbolOnStack", resourceCulture);
+                return ResourceManager.GetString("InvalidSymbolOnStack1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid function or variable: .
+        ///   Looks up a localized string similar to Invalid function or variable: {0}.
         /// </summary>
-        internal static string InvalidVariableEncountered {
+        internal static string InvalidVariableEncountered1 {
             get {
-                return ResourceManager.GetString("InvalidVariableEncountered", resourceCulture);
+                return ResourceManager.GetString("InvalidVariableEncountered1", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid number for expression: .
+        ///   Looks up a localized string similar to Invalid number for expression: {0}.
         /// </summary>
-        internal static string NotEnoughNumbers {
+        internal static string NotEnoughNumbers1 {
             get {
-                return ResourceManager.GetString("NotEnoughNumbers", resourceCulture);
+                return ResourceManager.GetString("NotEnoughNumbers1", resourceCulture);
             }
         }
         
@@ -189,9 +189,9 @@ namespace LoreSoft.MathExpressions.Properties {
         /// <summary>
         ///   Looks up a localized string similar to The variable name conflicts with function &apos;{0}&apos;..
         /// </summary>
-        internal static string VariableNameConflict {
+        internal static string VariableNameConflict1 {
             get {
-                return ResourceManager.GetString("VariableNameConflict", resourceCulture);
+                return ResourceManager.GetString("VariableNameConflict1", resourceCulture);
             }
         }
         

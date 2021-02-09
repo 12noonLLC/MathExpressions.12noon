@@ -58,7 +58,7 @@ namespace LoreSoft.MathExpressions
                     break;
 
                 default:
-                    throw new ArgumentException(Resources.InvalidOperator + @operator, "operator");
+                    throw new ArgumentException(String.Format(Resources.InvalidOperator1, @operator), "operator");
             }
         }
 

@@ -28,7 +28,7 @@ namespace LoreSoft.MathExpressions
         {
             VerifyCache();
             if (!convertionCache.ContainsKey(expression))
-                throw new ArgumentException(Resources.InvalidConvertionExpression + expression, "expression");
+                throw new ArgumentException(String.Format(Resources.InvalidConversionExpression1, expression), "expression");
 
             this.expression = expression;
             current = convertionCache[expression];

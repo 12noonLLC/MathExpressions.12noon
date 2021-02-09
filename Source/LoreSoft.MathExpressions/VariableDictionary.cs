@@ -58,9 +58,7 @@ namespace LoreSoft.MathExpressions
                 throw new ArgumentNullException("name");
 
             if (_evaluator.IsFunction(name))
-                throw new ArgumentException(
-                    string.Format(CultureInfo.CurrentCulture,
-                        Resources.VariableNameConflict, name), "name");
+                throw new ArgumentException(String.Format(Resources.VariableNameConflict1, name), "name");
 
             for (int i = 0; i < name.Length; i++)
                 if (!char.IsLetter(name[i]))

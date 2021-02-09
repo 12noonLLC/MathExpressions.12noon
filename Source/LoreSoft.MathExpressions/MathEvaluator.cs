@@ -131,8 +131,7 @@ namespace LoreSoft.MathExpressions
                 throw new ArgumentException(Resources.EvaluatePropertyCanNotBeNull, "expression");
             if (_innerFunctions.BinarySearch(functionName) >= 0)
                 throw new ArgumentException(
-                    string.Format(CultureInfo.CurrentCulture,
-                        Resources.FunctionNameRegistered, functionName), "functionName");
+                    string.Format(Resources.FunctionNameRegistered1, functionName), "functionName");
 
             _innerFunctions.Add(functionName);
             _innerFunctions.Sort();
@@ -186,7 +185,7 @@ namespace LoreSoft.MathExpressions
                 if (TryConvert())
                     continue;
 
-                throw new ParseException(Resources.InvalidCharacterEncountered + _currentChar);
+                throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
             } while (_expressionReader.Peek() != -1);
 
             ProcessSymbolStack();
@@ -222,7 +221,7 @@ namespace LoreSoft.MathExpressions
                 return true;
             }
 
-            throw new ParseException(Resources.InvalidConvertionExpression + buffer);
+            throw new ParseException(String.Format(Resources.InvalidConversionExpression1, buffer));
         }
 
         private bool TryString()
@@ -265,7 +264,7 @@ namespace LoreSoft.MathExpressions
                 return true;
             }
 
-            throw new ParseException(Resources.InvalidVariableEncountered + buffer);
+            throw new ParseException(String.Format(Resources.InvalidVariableEncountered1, buffer));
         }
 
 		/// <summary>
@@ -351,7 +350,7 @@ namespace LoreSoft.MathExpressions
 
             if (PeekNextNonWhitespaceChar() == ',')
             {
-                throw new ParseException(Resources.InvalidCharacterEncountered + ",");
+                throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, ","));
             }
 
             _symbolStack.Push(_currentChar.ToString());
@@ -370,13 +369,13 @@ namespace LoreSoft.MathExpressions
                 //This fails for "(3 * Min(45,50))" because the function is INSIDE a group. [fctDepth = 1; grpDepth = 2]
                 (_nestedFunctionDepth < _nestedGroupDepth))
             {
-                throw new ParseException(Resources.InvalidCharacterEncountered + _currentChar);
+                throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
             }
                         
             char nextChar = PeekNextNonWhitespaceChar();
             if (nextChar == ')' || nextChar == ',')
             {
-                throw new ParseException(Resources.InvalidCharacterEncountered + _currentChar);
+                throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
             }
 
             return true;
@@ -500,7 +499,7 @@ namespace LoreSoft.MathExpressions
 
             double value;
             if (!(double.TryParse(buffer.ToString(), out value)))
-                throw new ParseException(Resources.InvalidNumberFormat + buffer);
+                throw new ParseException(String.Format(Resources.InvalidNumberFormat1, buffer));
 
             NumberExpression expression = new NumberExpression(value);
             _expressionQueue.Enqueue(expression);
@@ -543,7 +542,7 @@ namespace LoreSoft.MathExpressions
                 _expressionCache.Add(p, e);
             }
             else
-                throw new ParseException(Resources.InvalidSymbolOnStack + p);
+                throw new ParseException(String.Format(Resources.InvalidSymbolOnStack1, p));
 
             return e;
         }
@@ -555,7 +554,7 @@ namespace LoreSoft.MathExpressions
             foreach (IExpression expression in _expressionQueue)
             {
 				if (calculationStack.Count < expression.ArgumentCount)
-                    throw new ParseException(Resources.NotEnoughNumbers + expression);
+                    throw new ParseException(String.Format(Resources.NotEnoughNumbers1, expression));
 
                Stack<double> parameters = new Stack<double>(capacity: 2);
                 for (int i = 0; i < expression.ArgumentCount; i++)

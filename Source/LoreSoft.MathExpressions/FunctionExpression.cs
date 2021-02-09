@@ -48,7 +48,7 @@ namespace LoreSoft.MathExpressions
 				);
 				if (Method is null)
 				{
-					throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resources.InvalidFunctionName, MathMethodName));
+					throw new InvalidOperationException(String.Format(Resources.InvalidFunctionName1, MathMethodName));
 				}
 			}
 
@@ -112,7 +112,7 @@ namespace LoreSoft.MathExpressions
 			// REF: https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1308
 			if (!MathFunctions.TryGetValue(function.ToUpperInvariant(), out _mathFunction))
 			{
-				throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, Resources.InvalidFunctionName, function), nameof(function));
+				throw new ArgumentException(String.Format(Resources.InvalidFunctionName1, function), nameof(function));
 			}
 
 			base.Evaluate = new MathEvaluate(Execute);
