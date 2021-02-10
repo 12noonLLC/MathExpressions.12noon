@@ -1,11 +1,11 @@
-using LoreSoft.MathExpressions.Properties;
+using MathExpressions.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>
 	/// A class representing the System.Math function expressions

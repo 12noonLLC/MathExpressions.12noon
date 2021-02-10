@@ -8,8 +8,8 @@
     <ProjectGuid>{B6813448-FCE2-429C-81B5-9722FEA839B8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LoreSoft.MathExpressions</RootNamespace>
-    <AssemblyName>LoreSoft.MathExpressions</AssemblyName>
+    <RootNamespace>MathExpressions</RootNamespace>
+    <AssemblyName>MathExpressions</AssemblyName>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathExpressions.snk</AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
@@ -43,7 +43,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\Build\Debug\LoreSoft.MathExpressions.XML</DocumentationFile>
+    <DocumentationFile>..\..\Build\Debug\MathExpressions.xml</DocumentationFile>
     <RunCodeAnalysis>false</RunCodeAnalysis>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
@@ -55,7 +55,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\Build\Release\LoreSoft.MathExpressions.XML</DocumentationFile>
+    <DocumentationFile>..\..\Build\Release\MathExpressions.xml</DocumentationFile>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>

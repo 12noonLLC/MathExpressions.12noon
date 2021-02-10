@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.IO;
 
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     partial class AboutForm : Form
     {

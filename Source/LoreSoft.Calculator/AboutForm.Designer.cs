@@ -1,4 +1,4 @@
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     partial class AboutForm
     {
@@ -121,7 +121,7 @@ namespace LoreSoft.Calculator
 			// 
 			// iconPictureBox
 			// 
-			this.iconPictureBox.Image = global::LoreSoft.Calculator.Properties.Resources.Calculator96;
+			this.iconPictureBox.Image = global::CalculateX.Properties.Resources.Calculator96;
 			this.iconPictureBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.iconPictureBox.Location = new System.Drawing.Point(10, 9);
 			this.iconPictureBox.Name = "iconPictureBox";

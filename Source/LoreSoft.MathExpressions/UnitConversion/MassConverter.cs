@@ -1,6 +1,6 @@
-using LoreSoft.MathExpressions.Metadata;
+using MathExpressions.Metadata;
 
-namespace LoreSoft.MathExpressions.UnitConversion
+namespace MathExpressions.UnitConversion
 {
 	/// <summary>Units for Mass</summary>
 	public enum MassUnit

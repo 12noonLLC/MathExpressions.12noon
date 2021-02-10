@@ -1,4 +1,4 @@
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     partial class CalculatorForm
     {
@@ -165,7 +165,7 @@ namespace LoreSoft.Calculator
 			// 
 			// saveToolStripMenuItem
 			// 
-			this.saveToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Save;
+			this.saveToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Save;
 			this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
 			this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
@@ -201,7 +201,7 @@ namespace LoreSoft.Calculator
 			// 
 			// undoToolStripMenuItem
 			// 
-			this.undoToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Undo;
+			this.undoToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Undo;
 			this.undoToolStripMenuItem.Name = "undoToolStripMenuItem";
 			this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
 			this.undoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
@@ -215,7 +215,7 @@ namespace LoreSoft.Calculator
 			// 
 			// cutToolStripMenuItem
 			// 
-			this.cutToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Cut;
+			this.cutToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Cut;
 			this.cutToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cutToolStripMenuItem.Name = "cutToolStripMenuItem";
 			this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
@@ -225,7 +225,7 @@ namespace LoreSoft.Calculator
 			// 
 			// copyToolStripMenuItem
 			// 
-			this.copyToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Copy;
+			this.copyToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Copy;
 			this.copyToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.copyToolStripMenuItem.Name = "copyToolStripMenuItem";
 			this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
@@ -235,7 +235,7 @@ namespace LoreSoft.Calculator
 			// 
 			// pasteToolStripMenuItem
 			// 
-			this.pasteToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Paste;
+			this.pasteToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Paste;
 			this.pasteToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.pasteToolStripMenuItem.Name = "pasteToolStripMenuItem";
 			this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
@@ -272,7 +272,7 @@ namespace LoreSoft.Calculator
 			// 
 			// clearHistoryToolStripMenuItem
 			// 
-			this.clearHistoryToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Delete;
+			this.clearHistoryToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Delete;
 			this.clearHistoryToolStripMenuItem.Name = "clearHistoryToolStripMenuItem";
 			this.clearHistoryToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
 			this.clearHistoryToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
@@ -286,7 +286,7 @@ namespace LoreSoft.Calculator
 			// 
 			// historyFontToolStripMenuItem
 			// 
-			this.historyFontToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Font;
+			this.historyFontToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Font;
 			this.historyFontToolStripMenuItem.Name = "historyFontToolStripMenuItem";
 			this.historyFontToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
 			this.historyFontToolStripMenuItem.Text = "&History Font...";
@@ -294,7 +294,7 @@ namespace LoreSoft.Calculator
 			// 
 			// inputFontToolStripMenuItem
 			// 
-			this.inputFontToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Font;
+			this.inputFontToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Font;
 			this.inputFontToolStripMenuItem.Name = "inputFontToolStripMenuItem";
 			this.inputFontToolStripMenuItem.Size = new System.Drawing.Size(204, 22);
 			this.inputFontToolStripMenuItem.Text = "&Input Font...";
@@ -686,7 +686,7 @@ namespace LoreSoft.Calculator
 			// 
 			// aboutToolStripMenuItem
 			// 
-			this.aboutToolStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Help;
+			this.aboutToolStripMenuItem.Image = global::CalculateX.Properties.Resources.Help;
 			this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
 			this.aboutToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
 			this.aboutToolStripMenuItem.Text = "&About...";
@@ -713,7 +713,7 @@ namespace LoreSoft.Calculator
 			// saveToolStripButton
 			// 
 			this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.saveToolStripButton.Image = global::LoreSoft.Calculator.Properties.Resources.Save;
+			this.saveToolStripButton.Image = global::CalculateX.Properties.Resources.Save;
 			this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.saveToolStripButton.Name = "saveToolStripButton";
 			this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
@@ -728,7 +728,7 @@ namespace LoreSoft.Calculator
 			// cutToolStripButton
 			// 
 			this.cutToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.cutToolStripButton.Image = global::LoreSoft.Calculator.Properties.Resources.Cut;
+			this.cutToolStripButton.Image = global::CalculateX.Properties.Resources.Cut;
 			this.cutToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cutToolStripButton.Name = "cutToolStripButton";
 			this.cutToolStripButton.Size = new System.Drawing.Size(23, 22);
@@ -738,7 +738,7 @@ namespace LoreSoft.Calculator
 			// copyToolStripButton
 			// 
 			this.copyToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.copyToolStripButton.Image = global::LoreSoft.Calculator.Properties.Resources.Copy;
+			this.copyToolStripButton.Image = global::CalculateX.Properties.Resources.Copy;
 			this.copyToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.copyToolStripButton.Name = "copyToolStripButton";
 			this.copyToolStripButton.Size = new System.Drawing.Size(23, 22);
@@ -748,7 +748,7 @@ namespace LoreSoft.Calculator
 			// pasteToolStripButton
 			// 
 			this.pasteToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.pasteToolStripButton.Image = global::LoreSoft.Calculator.Properties.Resources.Paste;
+			this.pasteToolStripButton.Image = global::CalculateX.Properties.Resources.Paste;
 			this.pasteToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.pasteToolStripButton.Name = "pasteToolStripButton";
 			this.pasteToolStripButton.Size = new System.Drawing.Size(23, 22);
@@ -763,7 +763,7 @@ namespace LoreSoft.Calculator
 			// undoToolStripButton
 			// 
 			this.undoToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.undoToolStripButton.Image = global::LoreSoft.Calculator.Properties.Resources.Undo;
+			this.undoToolStripButton.Image = global::CalculateX.Properties.Resources.Undo;
 			this.undoToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.undoToolStripButton.Name = "undoToolStripButton";
 			this.undoToolStripButton.Size = new System.Drawing.Size(23, 22);
@@ -778,7 +778,7 @@ namespace LoreSoft.Calculator
 			// clearHistoryToolStripButton
 			// 
 			this.clearHistoryToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-			this.clearHistoryToolStripButton.Image = global::LoreSoft.Calculator.Properties.Resources.Delete;
+			this.clearHistoryToolStripButton.Image = global::CalculateX.Properties.Resources.Delete;
 			this.clearHistoryToolStripButton.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.clearHistoryToolStripButton.Name = "clearHistoryToolStripButton";
 			this.clearHistoryToolStripButton.Size = new System.Drawing.Size(23, 22);
@@ -821,7 +821,7 @@ namespace LoreSoft.Calculator
 			// 
 			// clearHistoryContextStripMenuItem
 			// 
-			this.clearHistoryContextStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Delete;
+			this.clearHistoryContextStripMenuItem.Image = global::CalculateX.Properties.Resources.Delete;
 			this.clearHistoryContextStripMenuItem.Name = "clearHistoryContextStripMenuItem";
 			this.clearHistoryContextStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
 			this.clearHistoryContextStripMenuItem.Size = new System.Drawing.Size(184, 22);
@@ -835,7 +835,7 @@ namespace LoreSoft.Calculator
 			// 
 			// copyHistoryContextStripMenuItem2
 			// 
-			this.copyHistoryContextStripMenuItem2.Image = global::LoreSoft.Calculator.Properties.Resources.Copy;
+			this.copyHistoryContextStripMenuItem2.Image = global::CalculateX.Properties.Resources.Copy;
 			this.copyHistoryContextStripMenuItem2.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.copyHistoryContextStripMenuItem2.Name = "copyHistoryContextStripMenuItem2";
 			this.copyHistoryContextStripMenuItem2.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
@@ -898,7 +898,7 @@ namespace LoreSoft.Calculator
 			// 
 			// undoContextStripMenuItem
 			// 
-			this.undoContextStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Undo;
+			this.undoContextStripMenuItem.Image = global::CalculateX.Properties.Resources.Undo;
 			this.undoContextStripMenuItem.Name = "undoContextStripMenuItem";
 			this.undoContextStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
 			this.undoContextStripMenuItem.Size = new System.Drawing.Size(164, 22);
@@ -912,7 +912,7 @@ namespace LoreSoft.Calculator
 			// 
 			// cutContextStripMenuItem
 			// 
-			this.cutContextStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Cut;
+			this.cutContextStripMenuItem.Image = global::CalculateX.Properties.Resources.Cut;
 			this.cutContextStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.cutContextStripMenuItem.Name = "cutContextStripMenuItem";
 			this.cutContextStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
@@ -922,7 +922,7 @@ namespace LoreSoft.Calculator
 			// 
 			// copyContextStripMenuItem
 			// 
-			this.copyContextStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Copy;
+			this.copyContextStripMenuItem.Image = global::CalculateX.Properties.Resources.Copy;
 			this.copyContextStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.copyContextStripMenuItem.Name = "copyContextStripMenuItem";
 			this.copyContextStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
@@ -932,7 +932,7 @@ namespace LoreSoft.Calculator
 			// 
 			// pasteContextStripMenuItem
 			// 
-			this.pasteContextStripMenuItem.Image = global::LoreSoft.Calculator.Properties.Resources.Paste;
+			this.pasteContextStripMenuItem.Image = global::CalculateX.Properties.Resources.Paste;
 			this.pasteContextStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.pasteContextStripMenuItem.Name = "pasteContextStripMenuItem";
 			this.pasteContextStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));

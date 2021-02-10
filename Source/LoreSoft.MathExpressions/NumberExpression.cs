@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>
 	/// Class representing a constant number expression.

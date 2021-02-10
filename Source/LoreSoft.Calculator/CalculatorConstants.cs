@@ -1,4 +1,4 @@
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     internal static class CalculatorConstants
     {

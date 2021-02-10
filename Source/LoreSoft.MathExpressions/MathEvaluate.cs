@@ -1,4 +1,4 @@
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>Delegate used by an expression to do the math evaluation.</summary>
 	/// <param name="numbers">The numbers to evaluate.</param>

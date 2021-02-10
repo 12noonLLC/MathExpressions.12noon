@@ -8,8 +8,8 @@
     <ProjectGuid>{46271123-BEBD-4FF6-8B13-77D68A17C874}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>LoreSoft.Calculator</RootNamespace>
-    <AssemblyName>Calculator</AssemblyName>
+    <RootNamespace>CalculateX</RootNamespace>
+    <AssemblyName>CalculateX</AssemblyName>
     <ApplicationIcon>Calculator.ico</ApplicationIcon>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Calculator.snk</AssemblyOriginatorKeyFile>

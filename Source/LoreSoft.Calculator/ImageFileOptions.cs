@@ -1,7 +1,7 @@
 using System.IO;
 using Microsoft.Win32;
 
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     /// <summary>
     /// Class used to set the debugger for an image file.

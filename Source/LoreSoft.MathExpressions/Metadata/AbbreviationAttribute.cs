@@ -1,6 +1,6 @@
 using System;
 
-namespace LoreSoft.MathExpressions.Metadata
+namespace MathExpressions.Metadata
 {
 	/// <summary>
 	/// Specifies an abbreviation for a instance. 

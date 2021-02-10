@@ -1,20 +1,18 @@
+using MathExpressions;
+using MathExpressions.Metadata;
+using MathExpressions.UnitConversion;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
-using System.Text;
-using System.Windows.Forms;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
-using LoreSoft.Calculator.Properties;
-using LoreSoft.MathExpressions;
-using LoreSoft.MathExpressions.UnitConversion;
-using LoreSoft.MathExpressions.Metadata;
+using System.Windows.Forms;
 
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
-    public partial class CalculatorForm : Form
+	public partial class CalculatorForm : Form
     {
         private MathEvaluator _eval = new MathEvaluator();
         private List<string> _history = new List<string>();
@@ -31,22 +29,31 @@ namespace LoreSoft.Calculator
         private void InitializeSettings()
         {
             SuspendLayout();
-            if (Settings.Default["CalculatorLocation"] != null)
-                Location = Settings.Default.CalculatorLocation;
-            if (Settings.Default["CalculatorSize"] != null)
-                Size = Settings.Default.CalculatorSize;
-            if (Settings.Default["CalculatorWindowState"] != null)
-                WindowState = Settings.Default.CalculatorWindowState;
-            if (Settings.Default["HistoryFont"] != null)
-                historyRichTextBox.Font = Settings.Default.HistoryFont;
-            if (Settings.Default["InputFont"] != null)
-                inputTextBox.Font = Settings.Default.InputFont;
+            if (Properties.Settings.Default.CalculatorLocation != null)
+            {
+               Location = Properties.Settings.Default.CalculatorLocation;
+            }
+            if (Properties.Settings.Default.CalculatorSize != null)
+            {
+               Size = Properties.Settings.Default.CalculatorSize;
+            }
+				WindowState = Properties.Settings.Default.CalculatorWindowState;
+
+			   if (Properties.Settings.Default.HistoryFont != null)
+			   {
+				   historyRichTextBox.Font = Properties.Settings.Default.HistoryFont;
+			   }
+
+			   if (Properties.Settings.Default.InputFont != null)
+            {
+				   inputTextBox.Font = Properties.Settings.Default.InputFont;
+			   }
 
             replaceCalculatorToolStripMenuItem.Checked = (Application.ExecutablePath.Equals(
                 ImageFileOptions.GetDebugger(CalculatorConstants.WindowsCalculatorName),
                 StringComparison.OrdinalIgnoreCase));
 
-            allowOnlyOneInstanceToolStripMenuItem.Checked = Settings.Default.IsSingleInstance;
+            allowOnlyOneInstanceToolStripMenuItem.Checked = Properties.Settings.Default.IsSingleInstance;
 
             ResumeLayout(true);
         }
@@ -110,7 +117,7 @@ namespace LoreSoft.Calculator
             historyRichTextBox.AppendText(Environment.NewLine);
             historyRichTextBox.AppendText("\t");
             if (hasError)
-                historyRichTextBox.SelectionColor = Color.Maroon;
+				historyRichTextBox.SelectionColor = Color.Maroon;
             else
                 historyRichTextBox.SelectionColor = Color.Blue;
             historyRichTextBox.SelectionFont = new Font(historyRichTextBox.Font, FontStyle.Bold);
@@ -132,12 +139,12 @@ namespace LoreSoft.Calculator
 
         private void CalculatorForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.CalculatorLocation = Location;
-            Settings.Default.CalculatorSize = Size;
-            Settings.Default.CalculatorWindowState = WindowState;
-            Settings.Default.HistoryFont = historyRichTextBox.Font;
-            Settings.Default.InputFont = inputTextBox.Font;
-            Settings.Default.Save();
+            Properties.Settings.Default.CalculatorLocation = Location;
+            Properties.Settings.Default.CalculatorSize = Size;
+            Properties.Settings.Default.CalculatorWindowState = WindowState;
+            Properties.Settings.Default.HistoryFont = historyRichTextBox.Font;
+            Properties.Settings.Default.InputFont = inputTextBox.Font;
+            Properties.Settings.Default.Save();
         }
 
         private void inputTextBox_KeyDown(object sender, KeyEventArgs e)
@@ -282,9 +289,9 @@ namespace LoreSoft.Calculator
 
 
             if (pad < 0 && length == 0)
-                pad = insert.Length;
+	   			pad = insert.Length;
             else if (pad >= 0 && length > 0)
-                pad = insert.Length;
+				   pad = insert.Length;
 
             inputTextBox.SuspendLayout();
             inputTextBox.Paste(insert.Replace("|", inputTextBox.SelectedText));
@@ -410,8 +417,8 @@ namespace LoreSoft.Calculator
 
         private void allowOnlyOneInstanceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Settings.Default.IsSingleInstance = allowOnlyOneInstanceToolStripMenuItem.Checked;
-            Settings.Default.Save();
+         Properties.Settings.Default.IsSingleInstance = allowOnlyOneInstanceToolStripMenuItem.Checked;
+         Properties.Settings.Default.Save();
         }
     }
 }

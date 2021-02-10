@@ -1,4 +1,4 @@
-﻿using LoreSoft.MathExpressions;
+﻿using MathExpressions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 

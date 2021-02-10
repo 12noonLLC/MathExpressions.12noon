@@ -1,4 +1,4 @@
-using LoreSoft.MathExpressions.Properties;
+using MathExpressions.Properties;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>
 	/// Evaluate math expressions

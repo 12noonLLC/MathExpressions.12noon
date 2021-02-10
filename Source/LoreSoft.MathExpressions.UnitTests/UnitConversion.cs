@@ -1,7 +1,7 @@
-﻿using LoreSoft.MathExpressions.UnitConversion;
+﻿using MathExpressions.UnitConversion;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LoreSoft.MathExpressions.UnitTests
+namespace MathExpressions.UnitTests
 {
 	[TestClass]
 	public class UnitConversion

@@ -1,7 +1,7 @@
-using LoreSoft.MathExpressions.Properties;
+using MathExpressions.Properties;
 using System;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>The base class for expressions</summary>
 	public abstract class ExpressionBase : IExpression

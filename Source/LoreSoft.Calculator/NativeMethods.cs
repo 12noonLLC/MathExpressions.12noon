@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     internal static class NativeMethods
     {

@@ -2,7 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Reflection;
 
-namespace LoreSoft.MathExpressions.Metadata
+namespace MathExpressions.Metadata
 {
 	/// <summary>
 	/// A class to read attributes from type members.

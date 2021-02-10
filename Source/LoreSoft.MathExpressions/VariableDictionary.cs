@@ -1,11 +1,11 @@
-using LoreSoft.MathExpressions.Properties;
+using MathExpressions.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>
 	/// Class representing a collection of variable names and values.

@@ -1,8 +1,8 @@
-﻿using LoreSoft.MathExpressions.Metadata;
-using LoreSoft.MathExpressions.UnitConversion;
+﻿using MathExpressions.Metadata;
+using MathExpressions.UnitConversion;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace LoreSoft.MathExpressions.UnitTests.Metadata
+namespace MathExpressions.UnitTests.Metadata
 {
 	[TestClass]
 	public class AttributeReaderTest

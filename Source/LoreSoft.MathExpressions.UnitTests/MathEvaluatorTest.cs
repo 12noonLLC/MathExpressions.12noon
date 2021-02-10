@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace LoreSoft.MathExpressions.UnitTests
+namespace MathExpressions.UnitTests
 {
 	[TestClass]
 	public class MathEvaluatorTest

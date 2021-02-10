@@ -1,7 +1,7 @@
-using LoreSoft.MathExpressions.Metadata;
+using MathExpressions.Metadata;
 using System.ComponentModel;
 
-namespace LoreSoft.MathExpressions.UnitConversion
+namespace MathExpressions.UnitConversion
 {
 	/// <summary>Units for Speed</summary>
 	public enum SpeedUnit

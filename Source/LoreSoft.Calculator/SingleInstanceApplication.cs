@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using Microsoft.VisualBasic.ApplicationServices;
 
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     internal class SingleInstanceApplication : WindowsFormsApplicationBase
     {

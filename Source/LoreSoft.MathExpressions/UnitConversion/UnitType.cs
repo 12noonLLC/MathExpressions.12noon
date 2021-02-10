@@ -1,4 +1,4 @@
-namespace LoreSoft.MathExpressions.UnitConversion
+namespace MathExpressions.UnitConversion
 {
 	///<summary>The unit types available for conversion.</summary>
 	public enum UnitType

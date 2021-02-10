@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>
 	/// The exception that is thrown when there is an error parsing a math expression.

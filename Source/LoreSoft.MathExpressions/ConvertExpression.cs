@@ -1,13 +1,13 @@
-using LoreSoft.MathExpressions.Metadata;
-using LoreSoft.MathExpressions.Properties;
-using LoreSoft.MathExpressions.UnitConversion;
+using MathExpressions.Metadata;
+using MathExpressions.Properties;
+using MathExpressions.UnitConversion;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>
 	/// A class representing unit conversion expressions.

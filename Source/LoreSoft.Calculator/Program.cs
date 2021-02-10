@@ -1,9 +1,9 @@
 using System;
 using System.Windows.Forms;
-using LoreSoft.Calculator.Properties;
+using CalculateX.Properties;
 using Microsoft.VisualBasic.ApplicationServices;
 
-namespace LoreSoft.Calculator
+namespace CalculateX
 {
     static class Program
     {

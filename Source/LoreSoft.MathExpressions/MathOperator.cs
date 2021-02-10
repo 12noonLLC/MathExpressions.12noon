@@ -1,4 +1,4 @@
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>Math Operators</summary>
 	public enum MathOperator

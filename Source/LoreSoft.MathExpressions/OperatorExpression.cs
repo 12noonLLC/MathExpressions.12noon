@@ -1,8 +1,8 @@
-using LoreSoft.MathExpressions.Properties;
+using MathExpressions.Properties;
 using System;
 using System.Linq;
 
-namespace LoreSoft.MathExpressions
+namespace MathExpressions
 {
 	/// <summary>
 	/// Class representing a math operator expression.
