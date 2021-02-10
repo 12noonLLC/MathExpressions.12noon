@@ -1,11 +1,9 @@
+using LoreSoft.MathExpressions.Properties;
 using System;
 using System.Collections.Generic;
-using System.Reflection;
-using LoreSoft.MathExpressions.Properties;
-using System.Globalization;
-using System.Linq;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 
 namespace LoreSoft.MathExpressions
 {
@@ -61,7 +59,7 @@ namespace LoreSoft.MathExpressions
 
 				// KLUDGE: One function's second argument is Int32 (not Double).
 				// To be more generic, we should do this differently.
-				if ((numbers.Count() == 2) && (ArgumentCount == 2) && (Arguments[1].Name == nameof(Int32)))
+				if ((ArgumentCount == 2) && (Arguments[1].Name == nameof(Int32)))
 				{
 					parameters[1] = Convert.ToInt32(numbers[1]);
 				}
@@ -115,7 +113,7 @@ namespace LoreSoft.MathExpressions
 				throw new ArgumentException(String.Format(Resources.InvalidFunctionName1, function), nameof(function));
 			}
 
-			base.Evaluate = new MathEvaluate(Execute);
+			base.Evaluate = Execute;
 		}
 
 		/// <summary>Executes the function on specified numbers.</summary>

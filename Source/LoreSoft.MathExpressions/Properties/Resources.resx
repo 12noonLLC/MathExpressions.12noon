@@ -160,7 +160,7 @@
     <value>Invalid math expression.</value>
   </data>
   <data name="InvalidConversionExpression1" xml:space="preserve">
-    <value>Invalid convertion expression: {0}</value>
+    <value>Invalid conversion expression: {0}</value>
   </data>
   <data name="NotEnoughNumbers1" xml:space="preserve">
     <value>Invalid number for expression: {0}</value>

@@ -97,7 +97,7 @@ namespace LoreSoft.MathExpressions.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid convertion expression: {0}.
+        ///   Looks up a localized string similar to Invalid conversion expression: {0}.
         /// </summary>
         internal static string InvalidConversionExpression1 {
             get {

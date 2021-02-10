@@ -319,7 +319,7 @@ namespace LoreSoft.Calculator
 
                     string key = string.Format(
                         CultureInfo.InvariantCulture,
-                        ConvertExpression.ExpressionFormat,
+                        ConvertExpression.KeyExpressionFormat2,
                         parrentKey,
                         childKey);
 
