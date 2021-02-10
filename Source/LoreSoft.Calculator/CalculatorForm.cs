@@ -22,31 +22,68 @@ namespace CalculateX
         public CalculatorForm()
         {
             InitializeComponent();
-            InitializeSettings();
             Application.Idle += new EventHandler(OnApplicationIdle);
         }
 
         private void InitializeSettings()
         {
             SuspendLayout();
-            if (Properties.Settings.Default.CalculatorLocation != null)
-            {
-               Location = Properties.Settings.Default.CalculatorLocation;
-            }
-            if (Properties.Settings.Default.CalculatorSize != null)
-            {
-               Size = Properties.Settings.Default.CalculatorSize;
-            }
-				WindowState = Properties.Settings.Default.CalculatorWindowState;
 
-			   if (Properties.Settings.Default.HistoryFont != null)
+			bool upgradeRequired = Properties.Settings.Default.UpgradeRequired;
+			if (upgradeRequired)
+			{
+				Properties.Settings.Default.UpgradeRequired = false;
+
+				if (Properties.Settings.Default[nameof(Properties.Settings.Default.CalculatorLocation)] is null)
+				{
+				Properties.Settings.Default.CalculatorLocation = Location;
+				}
+
+				if (Properties.Settings.Default[nameof(Properties.Settings.Default.CalculatorSize)] is null)
+				{
+				Properties.Settings.Default.CalculatorSize = Size;
+				}
+
+				if (Properties.Settings.Default[nameof(Properties.Settings.Default.HistoryFont)] is null)
+				{
+				Properties.Settings.Default.HistoryFont = historyRichTextBox.Font;
+				}
+
+				if (Properties.Settings.Default[nameof(Properties.Settings.Default.InputFont)] is null)
+				{
+				Properties.Settings.Default.InputFont = inputTextBox.Font;
+				}
+
+				Properties.Settings.Default.Save();
+			}
+
+            // Settings must be assigned to a variable.
+            // https://codedocu.com/Net-Framework/WinForms/Errors/C-_hash_,-Winforms_colon_-error-CS1061_colon_-PropertyStore-does-not-contain-a-definition-for-Settings
+			WindowState = Properties.Settings.Default.CalculatorWindowState;
+
+            var calculatorLocation = Properties.Settings.Default.CalculatorLocation;
+            if (calculatorLocation != null)
+            {
+               StartPosition = FormStartPosition.Manual;
+               Location = calculatorLocation;
+            }
+
+            var calculatorSize = Properties.Settings.Default.CalculatorSize;
+            if (calculatorSize != null)
+            {
+               Size = calculatorSize;
+            }
+
+            var historyFont = Properties.Settings.Default.HistoryFont;
+            if (historyFont != null)
 			   {
-				   historyRichTextBox.Font = Properties.Settings.Default.HistoryFont;
+				   historyRichTextBox.Font = historyFont;
 			   }
 
-			   if (Properties.Settings.Default.InputFont != null)
+            var inputFont = Properties.Settings.Default.InputFont;
+            if (inputFont != null)
             {
-				   inputTextBox.Font = Properties.Settings.Default.InputFont;
+				   inputTextBox.Font = inputFont;
 			   }
 
             replaceCalculatorToolStripMenuItem.Checked = (Application.ExecutablePath.Equals(
@@ -133,6 +170,8 @@ namespace CalculateX
 
         private void CalculatorForm_Load(object sender, EventArgs e)
         {
+			InitializeSettings();
+
             inputTextBox.Focus();
             inputTextBox.Select();
         }
