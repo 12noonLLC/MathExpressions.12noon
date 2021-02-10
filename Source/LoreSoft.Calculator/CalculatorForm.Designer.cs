@@ -62,7 +62,12 @@ namespace CalculateX
 			this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
 			this.sqrtToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.absToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.powToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.minToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.maxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.roundToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.floorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.ceilingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.trigFunctionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cosToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.coshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -125,11 +130,6 @@ namespace CalculateX
 			this.numLockToolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
 			this.fontDialog = new System.Windows.Forms.FontDialog();
 			this.saveFileDialog = new System.Windows.Forms.SaveFileDialog();
-			this.powToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.ceilingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.floorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.minToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.maxToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.mainMenuStrip.SuspendLayout();
 			this.mainToolStrip.SuspendLayout();
 			this.historyPanel.SuspendLayout();
@@ -403,7 +403,7 @@ namespace CalculateX
 			this.powerToolStripMenuItem.Name = "powerToolStripMenuItem";
 			this.powerToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.powerToolStripMenuItem.Tag = "^";
-			this.powerToolStripMenuItem.Text = "power (^)";
+			this.powerToolStripMenuItem.Text = "exponent (^)";
 			this.powerToolStripMenuItem.ToolTipText = "Raises a number to the power of another number.";
 			this.powerToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
 			// 
@@ -430,6 +430,33 @@ namespace CalculateX
 			this.absToolStripMenuItem.ToolTipText = "Returns the absolute value of a specified number. ";
 			this.absToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
 			// 
+			// powToolStripMenuItem
+			// 
+			this.powToolStripMenuItem.Name = "powToolStripMenuItem";
+			this.powToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.powToolStripMenuItem.Tag = "pow(|, )";
+			this.powToolStripMenuItem.Text = "pow";
+			this.powToolStripMenuItem.ToolTipText = "Raises a number to the power of another number.";
+			this.powToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
+			// 
+			// minToolStripMenuItem
+			// 
+			this.minToolStripMenuItem.Name = "minToolStripMenuItem";
+			this.minToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.minToolStripMenuItem.Tag = "min(|, )";
+			this.minToolStripMenuItem.Text = "min";
+			this.minToolStripMenuItem.ToolTipText = "Returns the smallest of the two specified numbers.";
+			this.minToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
+			// 
+			// maxToolStripMenuItem
+			// 
+			this.maxToolStripMenuItem.Name = "maxToolStripMenuItem";
+			this.maxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.maxToolStripMenuItem.Tag = "max(|, )";
+			this.maxToolStripMenuItem.Text = "max";
+			this.maxToolStripMenuItem.ToolTipText = "Returns the largest of the two specified numbers.";
+			this.maxToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
+			// 
 			// roundToolStripMenuItem
 			// 
 			this.roundToolStripMenuItem.Name = "roundToolStripMenuItem";
@@ -438,6 +465,24 @@ namespace CalculateX
 			this.roundToolStripMenuItem.Text = "round";
 			this.roundToolStripMenuItem.ToolTipText = "Returns the value rounded to the specified number of decimal places.";
 			this.roundToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
+			// 
+			// floorToolStripMenuItem
+			// 
+			this.floorToolStripMenuItem.Name = "floorToolStripMenuItem";
+			this.floorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.floorToolStripMenuItem.Tag = "floor(|)";
+			this.floorToolStripMenuItem.Text = "floor";
+			this.floorToolStripMenuItem.ToolTipText = "Returns the largest integer less than the specified number.";
+			this.floorToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
+			// 
+			// ceilingToolStripMenuItem
+			// 
+			this.ceilingToolStripMenuItem.Name = "ceilingToolStripMenuItem";
+			this.ceilingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.ceilingToolStripMenuItem.Tag = "ceiling(|)";
+			this.ceilingToolStripMenuItem.Text = "ceiling";
+			this.ceilingToolStripMenuItem.ToolTipText = "Returns the smallest integer greater than the specified number.";
+			this.ceilingToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
 			// 
 			// trigFunctionsToolStripMenuItem
 			// 
@@ -458,7 +503,7 @@ namespace CalculateX
 			// cosToolStripMenuItem
 			// 
 			this.cosToolStripMenuItem.Name = "cosToolStripMenuItem";
-			this.cosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.cosToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.cosToolStripMenuItem.Tag = "cos(|)";
 			this.cosToolStripMenuItem.Text = "cos";
 			this.cosToolStripMenuItem.ToolTipText = "Returns the cosine of the specified angle.";
@@ -467,7 +512,7 @@ namespace CalculateX
 			// coshToolStripMenuItem
 			// 
 			this.coshToolStripMenuItem.Name = "coshToolStripMenuItem";
-			this.coshToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.coshToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.coshToolStripMenuItem.Tag = "cosh(|)";
 			this.coshToolStripMenuItem.Text = "cosh";
 			this.coshToolStripMenuItem.ToolTipText = "Returns the hyperbolic cosine of the specified angle. ";
@@ -476,7 +521,7 @@ namespace CalculateX
 			// acosToolStripMenuItem
 			// 
 			this.acosToolStripMenuItem.Name = "acosToolStripMenuItem";
-			this.acosToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.acosToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.acosToolStripMenuItem.Tag = "acos(|)";
 			this.acosToolStripMenuItem.Text = "acos";
 			this.acosToolStripMenuItem.ToolTipText = "Returns the angle whose cosine is the specified number.";
@@ -485,7 +530,7 @@ namespace CalculateX
 			// sinToolStripMenuItem
 			// 
 			this.sinToolStripMenuItem.Name = "sinToolStripMenuItem";
-			this.sinToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.sinToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.sinToolStripMenuItem.Tag = "sin(|)";
 			this.sinToolStripMenuItem.Text = "sin";
 			this.sinToolStripMenuItem.ToolTipText = "Returns the sine of the specified angle. ";
@@ -494,7 +539,7 @@ namespace CalculateX
 			// sinhToolStripMenuItem
 			// 
 			this.sinhToolStripMenuItem.Name = "sinhToolStripMenuItem";
-			this.sinhToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.sinhToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.sinhToolStripMenuItem.Tag = "sinh(|)";
 			this.sinhToolStripMenuItem.Text = "sinh";
 			this.sinhToolStripMenuItem.ToolTipText = "Returns the hyperbolic sine of the specified angle.";
@@ -503,7 +548,7 @@ namespace CalculateX
 			// asinToolStripMenuItem
 			// 
 			this.asinToolStripMenuItem.Name = "asinToolStripMenuItem";
-			this.asinToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.asinToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.asinToolStripMenuItem.Tag = "asin(|)";
 			this.asinToolStripMenuItem.Text = "asin";
 			this.asinToolStripMenuItem.ToolTipText = "Returns the angle whose sine is the specified number.";
@@ -512,7 +557,7 @@ namespace CalculateX
 			// tanToolStripMenuItem
 			// 
 			this.tanToolStripMenuItem.Name = "tanToolStripMenuItem";
-			this.tanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.tanToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.tanToolStripMenuItem.Tag = "tan(|)";
 			this.tanToolStripMenuItem.Text = "tan";
 			this.tanToolStripMenuItem.ToolTipText = "Returns the tangent of the specified angle.";
@@ -521,7 +566,7 @@ namespace CalculateX
 			// tanhToolStripMenuItem
 			// 
 			this.tanhToolStripMenuItem.Name = "tanhToolStripMenuItem";
-			this.tanhToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.tanhToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.tanhToolStripMenuItem.Tag = "tanh(|)";
 			this.tanhToolStripMenuItem.Text = "tanh";
 			this.tanhToolStripMenuItem.ToolTipText = "Returns the hyperbolic tangent of the specified angle.";
@@ -530,7 +575,7 @@ namespace CalculateX
 			// atanToolStripMenuItem
 			// 
 			this.atanToolStripMenuItem.Name = "atanToolStripMenuItem";
-			this.atanToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.atanToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
 			this.atanToolStripMenuItem.Tag = "atan(|)";
 			this.atanToolStripMenuItem.Text = "atan";
 			this.atanToolStripMenuItem.ToolTipText = "Returns the angle whose tangent is the specified number.";
@@ -549,7 +594,7 @@ namespace CalculateX
 			// expToolStripMenuItem
 			// 
 			this.expToolStripMenuItem.Name = "expToolStripMenuItem";
-			this.expToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.expToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.expToolStripMenuItem.Tag = "exp(|)";
 			this.expToolStripMenuItem.Text = "exp";
 			this.expToolStripMenuItem.ToolTipText = "Returns e raised to the specified power.";
@@ -558,7 +603,7 @@ namespace CalculateX
 			// logToolStripMenuItem
 			// 
 			this.logToolStripMenuItem.Name = "logToolStripMenuItem";
-			this.logToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.logToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.logToolStripMenuItem.Tag = "log(|)";
 			this.logToolStripMenuItem.Text = "log";
 			this.logToolStripMenuItem.ToolTipText = "Returns the logarithm of a specified number.";
@@ -567,7 +612,7 @@ namespace CalculateX
 			// log10ToolStripMenuItem
 			// 
 			this.log10ToolStripMenuItem.Name = "log10ToolStripMenuItem";
-			this.log10ToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+			this.log10ToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.log10ToolStripMenuItem.Tag = "log10(|)";
 			this.log10ToolStripMenuItem.Text = "log10";
 			this.log10ToolStripMenuItem.ToolTipText = "Returns the base 10 logarithm of a specified number.";
@@ -997,51 +1042,6 @@ namespace CalculateX
 			this.saveFileDialog.Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*";
 			this.saveFileDialog.SupportMultiDottedExtensions = true;
 			this.saveFileDialog.Title = "Save History";
-			// 
-			// powToolStripMenuItem
-			// 
-			this.powToolStripMenuItem.Name = "powToolStripMenuItem";
-			this.powToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.powToolStripMenuItem.Tag = "pow(|, )";
-			this.powToolStripMenuItem.Text = "pow";
-			this.powToolStripMenuItem.ToolTipText = "Raises a number to the power of another number.";
-			this.powToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
-			// 
-			// ceilingToolStripMenuItem
-			// 
-			this.ceilingToolStripMenuItem.Name = "ceilingToolStripMenuItem";
-			this.ceilingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.ceilingToolStripMenuItem.Tag = "ceiling(|)";
-			this.ceilingToolStripMenuItem.Text = "ceiling";
-			this.ceilingToolStripMenuItem.ToolTipText = "Returns the smallest integer greater than the specified number.";
-			this.ceilingToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
-			// 
-			// floorToolStripMenuItem
-			// 
-			this.floorToolStripMenuItem.Name = "floorToolStripMenuItem";
-			this.floorToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.floorToolStripMenuItem.Tag = "floor(|)";
-			this.floorToolStripMenuItem.Text = "floor";
-			this.floorToolStripMenuItem.ToolTipText = "Returns the largest integer less than the specified number.";
-			this.floorToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
-			// 
-			// minToolStripMenuItem
-			// 
-			this.minToolStripMenuItem.Name = "minToolStripMenuItem";
-			this.minToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.minToolStripMenuItem.Tag = "min(|, )";
-			this.minToolStripMenuItem.Text = "min";
-			this.minToolStripMenuItem.ToolTipText = "Returns the smallest of the two specified numbers.";
-			this.minToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
-			// 
-			// maxToolStripMenuItem
-			// 
-			this.maxToolStripMenuItem.Name = "maxToolStripMenuItem";
-			this.maxToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-			this.maxToolStripMenuItem.Tag = "max(|, )";
-			this.maxToolStripMenuItem.Text = "max";
-			this.maxToolStripMenuItem.ToolTipText = "Returns the largest of the two specified numbers.";
-			this.maxToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
 			// 
 			// CalculatorForm
 			// 
