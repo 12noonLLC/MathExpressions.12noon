@@ -45,6 +45,9 @@ namespace CalculateX
 			// 
 			// assembliesListView
 			// 
+			this.assembliesListView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.assembliesListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.assemblyColumnHeader,
             this.versionColumnHeader,
@@ -53,7 +56,7 @@ namespace CalculateX
 			this.assembliesListView.HideSelection = false;
 			this.assembliesListView.Location = new System.Drawing.Point(8, 16);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(384, 120);
+			this.assembliesListView.Size = new System.Drawing.Size(393, 120);
 			this.assembliesListView.TabIndex = 9;
 			this.assembliesListView.UseCompatibleStateImageBehavior = false;
 			this.assembliesListView.View = System.Windows.Forms.View.Details;
@@ -75,45 +78,60 @@ namespace CalculateX
 			// 
 			// copyrightLabel
 			// 
+			this.copyrightLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.copyrightLabel.AutoSize = true;
 			this.copyrightLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.copyrightLabel.Location = new System.Drawing.Point(121, 57);
 			this.copyrightLabel.Name = "copyrightLabel";
-			this.copyrightLabel.Size = new System.Drawing.Size(273, 23);
+			this.copyrightLabel.Size = new System.Drawing.Size(106, 13);
 			this.copyrightLabel.TabIndex = 22;
 			this.copyrightLabel.Text = "Application Copyright";
 			// 
 			// descriptionLabel
 			// 
+			this.descriptionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.descriptionLabel.AutoSize = true;
 			this.descriptionLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.descriptionLabel.Location = new System.Drawing.Point(121, 81);
 			this.descriptionLabel.Name = "descriptionLabel";
-			this.descriptionLabel.Size = new System.Drawing.Size(273, 32);
+			this.descriptionLabel.Size = new System.Drawing.Size(115, 13);
 			this.descriptionLabel.TabIndex = 21;
 			this.descriptionLabel.Text = "Application Description";
 			// 
 			// versionLabel
 			// 
+			this.versionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.versionLabel.AutoSize = true;
 			this.versionLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.versionLabel.Location = new System.Drawing.Point(121, 33);
 			this.versionLabel.Name = "versionLabel";
-			this.versionLabel.Size = new System.Drawing.Size(273, 23);
+			this.versionLabel.Size = new System.Drawing.Size(97, 13);
 			this.versionLabel.TabIndex = 20;
 			this.versionLabel.Text = "Application Version";
 			// 
 			// titleLabel
 			// 
+			this.titleLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.titleLabel.AutoSize = true;
 			this.titleLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
 			this.titleLabel.Location = new System.Drawing.Point(121, 9);
 			this.titleLabel.Name = "titleLabel";
-			this.titleLabel.Size = new System.Drawing.Size(273, 24);
+			this.titleLabel.Size = new System.Drawing.Size(82, 13);
 			this.titleLabel.TabIndex = 19;
 			this.titleLabel.Text = "Application Title";
 			// 
 			// loresoftLinkLabel
 			// 
+			this.loresoftLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+			this.loresoftLinkLabel.AutoSize = true;
 			this.loresoftLinkLabel.Location = new System.Drawing.Point(121, 113);
 			this.loresoftLinkLabel.Name = "loresoftLinkLabel";
-			this.loresoftLinkLabel.Size = new System.Drawing.Size(273, 23);
+			this.loresoftLinkLabel.Size = new System.Drawing.Size(102, 13);
 			this.loresoftLinkLabel.TabIndex = 23;
 			this.loresoftLinkLabel.TabStop = true;
 			this.loresoftLinkLabel.Text = "https://12noon.com";
@@ -144,19 +162,21 @@ namespace CalculateX
 			// 
 			// okButton
 			// 
+			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(322, 289);
+			this.okButton.Location = new System.Drawing.Point(328, 289);
 			this.okButton.Name = "okButton";
 			this.okButton.Size = new System.Drawing.Size(75, 23);
 			this.okButton.TabIndex = 16;
-			this.okButton.Text = "&OK";
+			this.okButton.Text = "OK";
+			this.okButton.UseMnemonic = false;
 			// 
 			// AboutForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(409, 319);
+			this.ClientSize = new System.Drawing.Size(415, 319);
 			this.Controls.Add(this.copyrightLabel);
 			this.Controls.Add(this.descriptionLabel);
 			this.Controls.Add(this.versionLabel);
