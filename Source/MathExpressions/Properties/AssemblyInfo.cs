@@ -18,9 +18,9 @@
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.CLSCompliant(true)]
 [assembly: System.Reflection.AssemblyConfiguration("Release")]
-[assembly: System.Reflection.AssemblyVersion("1.2.1.0")]
-[assembly: System.Reflection.AssemblyFileVersion("1.2.1.0")]
-[assembly: System.Reflection.AssemblyInformationalVersion("1.2.0.0")]
+[assembly: System.Reflection.AssemblyVersion("2.0.9.0")]
+[assembly: System.Reflection.AssemblyFileVersion("2.0.9.0")]
+[assembly: System.Reflection.AssemblyInformationalVersion("2.0.0.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
 internal sealed partial class ThisAssembly {
