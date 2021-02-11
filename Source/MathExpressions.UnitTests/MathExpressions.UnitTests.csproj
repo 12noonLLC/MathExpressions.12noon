@@ -58,9 +58,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LoreSoft.MathExpressions\LoreSoft.MathExpressions.csproj">
+    <ProjectReference Include="..\MathExpressions\MathExpressions.csproj">
       <Project>{b6813448-fce2-429c-81b5-9722fea839b8}</Project>
-      <Name>LoreSoft.MathExpressions</Name>
+      <Name>MathExpressions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />

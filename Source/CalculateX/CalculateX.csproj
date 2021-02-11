@@ -187,9 +187,9 @@
     <None Include="Resources\Undo.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\LoreSoft.MathExpressions\LoreSoft.MathExpressions.csproj">
+    <ProjectReference Include="..\MathExpressions\MathExpressions.csproj">
       <Project>{B6813448-FCE2-429C-81B5-9722FEA839B8}</Project>
-      <Name>LoreSoft.MathExpressions</Name>
+      <Name>MathExpressions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
