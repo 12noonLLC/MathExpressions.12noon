@@ -63,9 +63,9 @@ namespace CalculateX.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Calculator {
+        internal static System.Drawing.Bitmap CalculateX {
             get {
-                object obj = ResourceManager.GetObject("Calculator", resourceCulture);
+                object obj = ResourceManager.GetObject("CalculateX", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace CalculateX.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Calculator96 {
+        internal static System.Drawing.Bitmap Calculator {
             get {
-                object obj = ResourceManager.GetObject("Calculator96", resourceCulture);
+                object obj = ResourceManager.GetObject("Calculator", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

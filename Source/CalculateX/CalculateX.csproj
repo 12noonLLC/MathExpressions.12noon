@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CalculateX</RootNamespace>
     <AssemblyName>CalculateX</AssemblyName>
-    <ApplicationIcon>Calculator.ico</ApplicationIcon>
+    <ApplicationIcon>CalculateX.ico</ApplicationIcon>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>Calculator.snk</AssemblyOriginatorKeyFile>
     <SignManifests>false</SignManifests>
@@ -164,8 +164,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Calculator.ico" />
-    <None Include="Resources\Calculator96.png" />
+    <Content Include="CalculateX.ico" />
+    <None Include="Resources\CalculateX.png" />
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>

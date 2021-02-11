@@ -36,11 +36,11 @@ namespace CalculateX
 			this.versionLabel = new System.Windows.Forms.Label();
 			this.titleLabel = new System.Windows.Forms.Label();
 			this.loresoftLinkLabel = new System.Windows.Forms.LinkLabel();
-			this.iconPictureBox = new System.Windows.Forms.PictureBox();
 			this.versionGroupBox = new System.Windows.Forms.GroupBox();
 			this.okButton = new System.Windows.Forms.Button();
-			((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).BeginInit();
+			this.iconPictureBox = new System.Windows.Forms.PictureBox();
 			this.versionGroupBox.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).BeginInit();
 			this.SuspendLayout();
 			// 
 			// assembliesListView
@@ -56,7 +56,7 @@ namespace CalculateX
 			this.assembliesListView.HideSelection = false;
 			this.assembliesListView.Location = new System.Drawing.Point(8, 16);
 			this.assembliesListView.Name = "assembliesListView";
-			this.assembliesListView.Size = new System.Drawing.Size(393, 120);
+			this.assembliesListView.Size = new System.Drawing.Size(393, 108);
 			this.assembliesListView.TabIndex = 9;
 			this.assembliesListView.UseCompatibleStateImageBehavior = false;
 			this.assembliesListView.View = System.Windows.Forms.View.Details;
@@ -82,7 +82,7 @@ namespace CalculateX
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.copyrightLabel.AutoSize = true;
 			this.copyrightLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.copyrightLabel.Location = new System.Drawing.Point(121, 57);
+			this.copyrightLabel.Location = new System.Drawing.Point(121, 52);
 			this.copyrightLabel.Name = "copyrightLabel";
 			this.copyrightLabel.Size = new System.Drawing.Size(106, 13);
 			this.copyrightLabel.TabIndex = 22;
@@ -94,7 +94,7 @@ namespace CalculateX
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.descriptionLabel.AutoSize = true;
 			this.descriptionLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.descriptionLabel.Location = new System.Drawing.Point(121, 81);
+			this.descriptionLabel.Location = new System.Drawing.Point(121, 74);
 			this.descriptionLabel.Name = "descriptionLabel";
 			this.descriptionLabel.Size = new System.Drawing.Size(115, 13);
 			this.descriptionLabel.TabIndex = 21;
@@ -106,7 +106,7 @@ namespace CalculateX
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.versionLabel.AutoSize = true;
 			this.versionLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.versionLabel.Location = new System.Drawing.Point(121, 33);
+			this.versionLabel.Location = new System.Drawing.Point(121, 30);
 			this.versionLabel.Name = "versionLabel";
 			this.versionLabel.Size = new System.Drawing.Size(97, 13);
 			this.versionLabel.TabIndex = 20;
@@ -118,7 +118,7 @@ namespace CalculateX
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.titleLabel.AutoSize = true;
 			this.titleLabel.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.titleLabel.Location = new System.Drawing.Point(121, 9);
+			this.titleLabel.Location = new System.Drawing.Point(121, 10);
 			this.titleLabel.Name = "titleLabel";
 			this.titleLabel.Size = new System.Drawing.Size(82, 13);
 			this.titleLabel.TabIndex = 19;
@@ -129,7 +129,7 @@ namespace CalculateX
 			this.loresoftLinkLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.loresoftLinkLabel.AutoSize = true;
-			this.loresoftLinkLabel.Location = new System.Drawing.Point(121, 113);
+			this.loresoftLinkLabel.Location = new System.Drawing.Point(121, 95);
 			this.loresoftLinkLabel.Name = "loresoftLinkLabel";
 			this.loresoftLinkLabel.Size = new System.Drawing.Size(102, 13);
 			this.loresoftLinkLabel.TabIndex = 23;
@@ -137,25 +137,14 @@ namespace CalculateX
 			this.loresoftLinkLabel.Text = "https://12noon.com";
 			this.loresoftLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.loresoftLinkLabel_LinkClicked);
 			// 
-			// iconPictureBox
-			// 
-			this.iconPictureBox.Image = global::CalculateX.Properties.Resources.Calculator96;
-			this.iconPictureBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-			this.iconPictureBox.Location = new System.Drawing.Point(10, 9);
-			this.iconPictureBox.Name = "iconPictureBox";
-			this.iconPictureBox.Size = new System.Drawing.Size(96, 96);
-			this.iconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-			this.iconPictureBox.TabIndex = 18;
-			this.iconPictureBox.TabStop = false;
-			// 
 			// versionGroupBox
 			// 
 			this.versionGroupBox.Controls.Add(this.assembliesListView);
 			this.versionGroupBox.FlatStyle = System.Windows.Forms.FlatStyle.System;
 			this.versionGroupBox.ForeColor = System.Drawing.SystemColors.Highlight;
-			this.versionGroupBox.Location = new System.Drawing.Point(2, 137);
+			this.versionGroupBox.Location = new System.Drawing.Point(2, 124);
 			this.versionGroupBox.Name = "versionGroupBox";
-			this.versionGroupBox.Size = new System.Drawing.Size(400, 144);
+			this.versionGroupBox.Size = new System.Drawing.Size(400, 132);
 			this.versionGroupBox.TabIndex = 17;
 			this.versionGroupBox.TabStop = false;
 			this.versionGroupBox.Text = "Version Information";
@@ -165,18 +154,29 @@ namespace CalculateX
 			this.okButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
 			this.okButton.DialogResult = System.Windows.Forms.DialogResult.OK;
 			this.okButton.FlatStyle = System.Windows.Forms.FlatStyle.System;
-			this.okButton.Location = new System.Drawing.Point(328, 289);
+			this.okButton.Location = new System.Drawing.Point(328, 264);
 			this.okButton.Name = "okButton";
-			this.okButton.Size = new System.Drawing.Size(75, 23);
+			this.okButton.Size = new System.Drawing.Size(75, 25);
 			this.okButton.TabIndex = 16;
 			this.okButton.Text = "OK";
 			this.okButton.UseMnemonic = false;
+			// 
+			// iconPictureBox
+			// 
+			this.iconPictureBox.Image = global::CalculateX.Properties.Resources.CalculateX;
+			this.iconPictureBox.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+			this.iconPictureBox.Location = new System.Drawing.Point(10, 10);
+			this.iconPictureBox.Name = "iconPictureBox";
+			this.iconPictureBox.Size = new System.Drawing.Size(96, 96);
+			this.iconPictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+			this.iconPictureBox.TabIndex = 18;
+			this.iconPictureBox.TabStop = false;
 			// 
 			// AboutForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(415, 319);
+			this.ClientSize = new System.Drawing.Size(415, 296);
 			this.Controls.Add(this.copyrightLabel);
 			this.Controls.Add(this.descriptionLabel);
 			this.Controls.Add(this.versionLabel);
@@ -194,8 +194,8 @@ namespace CalculateX
 			this.ShowInTaskbar = false;
 			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
 			this.Text = "About";
-			((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).EndInit();
 			this.versionGroupBox.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.iconPictureBox)).EndInit();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
