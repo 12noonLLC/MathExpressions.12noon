@@ -1,8 +1,6 @@
 [Bb]in
 [Oo]bj
-packages
 [Bb]uild
-TestResults
 *.suo
 *.user
 *.[Cc]ache
