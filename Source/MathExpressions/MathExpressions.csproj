@@ -122,7 +122,6 @@
     <Compile Include="ConvertExpression.cs" />
     <Compile Include="ExpressionBase.cs" />
     <Compile Include="FunctionExpression.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="IExpression.cs" />
     <Compile Include="MathEvaluate.cs" />
     <Compile Include="MathEvaluator.cs" />
