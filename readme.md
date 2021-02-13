@@ -3,46 +3,49 @@ CalculateX
 
 CalculateX - Calculator that evaluates math expressions
 
+[12noon.com](https://12noon.com)
+
+[Get it from Microsoft](ms-windows-store://pdp/?productid=9NWLKMVZPJD3)
+
 ![CalculateX](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
 
-
-## CalculateX Features
+## Features
 
 ### Summary
-* Evaluate math expressions including grouping
-* Support trigonometry and other functions
-* Common unit conversion of the following types
+* Evaluates math expressions including grouping.
+* Supports trigonometry and other functions.
+* Converts common units of:
     * Length
     * Speed
     * Temperature
     * Time
     * Mass
     * Volume
-* Variable support including last answer
+* Supports variables including last answer.
 
 ### Usage
 
 Type an expression in the input field and press **Enter**.
 
-Press the **up- and down-arrows** to cycle through the input history.
+Press the **up-** and **down-arrows** to cycle through the input history.
 
 You can use `pi` and `e` as variables that represent those values.
 
 You can use `answer` as a variable to represent the most recent result.
-If you type an operator into an empty input field,
-it will automatically type "`answer`" in the field for you.
+(If you type an operator into an empty input field,
+it automatically types "`answer`" in the field for you.)
 
 ### Basic Mathematical Operators
 
-CalculateX supports all of the basic mathematical operators: addition, subtraction,
-multiplication, and division. It also supports modulus and exponents.
+CalculateX supports the basic mathematical operators: addition, subtraction,
+multiplication, division, modulo, and exponent.
 You can use parentheses to group expressions and give them precedence.
 
 * addition: `+`
 * subtraction: `-`
 * multiplication: `*` or `x` or implied (as in algebra)
 * division: `/`
-* modulus: `%`
+* modulo: `%`
 * exponent: `^`
 
 Example: `(3 + 4)(5 - 2) * (sin(5 x 9) / sqrt(25)) + max(16, 7) ^ 2`
