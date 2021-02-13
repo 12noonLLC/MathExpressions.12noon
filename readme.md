@@ -3,7 +3,8 @@ CalculateX
 
 CalculateX - Calculator that evaluates math expressions
 
-![CalculateX](https://raw.githubusercontent.com/skst/CalculateX/master/CalculateX.png)
+![CalculateX](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
+
 
 ## CalculateX Features
 
