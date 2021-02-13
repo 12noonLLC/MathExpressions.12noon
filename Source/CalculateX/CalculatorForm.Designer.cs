@@ -368,7 +368,7 @@ namespace CalculateX
 			this.subtractToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.subtractToolStripMenuItem.Tag = "-";
 			this.subtractToolStripMenuItem.Text = "subtract (-)";
-			this.subtractToolStripMenuItem.ToolTipText = "Subtracts two numbers ";
+			this.subtractToolStripMenuItem.ToolTipText = "Subtracts two numbers.";
 			this.subtractToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
 			// 
 			// multiplyToolStripMenuItem
@@ -394,8 +394,8 @@ namespace CalculateX
 			this.modulusToolStripMenuItem.Name = "modulusToolStripMenuItem";
 			this.modulusToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.modulusToolStripMenuItem.Tag = "%";
-			this.modulusToolStripMenuItem.Text = "modulus (%)";
-			this.modulusToolStripMenuItem.ToolTipText = "Divides two numbers and returns only the remainder.";
+			this.modulusToolStripMenuItem.Text = "modulo (%)";
+			this.modulusToolStripMenuItem.ToolTipText = "Divides two numbers and returns the remainder.";
 			this.modulusToolStripMenuItem.Click += new System.EventHandler(this.function_Click);
 			// 
 			// powerToolStripMenuItem
