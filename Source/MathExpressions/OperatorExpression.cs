@@ -16,8 +16,26 @@ namespace MathExpressions
 		/// Determine whether the passed operator has higher or lower precedence.
 		/// </summary>
 		/// <param name="c">Operator to check</param>
-		/// <returns>Returns 2 if if the passed operator has a higher precedence; 1 if it is lower.</returns>
-		public static int Precedence(string c) => (c.Length == 1) && ((c[0] == '*') || (c[0] == 'x') || (c[0] == '/') || (c[0] == '%')) ? 2 : 1;
+		/// <returns>Returns 1, 2, or 3, depending on the precedence of the passed operator.</returns>
+		public static int Precedence(string c)
+		{
+			if (c.Length != 1)
+			{
+				return 1;
+			}
+
+			if (c[0] == '^')
+			{
+				return 3;
+			}
+
+			if ((c[0] == '*') || (c[0] == 'x') || (c[0] == '/') || (c[0] == '%'))
+			{
+				return 2;
+			}
+
+			return 1;
+		}
 
 		/// <summary>Initializes a new instance of the <see cref="OperatorExpression"/> class.</summary>
 		/// <param name="operator">The operator to use for this class.</param>
