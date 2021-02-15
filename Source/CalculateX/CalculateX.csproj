@@ -183,7 +183,6 @@
     <None Include="Resources\Copy.png" />
     <None Include="Resources\clock.png" />
     <None Include="Resources\car.png" />
-    <None Include="Resources\Calculator.png" />
     <None Include="Resources\Undo.png" />
   </ItemGroup>
   <ItemGroup>
