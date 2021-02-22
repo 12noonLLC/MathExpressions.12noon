@@ -64,6 +64,18 @@ namespace MathExpressions.UnitTests
 		}
 
 		[TestMethod]
+		public void TestSubtractionPrecision()
+		{
+			double expected = (double)(7464.36m - 7391.21m);
+			double result = eval.Evaluate("7464.36 - 7391.21");
+			Assert.AreEqual(expected, result);
+
+			expected = (double)(7391.21m - 7464.36m);
+			result = eval.Evaluate("7391.21 - 7464.36");
+			Assert.AreEqual(expected, result);
+		}
+
+		[TestMethod]
 		public void TestMultiplication()
 		{
 			double expected = 128 * 45;

@@ -101,6 +101,11 @@ namespace MathExpressions
 		}
 
 		/// <summary>Subtracts the specified numbers.</summary>
+		/// <remarks>
+		/// The inherent inability of hardware to maintain accurate precision
+		/// for doubles requires us to use `decimal` for subtraction.
+		/// REF: https://stackoverflow.com/questions/2741903/double-minus-double-giving-precision-problems
+		/// </remarks>
 		/// <param name="numbers">The numbers.</param>
 		/// <returns>The result of the operation.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
@@ -108,7 +113,7 @@ namespace MathExpressions
 		public double Subtract(double[] numbers)
 		{
 			base.Validate(numbers);
-			return numbers.Skip(1).Aggregate(numbers.First(), (accumulate, n) => accumulate - n);
+			return numbers.Skip(1).Aggregate(numbers.First(), (accumulate, n) => (double)((decimal)accumulate - (decimal)n));
 		}
 
 		/// <summary>Multiples the specified numbers.</summary>
