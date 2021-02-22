@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="CalculateX.ico" />
+    <None Include="Resources\link.png" />
     <None Include="Resources\CalculateX.png" />
     <None Include="app.config">
       <SubType>Designer</SubType>

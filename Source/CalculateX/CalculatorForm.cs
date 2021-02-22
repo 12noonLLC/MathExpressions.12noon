@@ -238,6 +238,11 @@ namespace CalculateX
 
 		}
 
+		private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			System.Diagnostics.Process.Start("https://github.com/skst/CalculateX");
+		}
+
 		private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			AboutForm about = new AboutForm();
