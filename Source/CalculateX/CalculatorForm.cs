@@ -196,37 +196,28 @@ namespace CalculateX
 			if (e.KeyData == Keys.Enter)
 			{
 				if (textBox.TextLength > 0)
-			{
+				{
 					Eval(textBox.Text);
-				e.Handled = true;
+					e.Handled = true;
 					// Prevent ding caused by Enter not having a default button.
 					// https://stackoverflow.com/questions/6660772/avoid-windows-ding-when-enter-is-pressed-in-textbox-with-onkeyup
 					e.SuppressKeyPress = true;
 				}
 			}
-			else if (_history.Count > 0)
+			else if (e.KeyData == Keys.Up)
 			{
-				if (e.KeyData == Keys.Up)
+				if (_history.Any())
 				{
-					--_historyIndex;
-
-					if (_historyIndex < 0)
-					{
-						_historyIndex = _history.Count - 1;
-					}
-
+					_historyIndex = (_historyIndex == 0) ? _history.Count - 1 : --_historyIndex;
 					SetInputFromHistory();
 					e.Handled = true;
 				}
-				else if (e.KeyData == Keys.Down)
+			}
+			else if (e.KeyData == Keys.Down)
+			{
+				if (_history.Any())
 				{
-					++_historyIndex;
-
-					if (_historyIndex >= _history.Count)
-					{
-						_historyIndex = 0;
-					}
-
+					_historyIndex = (_historyIndex == _history.Count - 1) ? 0 : ++_historyIndex;
 					SetInputFromHistory();
 					e.Handled = true;
 				}
@@ -235,15 +226,14 @@ namespace CalculateX
 
 		private void inputTextBox_KeyPress(object sender, KeyPressEventArgs e)
 		{
-			if ((inputTextBox.TextLength != 0) || !OperatorExpression.IsSymbol(e.KeyChar))
+			TextBox textBox = (TextBox)sender;
+
+			if ((textBox.TextLength == 0) && OperatorExpression.IsSymbol(e.KeyChar))
 			{
-				return;
+				textBox.Text = MathEvaluator.AnswerVariable + e.KeyChar;
+				textBox.Select(textBox.TextLength, 0);
+				e.Handled = true;
 			}
-
-			inputTextBox.Text = MathEvaluator.AnswerVariable + e.KeyChar;
-			inputTextBox.Select(inputTextBox.TextLength, 0);
-			e.Handled = true;
-
 		}
 
 		private void documentationToolStripMenuItem_Click(object sender, EventArgs e)
