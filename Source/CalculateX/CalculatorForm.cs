@@ -191,10 +191,18 @@ namespace CalculateX
 
 		private void inputTextBox_KeyDown(object sender, KeyEventArgs e)
 		{
-			if ((e.KeyData == Keys.Enter) && (inputTextBox.TextLength > 0))
+			TextBox textBox = (TextBox)sender;
+
+			if (e.KeyData == Keys.Enter)
 			{
-				Eval(inputTextBox.Text);
+				if (textBox.TextLength > 0)
+			{
+					Eval(textBox.Text);
 				e.Handled = true;
+					// Prevent ding caused by Enter not having a default button.
+					// https://stackoverflow.com/questions/6660772/avoid-windows-ding-when-enter-is-pressed-in-textbox-with-onkeyup
+					e.SuppressKeyPress = true;
+				}
 			}
 			else if (_history.Count > 0)
 			{
