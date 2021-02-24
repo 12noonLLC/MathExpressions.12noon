@@ -15,10 +15,9 @@ namespace CalculateX
 {
 	public partial class CalculatorForm : Form
 	{
-		private List<string> _history = new List<string>();
-		private int _historyIndex = 0;
+		private readonly LinkedList<string> _history = new LinkedList<string>();
 		// This is an instance variable to maintain the state of its variable dictionary.
-		private MathEvaluator _eval = new MathEvaluator();
+		private readonly MathEvaluator _eval = new MathEvaluator();
 
 		public CalculatorForm()
 		{
@@ -120,13 +119,6 @@ namespace CalculateX
 			pasteContextStripMenuItem.Enabled = pasteToolStripMenuItem.Enabled;
 		}
 
-		private void SetInputFromHistory()
-		{
-			inputTextBox.Text = _history[_historyIndex];
-			inputTextBox.Select(inputTextBox.TextLength, 0);
-			inputTextBox.Focus();
-		}
-
 		private void Eval(string input)
 		{
 			string answer;
@@ -145,8 +137,7 @@ namespace CalculateX
 			timerToolStripStatusLabel.Text = watch.Elapsed.TotalMilliseconds + " ms";
 			answerToolStripStatusLabel.Text = "Answer: " + answer;
 
-			_history.Add(input);
-			_historyIndex = 0;
+			_history.AddFirst(input);
 
 			historyRichTextBox.SuspendLayout();
 			historyRichTextBox.AppendText(input);
@@ -208,8 +199,11 @@ namespace CalculateX
 			{
 				if (_history.Any())
 				{
-					_historyIndex = (_historyIndex == 0) ? _history.Count - 1 : --_historyIndex;
-					SetInputFromHistory();
+					SetInputFromHistory(_history.First());
+
+					_history.AddLast(_history.First());
+					_history.RemoveFirst();
+
 					e.Handled = true;
 				}
 			}
@@ -217,11 +211,21 @@ namespace CalculateX
 			{
 				if (_history.Any())
 				{
-					_historyIndex = (_historyIndex == _history.Count - 1) ? 0 : ++_historyIndex;
-					SetInputFromHistory();
+					_history.AddFirst(_history.Last());
+					_history.RemoveLast();
+
+					SetInputFromHistory(_history.Last());
+
 					e.Handled = true;
 				}
 			}
+		}
+
+		private void SetInputFromHistory(string s)
+		{
+			inputTextBox.Text = s;
+			inputTextBox.Select(inputTextBox.TextLength, 0);
+			inputTextBox.Focus();
 		}
 
 		private void inputTextBox_KeyPress(object sender, KeyPressEventArgs e)
