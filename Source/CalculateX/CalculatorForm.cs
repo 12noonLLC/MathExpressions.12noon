@@ -140,13 +140,13 @@ namespace CalculateX
 			// Prevent duplicate history entries
 			if (!_history.Contains(input))
 			{
-			_history.AddFirst(input);
+				_history.AddFirst(input);
 			}
 
 			historyRichTextBox.SuspendLayout();
 			historyRichTextBox.AppendText(input);
 			historyRichTextBox.AppendText(Environment.NewLine);
-			historyRichTextBox.AppendText("\t");
+			historyRichTextBox.AppendText("\t= ");
 			if (hasError)
 			{
 				historyRichTextBox.SelectionColor = Color.Maroon;
