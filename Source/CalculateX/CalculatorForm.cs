@@ -137,7 +137,11 @@ namespace CalculateX
 			timerToolStripStatusLabel.Text = watch.Elapsed.TotalMilliseconds + " ms";
 			answerToolStripStatusLabel.Text = "Answer: " + answer;
 
+			// Prevent duplicate history entries
+			if (!_history.Contains(input))
+			{
 			_history.AddFirst(input);
+			}
 
 			historyRichTextBox.SuspendLayout();
 			historyRichTextBox.AppendText(input);
