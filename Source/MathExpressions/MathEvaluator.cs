@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace MathExpressions
 {
@@ -83,6 +84,28 @@ namespace MathExpressions
 				throw new ArgumentNullException(nameof(expression));
 			}
 
+			// Note: We cannot remove all whitespace because:
+			// "41 25" => "4125"
+			// "s q r t" => "sqrt"
+			// "p i" => "pi"
+
+			// Is the expression assigned to a variable?
+			// Parse for `string=`.
+			string variableName = null;
+			Match m = Regex.Match(expression, @"^\s*(\w+)\s*=\s*(.*)$");
+			if (m.Success)
+			{
+				variableName = m.Groups[1].Value;
+				if (IsFunction(variableName))
+				{
+					variableName = null;
+				}
+				else
+				{
+					expression = m.Groups[2].Value;
+				}
+			}
+
 			_expressionReader = new StringReader(expression);
 			_expressionBuilder = new StringBuilder(expression);
 			_expressionQueue.Clear();
@@ -95,6 +118,10 @@ namespace MathExpressions
 			double result = CalculateFromQueue();
 
 			Variables[AnswerVariable] = result;
+			if (variableName != null)
+			{
+				Variables[variableName] = result;
+			}
 			return result;
 		}
 
@@ -151,7 +178,7 @@ namespace MathExpressions
 				}
 
 				_currentChar = (char)_expressionReader.Read();
-				_expressionBuilder.Remove(0, 1);
+				_expressionBuilder.Remove(startIndex: 0, length: 1);
 
 				if (Char.IsWhiteSpace(_currentChar))
 				{
@@ -221,7 +248,7 @@ namespace MathExpressions
 				{
 					_expressionReader.Read();
 				}
-				_expressionBuilder.Remove(0, 1);
+				_expressionBuilder.Remove(startIndex: 0, length: 1);
 
 				if (p == ']')
 				{
@@ -255,19 +282,14 @@ namespace MathExpressions
 			while (Char.IsLetterOrDigit(p))
 			{
 				buffer.Append((char)_expressionReader.Read());
-				_expressionBuilder.Remove(0, 1);
+				_expressionBuilder.Remove(startIndex: 0, length: 1);
 				p = (char)_expressionReader.Peek();
 			}
 
 			string name = buffer.ToString();
-			if (Variables.ContainsKey(name))
-			{
-				double value = Variables[name];
-				NumberExpression expression = new NumberExpression(value);
-				_expressionQueue.Enqueue(expression);
-				return true;
-			}
 
+			// Is the string a function?
+			// Note: Test for function first to prevent a variable from having a function name.
 			if (IsFunction(name))
 			{
 				_symbolStack.Push(name);
@@ -280,6 +302,15 @@ namespace MathExpressions
 				{
 					throw new ParseException(String.Format(Resources.InvalidArgumentCount1, name));
 				}
+				return true;
+			}
+
+			// Is the string a variable?
+			if (Variables.ContainsKey(name))
+			{
+				double value = Variables[name];
+				NumberExpression expression = new NumberExpression(value);
+				_expressionQueue.Enqueue(expression);
 				return true;
 			}
 
@@ -410,7 +441,8 @@ namespace MathExpressions
 			while ((next != -1) && Char.IsWhiteSpace((char)next))
 			{
 				_expressionReader.Read();
-				_expressionBuilder.Remove(0, 1);
+				_expressionBuilder.Remove(startIndex: 0, length: 1);
+
 				next = _expressionReader.Peek();
 			}
 			return (char)next;
@@ -519,7 +551,7 @@ namespace MathExpressions
 			while (NumberExpression.IsNumber(p))
 			{
 				_currentChar = (char)_expressionReader.Read();
-				_expressionBuilder.Remove(0, 1);
+				_expressionBuilder.Remove(startIndex: 0, length: 1);
 				buffer.Append(_currentChar);
 				p = (char)_expressionReader.Peek();
 			}
