@@ -50,39 +50,16 @@ namespace MathExpressions
 
 			switch (@operator)
 			{
-				case "+":
-					base.Evaluate = Add;
-					MathOperator = MathOperator.Add;
-					break;
-				case "-":
-					base.Evaluate = Subtract;
-					MathOperator = MathOperator.Subtract;
-					break;
-				case "*":
-					base.Evaluate = Multiply;
-					MathOperator = MathOperator.Multiply;
-					break;
-				case "/":
-					base.Evaluate = Divide;
-					MathOperator = MathOperator.Divide;
-					break;
-				case "%":
-					base.Evaluate = Modulo;
-					MathOperator = MathOperator.Modulo;
-					break;
-				case "^":
-					base.Evaluate = Power;
-					MathOperator = MathOperator.Power;
-					break;
-
+				case "+":	base.Evaluate = Add;			break;
+				case "-":	base.Evaluate = Subtract;	break;
+				case "*":	base.Evaluate = Multiply;	break;
+				case "/":	base.Evaluate = Divide;		break;
+				case "%":	base.Evaluate = Modulo;		break;
+				case "^":	base.Evaluate = Power;		break;
 				default:
 					throw new ArgumentException(String.Format(Resources.InvalidOperator1, @operator), nameof(@operator));
 			}
 		}
-
-		/// <summary>Gets the math operator.</summary>
-		/// <value>The math operator.</value>
-		public MathOperator MathOperator { get; }
 
 		/// <summary>Gets the number of arguments this expression uses.</summary>
 		/// <value>The argument count.</value>
@@ -176,14 +153,5 @@ namespace MathExpressions
 		/// <param name="c">The char to check.</param>
 		/// <returns><c>true</c> if the specified char is a math symbol; otherwise, <c>false</c>.</returns>
 		public static bool IsSymbol(char c) => operatorSymbols.Contains(c);
-
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
-		/// <filterPriority>2</filterPriority>
-		public override string ToString() => MathOperator.ToString();
 	}
 }
