@@ -31,6 +31,13 @@ namespace MathExpressions.UnitTests
 
 
 		[TestMethod]
+		public void ConvertSyntax()
+		{
+			MathEvaluator eval = new MathEvaluator();
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate("6789[ft<-mi]"));
+		}
+
+		[TestMethod]
 		public void IsConvertExpression()
 		{
 			bool result = ConvertExpression.IsConvertExpression("blah");
