@@ -1,5 +1,4 @@
-﻿using MathExpressions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace MathExpressions.UnitTests
@@ -141,7 +140,7 @@ namespace MathExpressions.UnitTests
 			Assert.ThrowsException<ParseException>(() => eval.Evaluate("(45xor(26))"));
 		}
 
-		[TestMethod]
+		[TestMethod, ExpectedException(typeof(ParseException))]
 		public void TestMultiplicationNoOperator()
 		{
 			double expected = 3 * 5;
@@ -151,6 +150,10 @@ namespace MathExpressions.UnitTests
 			expected = (1+2)*(3+4);
 			Assert.AreEqual(expected, eval.Evaluate("(1+2)*(3+4)"));
 			Assert.AreEqual(expected, eval.Evaluate("(1+2)(3+4)"));
+
+			expected = 4 * 12 + 4;
+			Assert.AreEqual(expected, eval.Evaluate("4 * 12 + 4"));
+			Assert.AreEqual(expected, eval.Evaluate("4 12 + 4"));
 		}
 
 		[TestMethod]
