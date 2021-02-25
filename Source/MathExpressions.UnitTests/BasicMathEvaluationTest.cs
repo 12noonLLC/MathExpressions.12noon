@@ -99,7 +99,7 @@ namespace MathExpressions.UnitTests
 			Assert.AreEqual(expected, result);
 		}
 
-		[TestMethod]
+		[TestMethod, ExpectedException(typeof(ParseException))]
 		public void TestMultiplicationAlternate()
 		{
 			double expected = 128 * 45;

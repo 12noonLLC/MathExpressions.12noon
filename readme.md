@@ -43,12 +43,12 @@ You can use parentheses to group expressions and give them precedence.
 
 * addition: `+`
 * subtraction: `-`
-* multiplication: `*` or `x` or implied (as in algebra)
+* multiplication: `*` or implied (as in algebra)
 * division: `/`
 * modulo: `%`
 * exponent: `^`
 
-Example: `(3 + 4)(5 - 2) * (sin(5 x 9) / sqrt(25)) + max(16, 7) ^ 2`
+Example: `(3 + 4)(5 - 2) * (sin(68) / sqrt(25)) + max(16, 7) ^ 2`
 
 ### Basic Mathematical Functions
 

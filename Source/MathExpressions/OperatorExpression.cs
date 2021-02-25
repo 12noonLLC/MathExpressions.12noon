@@ -10,7 +10,7 @@ namespace MathExpressions
 	public class OperatorExpression : ExpressionBase
 	{
 		/// <summary>The supported math operators by this class.</summary>
-		private static readonly char[] operatorSymbols = new char[] { '+', '-', '*', 'x', '/', '%', '^' };
+		private static readonly char[] operatorSymbols = new char[] { '+', '-', '*', '/', '%', '^' };
 
 		/// <summary>
 		/// Determine whether the passed operator has higher or lower precedence.
@@ -29,7 +29,7 @@ namespace MathExpressions
 				return 3;
 			}
 
-			if ((c[0] == '*') || (c[0] == 'x') || (c[0] == '/') || (c[0] == '%'))
+			if ((c[0] == '*') || (c[0] == '/') || (c[0] == '%'))
 			{
 				return 2;
 			}
@@ -59,7 +59,6 @@ namespace MathExpressions
 					MathOperator = MathOperator.Subtract;
 					break;
 				case "*":
-				case "x":
 					base.Evaluate = Multiply;
 					MathOperator = MathOperator.Multiply;
 					break;
