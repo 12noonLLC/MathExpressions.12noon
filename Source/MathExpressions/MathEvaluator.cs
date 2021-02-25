@@ -632,11 +632,16 @@ namespace MathExpressions
 				calculationStack.Push(expression.Evaluate.Invoke(parameters.ToArray()));
 			}
 
-			// Normally there would be only one value left on the stack.
-			// However, since we now allow implied multiplication,
-			// we multiply all remaining values to get the final result.
-			// This places a greater burden on the parser.
-			return calculationStack.Aggregate(1d, (accumulate, value) => accumulate * value);
+			// The remaining element is the result.
+			var result = calculationStack.Pop();
+
+			// If there are more elements, there is a parsing error.
+			if (calculationStack.Any())
+			{
+				throw new ParseException(String.Format("{0} items '{1}' remain on the calculation stack.", calculationStack.Count(), String.Join(",", calculationStack)));
+			}
+
+			return result;
 		}
 
 		#region IDisposable Members
