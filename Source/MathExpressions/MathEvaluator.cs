@@ -158,23 +158,13 @@ namespace MathExpressions
 					continue;
 				}
 
+				// Test for number before operator in case of negative sign.
 				if (TryNumber(lastChar))
 				{
 					continue;
 				}
 
-				// "x" performs multiplication so we have to check for it BEFORE strings.
 				if (TryOperator())
-				{
-					continue;
-				}
-
-				if (TryString())
-				{
-					continue;
-				}
-
-				if (TryStartGroup())
 				{
 					continue;
 				}
@@ -184,7 +174,17 @@ namespace MathExpressions
 					continue;
 				}
 
+				if (TryStartGroup())
+				{
+					continue;
+				}
+
 				if (TryEndGroup())
+				{
+					continue;
+				}
+
+				if (TryString())
 				{
 					continue;
 				}
@@ -466,12 +466,6 @@ namespace MathExpressions
 		private bool TryOperator()
 		{
 			if (!OperatorExpression.IsSymbol(_currentChar))
-			{
-				return false;
-			}
-
-			// Special case to allow 'x' to be a multiplication operator.
-			if ((_currentChar == 'x') && Char.IsLetter((char)_expressionReader.Peek()))
 			{
 				return false;
 			}

@@ -236,6 +236,8 @@ namespace CalculateX
 		{
 			TextBox textBox = (TextBox)sender;
 
+			// Could be a letter for a variable name, and "answerx" is wrong, so ignore letters.
+			// Could be a paren using implicit multiplication, but that's not preferable, so ignore parens.
 			if ((textBox.TextLength == 0) && OperatorExpression.IsSymbol(e.KeyChar))
 			{
 				textBox.Text = MathEvaluator.AnswerVariable + e.KeyChar;
