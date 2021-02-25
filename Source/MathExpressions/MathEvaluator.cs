@@ -504,10 +504,9 @@ namespace MathExpressions
 
 			bool repeat;
 			string s = _currentChar.ToString();
-
 			do
 			{
-				string p = !_symbolStack.Any() ? String.Empty : _symbolStack.Peek();
+				string p = _symbolStack.Any() ? _symbolStack.Peek() : String.Empty;
 				repeat = false;
 				if (!_symbolStack.Any())
 				{
@@ -625,7 +624,7 @@ namespace MathExpressions
 				}
 
 				Stack<double> parameters = new Stack<double>(capacity: 2);
-				foreach (int i in Enumerable.Range(0, expression.ArgumentCount))
+				foreach (int _ in Enumerable.Range(0, expression.ArgumentCount))
 				{
 					parameters.Push(calculationStack.Pop());
 				}

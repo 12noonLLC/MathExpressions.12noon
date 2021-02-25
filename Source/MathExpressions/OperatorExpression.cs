@@ -16,7 +16,7 @@ namespace MathExpressions
 		/// Determine whether the passed operator has higher or lower precedence.
 		/// </summary>
 		/// <param name="c">Operator to check</param>
-		/// <returns>Returns 1, 2, or 3, depending on the precedence of the passed operator.</returns>
+		/// <returns>Returns an integer indicating the precedence of the passed operator.</returns>
 		public static int Precedence(string c)
 		{
 			if (c.Length != 1)
@@ -93,7 +93,7 @@ namespace MathExpressions
 		/// <returns>The result of the operation.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Add(double[] numbers)
+		private double Add(double[] numbers)
 		{
 			base.Validate(numbers);
 			return numbers.Aggregate(0d, (accumulate, n) => accumulate + n);
@@ -109,7 +109,7 @@ namespace MathExpressions
 		/// <returns>The result of the operation.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Subtract(double[] numbers)
+		private double Subtract(double[] numbers)
 		{
 			base.Validate(numbers);
 			return numbers.Skip(1).Aggregate(numbers.First(), (accumulate, n) => (double)((decimal)accumulate - (decimal)n));
@@ -120,7 +120,7 @@ namespace MathExpressions
 		/// <returns>The result of the operation.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Multiply(double[] numbers)
+		private double Multiply(double[] numbers)
 		{
 			base.Validate(numbers);
 			return numbers.Aggregate(1d, (accumulate, n) => accumulate * n);
@@ -131,7 +131,7 @@ namespace MathExpressions
 		/// <returns>The result of the operation.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Divide(double[] numbers)
+		private double Divide(double[] numbers)
 		{
 			base.Validate(numbers);
 			return numbers.Skip(1).Aggregate(numbers.First(), (accumulate, n) => accumulate / n);
@@ -142,7 +142,7 @@ namespace MathExpressions
 		/// <returns>The result of the operation.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Modulo(double[] numbers)
+		private double Modulo(double[] numbers)
 		{
 			base.Validate(numbers);
 			return numbers.Skip(1).Aggregate(numbers.First(), (accumulate, n) => accumulate % n);
@@ -153,7 +153,7 @@ namespace MathExpressions
 		/// <returns>The result of the operation.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Power(double[] numbers)
+		private double Power(double[] numbers)
 		{
 			base.Validate(numbers);
 			return numbers.Skip(1).Aggregate(numbers.First(), (accumulate, n) => Math.Pow(accumulate, n));
