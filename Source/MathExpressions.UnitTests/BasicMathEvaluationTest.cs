@@ -208,16 +208,5 @@ namespace MathExpressions.UnitTests
 			Assert.AreEqual(3 + 4 * 2, eval.Evaluate("3 + 4 * 2"));
 			Assert.AreEqual((3 + 4) * 2, eval.Evaluate("(3 + 4) * 2"));
 		}
-
-		[TestMethod]
-		public void TestAnswer()
-		{
-			Assert.AreEqual((3 + 4) * 2, eval.Evaluate("(3 + 4) * 2"));
-			Assert.AreEqual(eval.Answer, eval.Evaluate("(3 + 4) * 2"));
-			Assert.AreEqual(eval.Evaluate("answer"), eval.Evaluate("(3 + 4) * 2"));
-
-			Assert.AreEqual(3 + 4*4, eval.Evaluate("3 + 4 ^ 2"));
-			Assert.AreEqual((3 + 4*4) * Math.Abs(5 - 8) - 7, eval.Evaluate("answer * abs(5-8) - 7"));
-		}
 	}
 }

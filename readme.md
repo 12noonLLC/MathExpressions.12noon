@@ -29,12 +29,6 @@ Type an expression in the input field and press **Enter**.
 
 Press the **up-** and **down-arrows** to cycle through the input history.
 
-You can use `pi` and `e` as variables that represent those values.
-
-You can use `answer` as a variable to represent the most recent result.
-(If you type an operator into an empty input field,
-it automatically types "`answer`" in the field for you.)
-
 ### Basic Mathematical Operators
 
 CalculateX supports the basic mathematical operators: addition, subtraction,
@@ -49,6 +43,24 @@ You can use parentheses to group expressions and give them precedence.
 * exponent: `^`
 
 Example: `(3 + 4)(5 - 2) * (sin(68) / sqrt(25)) + max(16, 7) ^ 2`
+
+### Variables
+
+You can set and access variables in your expressions.
+
+The `pi` and `e` variables are pre-defined.
+
+Example:
+````
+y = sin(pi / 2)
+x = y + 2
+x + 1
+````
+(The `answer` variable is set to `4`.)
+
+The `answer` variable is always set to the most recent result.
+(If you type an operator into an empty input field,
+it automatically types "`answer`" in the field for you.)
 
 ### Basic Mathematical Functions
 
