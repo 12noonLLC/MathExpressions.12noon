@@ -18,8 +18,8 @@
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.CLSCompliant(true)]
 [assembly: System.Reflection.AssemblyConfiguration("Release")]
-[assembly: System.Reflection.AssemblyVersion("2.0.14.0")]
-[assembly: System.Reflection.AssemblyFileVersion("2.0.14.0")]
+[assembly: System.Reflection.AssemblyVersion("2.0.15.0")]
+[assembly: System.Reflection.AssemblyFileVersion("2.0.15.0")]
 [assembly: System.Reflection.AssemblyInformationalVersion("2.0.0.0")]
 [assembly: NeutralResourcesLanguage("en-US")]
 
