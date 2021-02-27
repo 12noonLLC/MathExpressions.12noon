@@ -278,12 +278,10 @@ namespace MathExpressions
 			StringBuilder buffer = new StringBuilder();
 			buffer.Append(_currentChar);
 
-			char p = (char)_expressionReader.Peek();
-			while (Char.IsLetterOrDigit(p))
+			while (char.IsLetterOrDigit((char)_expressionReader.Peek()))
 			{
 				buffer.Append((char)_expressionReader.Read());
 				_expressionBuilder.Remove(startIndex: 0, length: 1);
-				p = (char)_expressionReader.Peek();
 			}
 
 			string name = buffer.ToString();
@@ -311,6 +309,14 @@ namespace MathExpressions
 				double value = Variables[name];
 				NumberExpression expression = new NumberExpression(value);
 				_expressionQueue.Enqueue(expression);
+
+				// Variable can be followed by a group.
+				// If there is no operator, assume multiplication.
+				char nextChar = PeekNextNonWhitespaceChar();
+				if ((nextChar == '('))
+				{
+					_symbolStack.Push(((char)MathOperator.Multiply).ToString());
+				}
 				return true;
 			}
 
@@ -492,6 +498,14 @@ namespace MathExpressions
 				throw new ParseException(Resources.UnbalancedParentheses);
 			}
 
+			// Group or function can be followed by a group, number >= 0, function, or variable.
+			// If there is no operator, assume multiplication.
+			char nextChar = PeekNextNonWhitespaceChar();
+			if ((nextChar == '(') || Char.IsLetterOrDigit(nextChar))
+			{
+				_symbolStack.Push(((char)MathOperator.Multiply).ToString());
+			}
+
 			return true;
 		}
 
@@ -562,6 +576,14 @@ namespace MathExpressions
 
 			NumberExpression expression = new NumberExpression(value);
 			_expressionQueue.Enqueue(expression);
+
+			// Number can be followed by a group, function, or variable.
+			// If there is no operator, assume multiplication.
+			char nextChar = PeekNextNonWhitespaceChar();
+			if ((nextChar == '(') || Char.IsLetter(nextChar))
+			{
+				_symbolStack.Push(((char)MathOperator.Multiply).ToString());
+			}
 
 			return true;
 		}
