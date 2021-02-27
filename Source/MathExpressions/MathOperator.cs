@@ -4,16 +4,16 @@ namespace MathExpressions
 	public enum MathOperator
 	{
 		/// <summary>Addition Operator</summary>
-		Add,
+		Add = '+',
 		/// <summary>Subtraction Operator</summary>
-		Subtract,
+		Subtract = '-',
 		/// <summary>Multiplication Operator</summary>
-		Multiply,
+		Multiply = '*',
 		/// <summary>Division Operator</summary>
-		Divide,
+		Divide = '/',
 		/// <summary>Modulo Operator</summary>
-		Modulo,
+		Modulo = '%',
 		/// <summary>Exponent Operator</summary>
-		Power,
+		Power = '^',
 	}
 }
