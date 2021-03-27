@@ -5,7 +5,7 @@ CalculateX - Calculator that evaluates math expressions
 
 [12noon.com](https://12noon.com)
 
-[Get it from Microsoft](ms-windows-store://pdp/?productid=9NWLKMVZPJD3)
+[Get it from Microsoft](https://microsoft.com/en-us/p/calculatex/9NWLKMVZPJD3)
 
 ![CalculateX](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
 
