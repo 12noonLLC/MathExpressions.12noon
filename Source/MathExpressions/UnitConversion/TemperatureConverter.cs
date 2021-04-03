@@ -1,4 +1,5 @@
 using MathExpressions.Metadata;
+using System;
 
 namespace MathExpressions.UnitConversion
 {
@@ -24,14 +25,14 @@ namespace MathExpressions.UnitConversion
 		/// <summary>
 		/// Converts the specified from unit to the specified unit.
 		/// </summary>
-		/// <param name="fromUnit">Covert from unit.</param>
-		/// <param name="toUnit">Covert to unit.</param>
-		/// <param name="fromValue">Covert from value.</param>
+		/// <param name="fromUnit">Convert from unit.</param>
+		/// <param name="toUnit">Convert to unit.</param>
+		/// <param name="fromValue">Convert from value.</param>
 		/// <returns>The converted value.</returns>
-		public static double Convert(
+		public static decimal Convert(
 			 TemperatureUnit fromUnit,
 			 TemperatureUnit toUnit,
-			 double fromValue)
+			 decimal fromValue)
 		{
 			if (fromUnit == toUnit)
 			{
@@ -42,38 +43,38 @@ namespace MathExpressions.UnitConversion
 			{
 				if (toUnit == TemperatureUnit.Kelvin)
 				{
-					return fromValue + 273.15d;
+					return fromValue + 273.15m;
 				}
 				else if (toUnit == TemperatureUnit.Fahrenheit)
 				{
-					//(9/5 * C) + 32 = F
-					return (9.0d / 5.0d * fromValue) + 32d;
+					// F = (C * 9/5) + 32
+					return (fromValue * 9m / 5m) + 32m;
 				}
 			}
 			else if (fromUnit == TemperatureUnit.Kelvin)
 			{
 				if (toUnit == TemperatureUnit.Celsius)
 				{
-					return fromValue - 273.15d;
+					return fromValue - 273.15m;
 				}
 				else if (toUnit == TemperatureUnit.Fahrenheit)
 				{
-					return 5.0d / 9.0d * ((fromValue - 273.15d) + 32d);
+					return ((fromValue - 273.15m) + 32m) * 5m / 9m;
 				}
 			}
 			else if (fromUnit == TemperatureUnit.Fahrenheit)
 			{
 				if (toUnit == TemperatureUnit.Celsius)
 				{
-					//(F - 32) * 5/9 = C
-					return 5.0d / 9.0d * (fromValue - 32d);
+					// C = (F - 32) * 5/9
+					return (fromValue - 32m) * 5m / 9m;
 				}
 				else if (toUnit == TemperatureUnit.Kelvin)
 				{
-					return (5.0d / 9.0d * (fromValue - 32d)) + 273.15;
+					return ((fromValue - 32m) * 5m / 9m) + 273.15m;
 				}
 			}
-			return 0;
+			return Decimal.Zero;
 		}
 	}
 }

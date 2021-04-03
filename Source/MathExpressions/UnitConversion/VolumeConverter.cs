@@ -39,38 +39,38 @@ namespace MathExpressions.UnitConversion
 	public static class VolumeConverter
 	{
 		// In enum order
-		private static readonly double[] factors = new double[]
+		private static readonly decimal[] factors = new[]
 		{
-			0.000001d,					//milliliter
-			0.001d,						//liter
-			1d,							//kiloliter
-			0.0037854118d / 128d,	//ounce [US, liquid]
-			0.0037854118d / 16d,		//cup [US]
-			0.0037854118d / 8d,		//pint [US, liquid]
-			0.0037854118d / 4d,		//quart [US, liquid]
-			0.0037854118d,				//gallon [US, liquid]
+			0.000001m,					//milliliter
+			0.001m,						//liter
+			1m,							//kiloliter
+			0.0037854118m / 128m,	//ounce [US, liquid]
+			0.0037854118m / 16m,		//cup [US]
+			0.0037854118m / 8m,		//pint [US, liquid]
+			0.0037854118m / 4m,		//quart [US, liquid]
+			0.0037854118m,				//gallon [US, liquid]
 		};
 
 		/// <summary>
 		/// Converts the specified from unit to the specified unit.
 		/// </summary>
-		/// <param name="fromUnit">Covert from unit.</param>
-		/// <param name="toUnit">Covert to unit.</param>
-		/// <param name="fromValue">Covert from value.</param>
+		/// <param name="fromUnit">Convert from unit.</param>
+		/// <param name="toUnit">Convert to unit.</param>
+		/// <param name="fromValue">Convert from value.</param>
 		/// <returns>The converted value.</returns>
-		public static double Convert(
+		public static decimal Convert(
 			 VolumeUnit fromUnit,
 			 VolumeUnit toUnit,
-			 double fromValue)
+			 decimal fromValue)
 		{
 			if (fromUnit == toUnit)
 			{
 				return fromValue;
 			}
 
-			double fromFactor = factors[(int)fromUnit];
-			double toFactor = factors[(int)toUnit];
-			double result = fromFactor * fromValue / toFactor;
+			decimal fromFactor = factors[(int)fromUnit];
+			decimal toFactor = factors[(int)toUnit];
+			decimal result = fromFactor * fromValue / toFactor;
 			return result;
 		}
 	}

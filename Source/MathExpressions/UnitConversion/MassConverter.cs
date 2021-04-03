@@ -31,36 +31,36 @@ namespace MathExpressions.UnitConversion
 	public static class MassConverter
 	{
 		// In enum order
-		private static readonly double[] factors = new double[]
+		private static readonly decimal[] factors = new[]
 		{
-			0.000001d,					//milligram
-			0.001d,						//gram
-			1d,							//kilogram
-			0.45359237d / 16d,		//ounce
-			0.45359237d,				//pound
-			0.45359237d * 2_000d,	//ton [short, US]      
+			0.000001m,					//milligram
+			0.001m,						//gram
+			1m,							//kilogram
+			0.45359237m / 16m,		//ounce
+			0.45359237m,				//pound
+			0.45359237m * 2_000m,	//ton [short, US]      
 		};
 
 		/// <summary>
 		/// Converts the specified from unit to the specified unit.
 		/// </summary>
-		/// <param name="fromUnit">Covert from unit.</param>
-		/// <param name="toUnit">Covert to unit.</param>
-		/// <param name="fromValue">Covert from value.</param>
+		/// <param name="fromUnit">Convert from unit.</param>
+		/// <param name="toUnit">Convert to unit.</param>
+		/// <param name="fromValue">Convert from value.</param>
 		/// <returns>The converted value.</returns>
-		public static double Convert(
+		public static decimal Convert(
 			 MassUnit fromUnit,
 			 MassUnit toUnit,
-			 double fromValue)
+			 decimal fromValue)
 		{
 			if (fromUnit == toUnit)
 			{
 				return fromValue;
 			}
 
-			double fromFactor = factors[(int)fromUnit];
-			double toFactor = factors[(int)toUnit];
-			double result = fromFactor * fromValue / toFactor;
+			decimal fromFactor = factors[(int)fromUnit];
+			decimal toFactor = factors[(int)toUnit];
+			decimal result = fromFactor * fromValue / toFactor;
 			return result;
 		}
 	}

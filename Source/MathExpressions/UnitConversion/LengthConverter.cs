@@ -37,39 +37,39 @@ namespace MathExpressions.UnitConversion
 	public static class LengthConverter
 	{
 		// In enum order
-		private static readonly double[] factors = new double[]
+		private static readonly decimal[] Factors = new[]
 		{
-			0.001d,				//millimeter
-			0.01d,				//centimeter
-			1d,					//meter
-			1_000d,				//kilometer
-			0.3048d / 12d,		//inch
-			0.3048d,				//feet
-			0.9144d,				//yard
-			0.3048d * 5_280d,	//mile
+			0.001m,				//millimeter
+			0.01m,				//centimeter
+			1m,					//meter
+			1_000m,				//kilometer
+			0.3048m / 12m,		//inch
+			0.3048m,				//feet
+			0.9144m,				//yard
+			0.3048m * 5_280m,	//mile
 		};
 
 
 		/// <summary>
 		/// Converts the specified from unit to the specified unit.
 		/// </summary>
-		/// <param name="fromUnit">Covert from unit.</param>
-		/// <param name="toUnit">Covert to unit.</param>
-		/// <param name="fromValue">Covert from value.</param>
+		/// <param name="fromUnit">Convert from unit.</param>
+		/// <param name="toUnit">Convert to unit.</param>
+		/// <param name="fromValue">Convert from value.</param>
 		/// <returns>The converted value.</returns>
-		public static double Convert(
+		public static decimal Convert(
 			 LengthUnit fromUnit,
 			 LengthUnit toUnit,
-			 double fromValue)
+			 decimal fromValue)
 		{
 			if (fromUnit == toUnit)
 			{
 				return fromValue;
 			}
 
-			double fromFactor = factors[(int)fromUnit];
-			double toFactor = factors[(int)toUnit];
-			double result = fromFactor * fromValue / toFactor;
+			decimal fromFactor = Factors[(int)fromUnit];
+			decimal toFactor = Factors[(int)toUnit];
+			decimal result = fromFactor * fromValue / toFactor;
 			return result;
 		}
 	}

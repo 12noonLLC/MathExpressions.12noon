@@ -3,101 +3,71 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 
 namespace MathExpressions
 {
 	/// <summary>
 	/// A class representing the System.Math function expressions
 	/// </summary>
-	public class FunctionExpression : ExpressionBase
+	public class FunctionExpression : IExpression
 	{
 		private class MathFunction
 		{
-			public int ArgumentCount => Arguments.Count();
 			public readonly string MathMethodName;
 
-			private readonly List<Type> Arguments = new List<Type>();
-			private MethodInfo Method = null;
+			public delegate double TMathFunction(PreciseNumber[] operands);
+			private readonly TMathFunction _function;
 
-			public MathFunction(string methodName, Type firstArgument)
+			public int ArgumentCount { get; }
+
+			public MathFunction(string methodName, TMathFunction function, int argumentCount)
 			{
 				MathMethodName = methodName;
-				Arguments.Add(firstArgument);
-				Initialize();
+				_function = function;
+				ArgumentCount = argumentCount;
 			}
 
-			public MathFunction(string methodName, Type firstArgument, Type secondArgument)
+			public PreciseNumber Invoke(PreciseNumber[] operands)
 			{
-				MathMethodName = methodName;
-				Arguments.Add(firstArgument);
-				Arguments.Add(secondArgument);
-				Initialize();
-			}
+				Debug.Assert(operands.Length == ArgumentCount, "The number of arguments is validated by the caller.");
 
-			private void Initialize()
-			{
-				Method = typeof(Math).GetMethod(
-					 MathMethodName,
-					 BindingFlags.Static | BindingFlags.Public,
-					 binder: null,
-					 Arguments.ToArray(),
-					 modifiers: null
-				);
-				if (Method is null)
-				{
-					throw new InvalidOperationException(String.Format(Resources.InvalidFunctionName1, MathMethodName));
-				}
-			}
-
-			public double Invoke(double[] numbers)
-			{
-				Debug.Assert(numbers.Count() == ArgumentCount, "The number of arguments is validated by the caller.");
-
-				object[] parameters = new object[numbers.Length];
-				Array.Copy(sourceArray: numbers, destinationArray: parameters, length: numbers.Length);
-
-				// KLUDGE: One function's second argument is Int32 (not Double).
-				// To be more generic, we should do this differently.
-				if ((ArgumentCount == 2) && (Arguments[1].Name == nameof(Int32)))
-				{
-					parameters[1] = Convert.ToInt32(numbers[1]);
-				}
-
-				return (double)Method.Invoke(obj: null, parameters);
+				// Note: Some Math functions can return Double.NaN, Double.PositiveInfinity, etc. which cannot cast to Decimal.
+				double result;
+				result = _function(operands);
+				return new PreciseNumber(result);
 			}
 		}
 
-		private static readonly Dictionary<string, MathFunction> MathFunctions = new Dictionary<string, MathFunction>();
+		private static readonly Dictionary<string, MathFunction> MathFunctions = new();
 		static FunctionExpression()
 		{
 			// Note: The keys must be uppercase for <see cref="FunctionExpression"/>.
 
 			// Basic functions
-			MathFunctions.Add("SQRT",		new MathFunction(nameof(Math.Sqrt),		typeof(Double)));
-			MathFunctions.Add("ABS",		new MathFunction(nameof(Math.Abs),		typeof(Double)));
-			MathFunctions.Add("POW",		new MathFunction(nameof(Math.Pow),		typeof(Double), typeof(Double)));
-			MathFunctions.Add("MIN",		new MathFunction(nameof(Math.Min),		typeof(Double), typeof(Double)));
-			MathFunctions.Add("MAX",		new MathFunction(nameof(Math.Max),		typeof(Double), typeof(Double)));
-			MathFunctions.Add("ROUND",		new MathFunction(nameof(Math.Round),	typeof(Double), typeof(Int32)));
-			MathFunctions.Add("FLOOR",		new MathFunction(nameof(Math.Floor),	typeof(Double)));
-			MathFunctions.Add("CEILING",	new MathFunction(nameof(Math.Ceiling),	typeof(Double)));
+			MathFunctions.Add("SQRT",		new MathFunction(nameof(Math.Sqrt),		(operands) => Math.Sqrt(operands[0].AsDouble), 1));
+			MathFunctions.Add("ABS",		new MathFunction(nameof(Math.Abs),		(operands) => Math.Abs(operands[0].AsDouble), 1));
+			MathFunctions.Add("POW",		new MathFunction(nameof(Math.Pow),		(operands) => Math.Pow(operands[0].AsDouble, operands[1].AsDouble), 2));
+			MathFunctions.Add("MIN",		new MathFunction(nameof(Math.Min),		(operands) => Math.Min(operands[0].AsDouble, operands[1].AsDouble), 2));
+			MathFunctions.Add("MAX",		new MathFunction(nameof(Math.Max),		(operands) => Math.Max(operands[0].AsDouble, operands[1].AsDouble), 2));
+			MathFunctions.Add("ROUND",	new MathFunction(nameof(Math.Round),		(operands) => Math.Round(operands[0].AsDouble, (int)operands[1].AsDouble), 2));
+			MathFunctions.Add("FLOOR",	new MathFunction(nameof(Math.Floor),		(operands) => Math.Floor(operands[0].AsDouble), 1));
+			MathFunctions.Add("CEILING",	new MathFunction(nameof(Math.Ceiling),	(operands) => Math.Ceiling(operands[0].AsDouble), 1));
 
 			// Trigonometric functions
-			MathFunctions.Add("COS",		new MathFunction(nameof(Math.Cos),		typeof(Double)));
-			MathFunctions.Add("COSH",		new MathFunction(nameof(Math.Cosh),		typeof(Double)));
-			MathFunctions.Add("ACOS",		new MathFunction(nameof(Math.Acos),		typeof(Double)));
-			MathFunctions.Add("SIN",		new MathFunction(nameof(Math.Sin),		typeof(Double)));
-			MathFunctions.Add("SINH",		new MathFunction(nameof(Math.Sinh),		typeof(Double)));
-			MathFunctions.Add("ASIN",		new MathFunction(nameof(Math.Asin),		typeof(Double)));
-			MathFunctions.Add("TAN",		new MathFunction(nameof(Math.Tan),		typeof(Double)));
-			MathFunctions.Add("TANH",		new MathFunction(nameof(Math.Tanh),		typeof(Double)));
-			MathFunctions.Add("ATAN",		new MathFunction(nameof(Math.Atan),		typeof(Double)));
+			MathFunctions.Add("COS",		new MathFunction(nameof(Math.Cos),		(operands) => Math.Cos(operands[0].AsDouble), 1));
+			MathFunctions.Add("COSH",		new MathFunction(nameof(Math.Cosh),		(operands) => Math.Cosh(operands[0].AsDouble), 1));
+			MathFunctions.Add("ACOS",		new MathFunction(nameof(Math.Acos),		(operands) => Math.Acos(operands[0].AsDouble), 1));
+			MathFunctions.Add("SIN",		new MathFunction(nameof(Math.Sin),		(operands) => Math.Sin(operands[0].AsDouble), 1));
+			MathFunctions.Add("SINH",		new MathFunction(nameof(Math.Sinh),		(operands) => Math.Sinh(operands[0].AsDouble), 1));
+			MathFunctions.Add("ASIN",		new MathFunction(nameof(Math.Asin),		(operands) => Math.Asin(operands[0].AsDouble), 1));
+			MathFunctions.Add("TAN",		new MathFunction(nameof(Math.Tan),		(operands) => Math.Tan(operands[0].AsDouble), 1));
+			MathFunctions.Add("TANH",		new MathFunction(nameof(Math.Tanh),		(operands) => Math.Tanh(operands[0].AsDouble), 1));
+			MathFunctions.Add("ATAN",		new MathFunction(nameof(Math.Atan),		(operands) => Math.Atan(operands[0].AsDouble), 1));
 
 			// Logarithmic functions
-			MathFunctions.Add("EXP",		new MathFunction(nameof(Math.Exp),		typeof(Double)));
-			MathFunctions.Add("LOG",		new MathFunction(nameof(Math.Log),		typeof(Double)));
-			MathFunctions.Add("LOG10",		new MathFunction(nameof(Math.Log10),	typeof(Double)));
+			MathFunctions.Add("EXP",		new MathFunction(nameof(Math.Exp),		(operands) => Math.Exp(operands[0].AsDouble), 1));
+			MathFunctions.Add("LOG",		new MathFunction(nameof(Math.Log),		(operands) => Math.Log(operands[0].AsDouble), 1));
+			MathFunctions.Add("LOG10",	new MathFunction(nameof(Math.Log10),		(operands) => Math.Log10(operands[0].AsDouble), 1));
 		}
 
 
@@ -108,29 +78,27 @@ namespace MathExpressions
 		internal FunctionExpression(string function)
 		{
 			// REF: https://docs.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca1308
-			if (!MathFunctions.TryGetValue(function.ToUpperInvariant(), out _mathFunction))
+			if (!MathFunctions.TryGetValue(function.ToUpperInvariant(), out _mathFunction!))
 			{
 				throw new ArgumentException(String.Format(Resources.InvalidFunctionName1, function), nameof(function));
 			}
-
-			base.Evaluate = Execute;
 		}
 
 		/// <summary>Executes the function on specified numbers.</summary>
-		/// <param name="numbers">The numbers used in the function.</param>
-		/// <returns>The result of the function execution.</returns>
+		/// <param name="operands">The numbers used in the function.</param>
+		/// <returns>The result of the function execution. May be Double.NaN, Double.PositiveInfinity, etc.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Execute(double[] numbers)
+		public PreciseNumber Evaluate(PreciseNumber[] operands)
 		{
-			base.Validate(numbers);
+			((IExpression)this).Validate(operands);
 
-			return _mathFunction.Invoke(numbers);
+			return _mathFunction.Invoke(operands);
 		}
 
 		/// <summary>Gets the number of arguments this expression uses.</summary>
 		/// <value>The argument count.</value>
-		public override int ArgumentCount => _mathFunction.ArgumentCount;
+		public int ArgumentCount => _mathFunction.ArgumentCount;
 
 		/// <summary>Determines whether the specified function name is a function.</summary>
 		/// <param name="function">The function name.</param>
