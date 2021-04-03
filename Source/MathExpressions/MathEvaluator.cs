@@ -442,6 +442,14 @@ namespace MathExpressions
 				throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
 			}
 
+			// This is an argument separator, so all cached symbols (that are "inside" this function) must move to the expression queue.
+			// (If the stack is empty, it will throw InvalidOperationException.)
+			while (_symbolStack.Peek() != "(")
+			{
+				IExpression e = GetExpressionFromSymbol(_symbolStack.Pop());
+				_expressionQueue.Enqueue(e);
+			}
+
 			return true;
 		}
 
