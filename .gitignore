@@ -4,14 +4,9 @@
 *.suo
 *.user
 *.[Cc]ache
-*[Rr]esharper*
 *.zip
 *.nupkg
 *.msi
 *.chm
 *.dbmdl
-/Package
-/Tools
 .vs/
-CalculateX.Package/
-Calculator.v1.2.0.42/
