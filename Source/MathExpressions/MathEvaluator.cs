@@ -243,7 +243,7 @@ namespace MathExpressions
 			buffer.Append(_currentChar);
 
 			char p = (char)expressionReader.Peek();
-			while (Char.IsLetter(p) || Char.IsWhiteSpace(p) || (p == '-') || (p == '>') || (p == ']'))
+			while (Char.IsLetter(p) || Char.IsWhiteSpace(p) || (p == '-') || (p == '>') || (p == '/') || (p == ']'))
 			{
 				if (!Char.IsWhiteSpace(p))
 				{
