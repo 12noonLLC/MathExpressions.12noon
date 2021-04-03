@@ -23,9 +23,17 @@ CalculateX - Calculator that evaluates math expressions
     - Volume
 - Supports variables including last answer.
 
+Enter simple or complex mathematical expressions and immediately calculate the result.
+From adding your grocery bill to calculating cosine, *CalculateX* does it all.
+Results are added to a history tape,
+so you don't have to write them down to remember them.
+Those results are even saved and restored when you exit and restart the application.
+
 ### Usage
 
 Type an expression in the input field and press **Enter**.
+
+Press **ESC** to clear the input field.
 
 Press the **up-** and **down-arrows** to cycle through the input history.
 
@@ -57,6 +65,7 @@ You can also use algebraic (implied) multiplication in many cases:
 
 You can set and access variables in your expressions.
 Variables must start with a letter, and they can contain digits.
+All variables and their current values are displayed in the list on the right.
 
 Examples:
 ````
@@ -82,6 +91,12 @@ x + 1
 📌 If you type an operator into an empty input field,
 it automatically enters "*answer*" in the field for you.
 
+You can clear a variable (and remove it from the variable pane) by assigning nothing to it.
+
+````
+x =
+````
+
 ### Basic Mathematical Functions
 
 - sqrt(n) - square root of `n`
@@ -104,12 +119,15 @@ it automatically enters "*answer*" in the field for you.
 - tan(t) - tangent of `t`
 - tanh(t) - hyperbolic tangent of `t`
 - atan(t) - arctangent of `t`
+- atanh(t) - hyperbolic arctangent of `t`
+- atan2(x,y) - arctangent of `x/y`
 
 ### Logarithmic Functions
 
 - exp(x) - `e` to the power of `x`
 - log(n) - log base `e` of `n`
 - log10(n) - log base 10 of `n`
+- log2(n) - log base 2 of `n`
 
 ### Conversion Functions
 
@@ -121,7 +139,7 @@ Example: `80[kph->mph]`
 
 #### length
 
-- Kilometer `mm`
+- Kilometer `km`
 - Meter `m`
 - Centimeter `cm`
 - Millimeter `mm`
@@ -133,7 +151,11 @@ Example: `80[kph->mph]`
 #### speed
 
 - Kilometers/hour `kph`
+- Meters/second `m/s`
 - Miles/hour `mph`
+- Feet/second `ft/s`
+- Knot `knot` (nautical-miles/hour)
+- Mach `mach` (speed of sound)
 
 #### temperature
 
