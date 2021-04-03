@@ -33,8 +33,9 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void ConvertSyntax()
 		{
-			MathEvaluator eval = new MathEvaluator();
+			MathEvaluator eval = new();
 			Assert.ThrowsException<ParseException>(() => eval.Evaluate("6789[ft<-mi]"));
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate("6789[ft-mi]"));
 		}
 
 		[TestMethod]
@@ -53,11 +54,23 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void Convert()
 		{
-			ConvertExpression e = new ConvertExpression("[in->ft]");
+			ConvertExpression e = new("[in->ft]");
 			Assert.IsNotNull(e);
 
-			double feet = e.Convert(new double[] { 12d });
-			Assert.AreEqual(1, feet);
+			PreciseNumber feet = e.Evaluate(new PreciseNumber[] { new PreciseNumber(12m) });
+			Assert.IsTrue(feet.HasValue);
+			Assert.AreEqual(1, feet.Value);
+		}
+
+		[TestMethod]
+		public void ConvertRounding()
+		{
+			ConvertExpression e = new("[in->ft]");
+			Assert.IsNotNull(e);
+
+			PreciseNumber feet = e.Evaluate(new PreciseNumber[] { new PreciseNumber(120m) });
+			Assert.IsTrue(feet.HasValue);
+			Assert.AreEqual(10, feet.Value);
 		}
 	}
 }

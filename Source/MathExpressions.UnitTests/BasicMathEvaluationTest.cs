@@ -33,6 +33,17 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void TestWhitespace()
 		{
+			// We can remove leading and trailing whitespace from the expression.
+			Assert.AreEqual(412d + 4d, eval.Evaluate(" 412 + 4"));
+			Assert.AreEqual(412d + 4d, eval.Evaluate("412 +  4   "));
+			Assert.AreEqual(412d + 4d, eval.Evaluate(" 412  +  4   "));
+			Assert.AreEqual(Math.Sqrt(16), eval.Evaluate(" sqrt(16)"));
+			Assert.AreEqual(Math.Sqrt(16), eval.Evaluate(" sqrt ( 16 )"));
+			Assert.AreEqual(Math.Sqrt(16), eval.Evaluate("  sqrt(16) "));
+			// We need to cast it to a Decimal to gain that precision and then to a Double as that's the return type.
+			Assert.AreEqual((double)(decimal)Math.PI, eval.Evaluate(" pi   "));
+			Assert.AreEqual((double)(decimal)Math.PI, eval.Evaluate("pi  "));
+
 			// We cannot remove whitespace from the expression.
 			Assert.ThrowsException<ParseException>(() => eval.Evaluate("4 12 + 4"));
 			Assert.ThrowsException<ParseException>(() => eval.Evaluate("s q r t(16)"));
@@ -41,18 +52,34 @@ namespace MathExpressions.UnitTests
 
 
 		[TestMethod]
+		public void TestCommaErrors()
+		{
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate(","));
+		}
+
+
+		[TestMethod]
+		public void TestInfinity()
+		{
+			Assert.AreEqual(Double.PositiveInfinity, eval.Evaluate(" 1 / 0 "));
+			Assert.AreEqual(Double.PositiveInfinity, eval.Evaluate(" -1* (-1 / 0 ) "));
+			Assert.AreEqual(Double.NegativeInfinity, eval.Evaluate(" -1 / 0 "));
+		}
+
+
+		[TestMethod]
 		public void TestAddition()
 		{
 			double expected = 45 + 128;
-			double result = eval.Evaluate("45 + 128");
+			double result = eval.Evaluate("45 + 128").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 128 + 45;
-			result = eval.Evaluate("128 + 45");
+			result = eval.Evaluate("128 + 45").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 128 + 45;
-			result = eval.Evaluate("(128 + 45)");
+			result = eval.Evaluate("(128 + 45)").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 		}
 
@@ -60,15 +87,15 @@ namespace MathExpressions.UnitTests
 		public void TestSubtraction()
 		{
 			double expected = 128 - 45;
-			double result = eval.Evaluate("128 - 45");
+			double result = eval.Evaluate("128 - 45").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 - 128;
-			result = eval.Evaluate("45 - 128");
+			result = eval.Evaluate("45 - 128").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 - 128;
-			result = eval.Evaluate("(45 - 128)");
+			result = eval.Evaluate("(45 - 128)").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 		}
 
@@ -76,11 +103,11 @@ namespace MathExpressions.UnitTests
 		public void TestSubtractionPrecision()
 		{
 			double expected = (double)(7464.36m - 7391.21m);
-			double result = eval.Evaluate("7464.36 - 7391.21");
+			double result = eval.Evaluate("7464.36 - 7391.21").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = (double)(7391.21m - 7464.36m);
-			result = eval.Evaluate("7391.21 - 7464.36");
+			result = eval.Evaluate("7391.21 - 7464.36").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 		}
 
@@ -88,23 +115,31 @@ namespace MathExpressions.UnitTests
 		public void TestMultiplication()
 		{
 			double expected = 128 * 45;
-			double result = eval.Evaluate("128 * 45");
+			double result = eval.Evaluate("128 * 45").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 * 128;
-			result = eval.Evaluate("45 * 128");
+			result = eval.Evaluate("45 * 128").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 * 128;
-			result = eval.Evaluate("(45 * 128)");
+			result = eval.Evaluate("(45 * 128)").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 * 128;
-			result = eval.Evaluate("45 * (128)");
+			result = eval.Evaluate("45 * (128)").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 * 128;
-			result = eval.Evaluate("(45 * (128))");
+			result = eval.Evaluate("(45 * (128))").GetValueOrDefault();
+			Assert.AreEqual(expected, result);
+		}
+
+		[TestMethod]
+		public void TestMultiplicationPrecision()
+		{
+			double expected = (double)(14.33m * 1.15m);
+			double result = eval.Evaluate("14.33 * 1.15").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 		}
 
@@ -187,15 +222,15 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void TestMultiplyGroupThenVariable()
 		{
-			Assert.AreEqual(3 * Math.PI, eval.Evaluate("(3)pi"));
-			Assert.AreEqual(-3 * Math.PI, eval.Evaluate("(-3)pi"));
-			Assert.AreEqual(14 * Math.PI, eval.Evaluate("(14)pi"));
-			Assert.AreEqual(-14 * Math.PI, eval.Evaluate("(-14)pi"));
+			Assert.AreEqual((double)(3 * (decimal)Math.PI), eval.Evaluate("(3)pi"));
+			Assert.AreEqual((double)(-3 * (decimal)Math.PI), eval.Evaluate("(-3)pi"));
+			Assert.AreEqual((double)(14 * (decimal)Math.PI), eval.Evaluate("(14)pi"));
+			Assert.AreEqual((double)(-14 * (decimal)Math.PI), eval.Evaluate("(-14)pi"));
 
-			Assert.AreEqual(3 * Math.E, eval.Evaluate("(3)e"));
-			Assert.AreEqual(-3 * Math.E, eval.Evaluate("(-3)e"));
-			Assert.AreEqual(14 * Math.E, eval.Evaluate("(14)e"));
-			Assert.AreEqual(-14 * Math.E, eval.Evaluate("(-14)e"));
+			Assert.AreEqual((double)(3 * (decimal)Math.E), eval.Evaluate("(3)e"));
+			Assert.AreEqual((double)(-3 * (decimal)Math.E), eval.Evaluate("(-3)e"));
+			Assert.AreEqual((double)(14 * (decimal)Math.E), eval.Evaluate("(14)e"));
+			Assert.AreEqual((double)(-14 * (decimal)Math.E), eval.Evaluate("(-14)e"));
 		}
 
 		[TestMethod]
@@ -234,8 +269,8 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void TestMultiplyFunctionThenVariable()
 		{
-			Assert.AreEqual(Math.Sqrt(16) * Math.PI, eval.Evaluate("sqrt(16)pi"));
-			Assert.AreEqual(Math.Sqrt(144) * Math.PI, eval.Evaluate("sqrt(144)pi"));
+			Assert.AreEqual((double)((decimal)Math.Sqrt(16) * (decimal)Math.PI), eval.Evaluate("sqrt(16)pi"));
+			Assert.AreEqual((double)((decimal)Math.Sqrt(144) * (decimal)Math.PI), eval.Evaluate("sqrt(144)pi"));
 		}
 
 
@@ -258,28 +293,30 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void TestMultiplyNumberThenVariable()
 		{
-			Assert.AreEqual(-3 * Math.PI, eval.Evaluate("-3pi"));
-			Assert.AreEqual(3 * Math.PI, eval.Evaluate("3pi"));
-			Assert.AreEqual(-14 * Math.PI, eval.Evaluate("-14pi"));
+			Assert.AreEqual((double)(-3 * (decimal)Math.PI), eval.Evaluate("-3pi"));
+			Assert.AreEqual((double)(3 * (decimal)Math.PI), eval.Evaluate("3pi"));
+			Assert.AreEqual((double)(-14 * (decimal)Math.PI), eval.Evaluate("-14pi"));
 
-			Assert.AreEqual(14 * Math.PI, eval.Evaluate("14pi"));
-			Assert.AreEqual(2 * (14 * Math.PI), eval.Evaluate("2answer"));
-			Assert.AreEqual(-3 * (2 * (14 * Math.PI)), eval.Evaluate("-3answer"));
+			double result = (double)(14m * (decimal)Math.PI);
+			Assert.AreEqual(result, eval.Evaluate("14pi"));
+			Assert.AreEqual((double)(2m * (decimal)result), eval.Evaluate("2answer"));
+			Assert.AreEqual((double)(-3m * (2m * (decimal)result)), eval.Evaluate("-3answer"));
 
-			var xyz = 14 * Math.PI;
+			double xyz = (double)(14m * (decimal)Math.PI);
 			Assert.AreEqual(xyz, eval.Evaluate("xyz = 14pi"));
-			Assert.AreEqual(16 * xyz, eval.Evaluate("16xyz"));
-			Assert.AreEqual(-39 * xyz, eval.Evaluate("-39xyz"));
+			Assert.AreEqual((double)(16m * (decimal)xyz), eval.Evaluate("16xyz"));
+			Assert.AreEqual((double)(-39m * (decimal)xyz), eval.Evaluate("-39xyz"));
 		}
 
 		[TestMethod]
 		public void TestMultiplyVariableThenGroup()
 		{
-			Assert.AreEqual(Math.PI * 5, eval.Evaluate("pi(5)"));
-			Assert.AreEqual(Math.PI * -15, eval.Evaluate("pi(-15)"));
+			Assert.AreEqual((double)((decimal)Math.PI * 5), eval.Evaluate("pi(5)"));
+			Assert.AreEqual((double)((decimal)Math.PI * -15), eval.Evaluate("pi(-15)"));
 
-			Assert.AreEqual(Math.PI * 15, eval.Evaluate("pi(15)"));
-			Assert.AreEqual((Math.PI * 15) * 3, eval.Evaluate("answer(3)"));
+			double result = (double)((decimal)Math.PI * 15m);
+			Assert.AreEqual(result, eval.Evaluate("pi(15)"));
+			Assert.AreEqual((double)((decimal)result * 3m), eval.Evaluate("answer(3)"));
 		}
 
 
@@ -307,48 +344,48 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void TestDivision()
 		{
-			double expected = 128d / 45d;
-			double result = eval.Evaluate("128 / 45");
+			// 128m/45m								= 2.8444444444444444444444444444
+			// (double)(128m/45m)				= 2.8444444444444446
+			// 128d/45d								= 2.8444444444444446
+			// (double)(decimal)(128d/45d)	= 2.84444444444444
+			double expected = (double)(128m / 45m);
+			double result = eval.Evaluate("128 / 45").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
-			expected = 45d / 128d;
-			result = eval.Evaluate("45 / 128");
-			Assert.AreEqual(expected, result);
-
-			expected = 45d / 128d;
-			result = eval.Evaluate("(45 / 128)");
-			Assert.AreEqual(expected, result);
+			expected = (double)(45m / 128m);
+			Assert.AreEqual(expected, eval.Evaluate("45 / 128"));
+			Assert.AreEqual(expected, eval.Evaluate("(45 / 128)"));
 		}
 
 		[TestMethod]
 		public void TestModulo()
 		{
 			double expected = 128 % 45;
-			double result = eval.Evaluate("128 % 45");
+			double result = eval.Evaluate("128 % 45").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 % 128;
-			result = eval.Evaluate("45 % 128");
+			result = eval.Evaluate("45 % 128").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 
 			expected = 45 % 128;
-			result = eval.Evaluate("(45 % 128)");
+			result = eval.Evaluate("(45 % 128)").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 		}
 
 		[TestMethod]
 		public void TestPower()
 		{
-			double expected = Math.Pow(128, 45);
-			double result = eval.Evaluate("128 ^ 45");
-			Assert.AreEqual(expected, result);
+			// This quantity is too large to cast to a Decimal.
+			Assert.ThrowsException<OverflowException>(() => eval.Evaluate("128 ^ 45"));
 
-			expected = Math.Pow(45, 128);
-			result = eval.Evaluate("45 ^ 128");
-			Assert.AreEqual(expected, result);
+			Assert.ThrowsException<OverflowException>(() => eval.Evaluate("45^18"));
+			Assert.ThrowsException<OverflowException>(() => eval.Evaluate("(45 ^ 18)"));
 
-			expected = Math.Pow(45, 128);
-			result = eval.Evaluate("(45 ^ 128)");
+			double expected = Math.Pow(45, 16);
+			double result = eval.Evaluate("45 ^ 16").GetValueOrDefault();
+			Assert.AreEqual(expected, result);
+			result = eval.Evaluate("(45 ^ 16)").GetValueOrDefault();
 			Assert.AreEqual(expected, result);
 		}
 
@@ -359,6 +396,7 @@ namespace MathExpressions.UnitTests
 			Assert.AreEqual(3 + 4 * 2, eval.Evaluate("3 + 4 * 2"));
 			Assert.AreEqual((3 + 4) * 2, eval.Evaluate("(3 + 4) * 2"));
 			Assert.AreEqual(4 * 12 + 8, eval.Evaluate("4 * 12 + 8"));
+			Assert.AreEqual(2 + 4 * 3 + 5 * Math.Pow(6, 3) - 7, eval.Evaluate("2+4*3+5*6^3-7"));
 		}
 	}
 }

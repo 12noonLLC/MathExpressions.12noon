@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace MathExpressions.UnitTests
 {
@@ -31,11 +32,32 @@ namespace MathExpressions.UnitTests
 
 
 		[TestMethod]
+		public void TestInitialize()
+		{
+			Assert.AreEqual(46d, eval.Evaluate("y = 46"));
+			Assert.AreEqual(46d, eval.Variables["y"]);
+			Assert.AreEqual(-45.9, eval.Evaluate("today = -45.9"));
+			Assert.AreEqual(-45.9, eval.Variables["today"]);
+
+			eval.Variables.Initialize();
+
+			Assert.AreEqual(Math.PI, eval.Variables["PI"]);
+			Assert.AreEqual(Math.E, eval.Variables["e"]);
+			Assert.AreEqual(0d, eval.Variables[MathEvaluator.AnswerVariable]);
+
+			Assert.ThrowsException<KeyNotFoundException>(() => eval.Variables["y"]);
+			Assert.ThrowsException<KeyNotFoundException>(() => eval.Variables["today"]);
+		}
+
+
+		[TestMethod]
 		public void TestAnswer()
 		{
+			Assert.AreEqual("answer", MathEvaluator.AnswerVariable);
+
 			Assert.AreEqual((3 + 4) * 2, eval.Evaluate("(3 + 4) * 2"));
 			Assert.AreEqual(eval.Answer, eval.Evaluate("(3 + 4) * 2"));
-			Assert.AreEqual(eval.Evaluate("answer"), eval.Evaluate("(3 + 4) * 2"));
+			Assert.AreEqual(eval.Evaluate(MathEvaluator.AnswerVariable), eval.Evaluate("(3 + 4) * 2"));
 
 			Assert.AreEqual(3 + 4 * 4, eval.Evaluate("3 + 4 ^ 2"));
 			Assert.AreEqual((3 + 4 * 4) * Math.Abs(5 - 8) - 7, eval.Evaluate("answer * abs(5-8) - 7"));
@@ -44,8 +66,8 @@ namespace MathExpressions.UnitTests
 		[TestMethod]
 		public void TestConstants()
 		{
-			Assert.AreEqual(Math.PI, eval.Evaluate("pi"));
-			Assert.AreEqual(Math.E, eval.Evaluate("e"));
+			Assert.AreEqual((double)(decimal)Math.PI, eval.Evaluate("pi"));
+			Assert.AreEqual((double)(decimal)Math.E, eval.Evaluate("e"));
 		}
 
 		[TestMethod]
@@ -92,15 +114,32 @@ namespace MathExpressions.UnitTests
 		}
 
 		[TestMethod]
+		public void TestVariableNameError()
+		{
+			VariableDictionary dct = new(new MathEvaluator());
+			Assert.ThrowsException<ArgumentException>(() => dct.Add("bad-name", 1));
+			Assert.ThrowsException<ArgumentException>(() => dct["bad-name2"] = 2);
+		}
+
+		[TestMethod]
 		public void TestVariableNameConflicts()
 		{
-			//Assert.AreEqual(sqrt, eval.Evaluate("sqrt=3"));
 			Assert.ThrowsException<ParseException>(() => eval.Evaluate("sqrt=3"));
 			Assert.ThrowsException<ParseException>(() => eval.Evaluate("x = sqrt+3"));
 
 			Assert.AreEqual(Math.Sqrt(49), eval.Evaluate("sqrt(49)"));
 			var s = Math.Sqrt(49);
 			Assert.AreEqual(s, eval.Evaluate("s = sqrt(49)"));
+		}
+
+		[TestMethod]
+		public void TestVariableDelete()
+		{
+			Assert.AreEqual(800d, eval.Evaluate("x = 800"));
+
+			Assert.IsNull(eval.Evaluate(" x  =  "));
+
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate("  x "));
 		}
 
 		[TestMethod]
