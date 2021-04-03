@@ -18,15 +18,10 @@ namespace MathExpressions.Metadata
 		/// <seealso cref="DescriptionAttribute"/>
 		public static string GetDescription<T>(T instance)
 		{
-			if (instance == null)
-			{
-				throw new ArgumentNullException(nameof(instance));
-			}
-
-			string result = instance.ToString();
+			string result = instance?.ToString() ?? throw new ArgumentNullException(nameof(instance));
 
 			Type type = instance.GetType();
-			MemberInfo[] members = type.GetMember(result) ?? new MemberInfo[0];
+			MemberInfo[] members = type.GetMember(result) ?? Array.Empty<MemberInfo>();
 			if (members.Length == 0)
 			{
 				return result;
@@ -43,27 +38,10 @@ namespace MathExpressions.Metadata
 		/// <seealso cref="DescriptionAttribute"/>
 		public static string GetDescription(MemberInfo info)
 		{
-			if (info is null)
-			{
-				throw new ArgumentNullException(nameof(info));
-			}
-
-			string result = info.Name;
-
-			object[] attributes = info.GetCustomAttributes(typeof(DescriptionAttribute), false) ?? new object[0];
-			if (attributes.Length == 0)
-			{
-				return result;
-			}
-
-			DescriptionAttribute description = attributes[0] as DescriptionAttribute;
-			if (String.IsNullOrEmpty(description?.Description))
-			{
-				return result;
-			}
-
-			return description.Description;
+			DescriptionAttribute? attr = GetAttribute<DescriptionAttribute>(info);
+			return (attr is null) ? info.Name : attr.Description;
 		}
+
 
 		/// <summary>
 		/// Gets the abbreviation from the <see cref="AbbreviationAttribute"/> on an enum.
@@ -74,15 +52,10 @@ namespace MathExpressions.Metadata
 		/// <seealso cref="AbbreviationAttribute"/>
 		public static string GetAbbreviation<T>(T instance)
 		{
-			if (instance == null)
-			{
-				throw new ArgumentNullException(nameof(instance));
-			}
-
-			string result = instance.ToString();
+			string result = instance?.ToString() ?? throw new ArgumentNullException(nameof(instance));
 
 			Type type = instance.GetType();
-			MemberInfo[] members = type.GetMember(result) ?? new MemberInfo[0];
+			MemberInfo[] members = type.GetMember(result) ?? Array.Empty<MemberInfo>();
 			if (members.Length == 0)
 			{
 				return result;
@@ -99,26 +72,32 @@ namespace MathExpressions.Metadata
 		/// <seealso cref="AbbreviationAttribute"/>
 		public static string GetAbbreviation(MemberInfo info)
 		{
+			AbbreviationAttribute? attr = GetAttribute<AbbreviationAttribute>(info);
+			return (attr is null) ? info.Name : attr.Text;
+		}
+
+
+		/// <summary>
+		/// Return the instance of the attribute with the type T on the passed member.
+		/// </summary>
+		/// <typeparam name="T">The type of the attribute to return.</typeparam>
+		/// <param name="info">The instance info look for the attribute.</param>
+		/// <returns>The instance of the member's attribute or null.</returns>
+		private static T? GetAttribute<T>(MemberInfo info) where T : class
+		{
 			if (info is null)
 			{
 				throw new ArgumentNullException(nameof(info));
 			}
 
-			string result = info.Name;
-
-			object[] attributes = info.GetCustomAttributes(typeof(AbbreviationAttribute), false) ?? new object[0];
+			object[] attributes = info.GetCustomAttributes(typeof(T), false) ?? Array.Empty<object>();
 			if (attributes.Length == 0)
 			{
-				return result;
+				return null;
 			}
 
-			AbbreviationAttribute abbreviation = attributes[0] as AbbreviationAttribute;
-			if (String.IsNullOrEmpty(abbreviation?.Text))
-			{
-				return result;
-			}
-
-			return abbreviation.Text;
+			T? attribute = attributes[0] as T;
+			return attribute;
 		}
 	}
 }

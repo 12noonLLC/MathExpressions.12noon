@@ -123,9 +123,6 @@
   <data name="InvalidFunctionName1" xml:space="preserve">
     <value>Invalid function name '{0}'.</value>
   </data>
-  <data name="EvaluatePropertyCanNotBeNull" xml:space="preserve">
-    <value>The IExpression.Evaluate property can not be null.</value>
-  </data>
   <data name="FunctionNameRegistered1" xml:space="preserve">
     <value>The function name '{0}' is already registered.</value>
   </data>

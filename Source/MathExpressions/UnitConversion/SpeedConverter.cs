@@ -35,37 +35,53 @@ namespace MathExpressions.UnitConversion
 	/// </summary>
 	public static class SpeedConverter
 	{
+		/// <summary>
+		/// For precision, we need to keep the numerator and denominator
+		/// separate, so that we can multiple first and then divide.
+		/// </summary>
 		// In enum order
-		private static readonly double[] factors = new double[]
+		private static readonly decimal[] factorNumerators = new[]
 		{
-			1d,									//meter/second
-			1_000d / 3_600d,					//kilometer/hour
-			0.3048d,								//foot/second
-			(0.3048d * 5_280d) / 3_600d,	//mile/hour (mph)
-			1_852d / 3_600d,					//knot
-			340.29d,								//mach
+			1m,									//meter/second
+			1_000m,								//kilometer/hour
+			0.3048m,								//foot/second
+			(0.3048m * 5_280m),				//mile/hour (mph)
+			1_852m,								//knot
+			340.29m,								//mach
+		};
+		private static readonly decimal[] factorDenominators = new[]
+		{
+			1m,									//meter/second
+			3_600m,								//kilometer/hour
+			1m,									//foot/second
+			3_600m,								//mile/hour (mph)
+			3_600m,								//knot
+			1m,								//mach
 		};
 
 		/// <summary>
 		/// Converts the specified from unit to the specified unit.
 		/// </summary>
-		/// <param name="fromUnit">Covert from unit.</param>
-		/// <param name="toUnit">Covert to unit.</param>
-		/// <param name="fromValue">Covert from value.</param>
+		/// <param name="fromUnit">Convert from unit.</param>
+		/// <param name="toUnit">Convert to unit.</param>
+		/// <param name="fromValue">Convert from value.</param>
 		/// <returns>The converted value.</returns>
-		public static double Convert(
+		public static decimal Convert(
 			 SpeedUnit fromUnit,
 			 SpeedUnit toUnit,
-			 double fromValue)
+			 decimal fromValue)
 		{
 			if (fromUnit == toUnit)
 			{
 				return fromValue;
 			}
 
-			double fromFactor = factors[(int)fromUnit];
-			double toFactor = factors[(int)toUnit];
-			double result = fromFactor * fromValue / toFactor;
+			decimal fromFactorNumerator = factorNumerators[(int)fromUnit];
+			decimal fromFactorDenominator = factorDenominators[(int)fromUnit];
+			decimal toFactorNumerator = factorNumerators[(int)toUnit];
+			decimal toFactorDenominator = factorDenominators[(int)toUnit];
+			//decimal result = fromFactor * fromValue / toFactor;
+			decimal result = fromFactorNumerator * fromValue * toFactorDenominator / fromFactorDenominator / toFactorNumerator;
 			return result;
 		}
 	}

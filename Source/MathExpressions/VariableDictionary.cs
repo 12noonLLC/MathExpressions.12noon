@@ -2,8 +2,6 @@ using MathExpressions.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
 
 namespace MathExpressions
 {
@@ -11,32 +9,33 @@ namespace MathExpressions
 	/// Class representing a collection of variable names and values.
 	/// </summary>
 	/// <remarks>
-	/// Variable names can only contain letters, numbers and symbols are not allowed.
+	/// Variable names can only contain letters and numbers. Symbols are not allowed.
+	/// Must store Double for all results, which may be Double.NaN, Double.PositiveInfinity, etc.
 	/// </remarks>
 	[Serializable]
 	public class VariableDictionary : Dictionary<string, double>
 	{
 		private readonly MathEvaluator _evaluator;
 
-		/// <summary>Initializes a new instance of the <see cref="VariableDictionary"/> class.</summary>
-		/// <param name="evaluator">The evaluator.</param>
-		internal VariableDictionary(MathEvaluator evaluator)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableDictionary"/> class.
+		/// </summary>
+		/// <param name="evaluator">The evaluator for comparing variable names with function names.</param>
+		public VariableDictionary(MathEvaluator evaluator)
 			 : base(StringComparer.OrdinalIgnoreCase)
 		{
 			_evaluator = evaluator;
+			Initialize();
+		}
+
+		public void Initialize()
+		{
+			base.Clear();
 			base.Add(MathEvaluator.AnswerVariable, 0);
 			base.Add("pi", Math.PI);
 			base.Add("e", Math.E);
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="VariableDictionary"/> class.
-		/// </summary>
-		/// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo"/> object containing the information required to serialize the <see cref="T:System.Collections.Generic.Dictionary`2"/>.</param>
-		/// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> structure containing the source and destination of the serialized stream associated with the <see cref="T:System.Collections.Generic.Dictionary`2"/>.</param>
-		protected VariableDictionary(SerializationInfo info, StreamingContext context)
-			 : base(info, context)
-		{ }
 
 		/// <summary>Adds the specified variable and value to the dictionary.</summary>
 		/// <param name="name">The name of the variable to add.</param>
@@ -52,6 +51,17 @@ namespace MathExpressions
 			base.Add(name, value);
 		}
 
+		public new double this[string name]
+		{
+			get => base[name];
+			set
+			{
+				Validate(name);
+				base[name] = value;
+			}
+		}
+
+
 		private void Validate(string name)
 		{
 			if (string.IsNullOrEmpty(name))
@@ -64,24 +74,10 @@ namespace MathExpressions
 				throw new ArgumentException(String.Format(Resources.VariableNameConflict1, name), nameof(name));
 			}
 
-			foreach (int i in Enumerable.Range(0, name.Length))
+			if (name.Any(c => !Char.IsLetterOrDigit(c)))
 			{
-				if (!char.IsLetter(name[i]))
-				{
-					throw new ArgumentException(Resources.VariableNameContainsLetters, nameof(name));
-				}
+				throw new ArgumentException(Resources.VariableNameContainsLetters, nameof(name));
 			}
-		}
-
-		/// <summary>
-		/// Implements the <see cref="T:System.Runtime.Serialization.ISerializable"/> interface and returns the data needed to serialize the <see cref="T:System.Collections.Generic.Dictionary`2"/> instance.
-		/// </summary>
-		/// <param name="info">A <see cref="T:System.Runtime.Serialization.SerializationInfo"/> object that contains the information required to serialize the <see cref="T:System.Collections.Generic.Dictionary`2"/> instance.</param>
-		/// <param name="context">A <see cref="T:System.Runtime.Serialization.StreamingContext"/> structure that contains the source and destination of the serialized stream associated with the <see cref="T:System.Collections.Generic.Dictionary`2"/> instance.</param>
-		[SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			base.GetObjectData(info, context);
 		}
 	}
 }

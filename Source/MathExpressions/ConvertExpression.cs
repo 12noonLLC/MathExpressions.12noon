@@ -12,7 +12,7 @@ namespace MathExpressions
 	/// <summary>
 	/// A class representing unit conversion expressions.
 	/// </summary>
-	public class ConvertExpression : ExpressionBase
+	public class ConvertExpression : IExpression
 	{
 		private static readonly Dictionary<string, ConversionMap> _conversionCache;
 
@@ -33,34 +33,37 @@ namespace MathExpressions
 
 			this._expression = expression;
 			_current = _conversionCache[expression];
-			base.Evaluate = Convert;
 		}
 
 		/// <summary>Gets the number of arguments this expression uses.</summary>
 		/// <value>The argument count.</value>
-		public override int ArgumentCount => 1;
+		public int ArgumentCount => 1;
 
 		/// <summary>Convert the numbers to the new unit.</summary>
 		/// <param name="numbers">The numbers used in the conversion.</param>
 		/// <returns>The result of the conversion execution.</returns>
 		/// <exception cref="ArgumentNullException">When numbers is null.</exception>
 		/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
-		public double Convert(double[] numbers)
+		public PreciseNumber Evaluate(PreciseNumber[] operands)
 		{
-			base.Validate(numbers);
-			double fromValue = numbers[0];
+			((IExpression)this).Validate(operands);
 
-			switch (_current.UnitType)
+			PreciseNumber fromValue = operands[0];
+			if (!fromValue.HasValue)
 			{
-				case UnitType.Length:		return LengthConverter.Convert((LengthUnit)_current.FromUnit, (LengthUnit)_current.ToUnit, fromValue);
-				case UnitType.Mass:			return MassConverter.Convert((MassUnit)_current.FromUnit, (MassUnit)_current.ToUnit, fromValue);
-				case UnitType.Speed:			return SpeedConverter.Convert((SpeedUnit)_current.FromUnit, (SpeedUnit)_current.ToUnit, fromValue);
-				case UnitType.Temperature:	return TemperatureConverter.Convert((TemperatureUnit)_current.FromUnit, (TemperatureUnit)_current.ToUnit, fromValue);
-				case UnitType.Time:			return TimeConverter.Convert((TimeUnit)_current.FromUnit, (TimeUnit)_current.ToUnit, fromValue);
-				case UnitType.Volume:		return VolumeConverter.Convert((VolumeUnit)_current.FromUnit, (VolumeUnit)_current.ToUnit, fromValue);
-				default:
-					throw new ArgumentOutOfRangeException(nameof(numbers));
+				return fromValue;
 			}
+
+			return _current.UnitType switch
+			{
+				UnitType.Length		=> new PreciseNumber(LengthConverter.Convert((LengthUnit)_current.FromUnit, (LengthUnit)_current.ToUnit, fromValue.Value)),
+				UnitType.Mass			=> new PreciseNumber(MassConverter.Convert((MassUnit)_current.FromUnit, (MassUnit)_current.ToUnit, fromValue.Value)),
+				UnitType.Speed			=> new PreciseNumber(SpeedConverter.Convert((SpeedUnit)_current.FromUnit, (SpeedUnit)_current.ToUnit, fromValue.Value)),
+				UnitType.Temperature	=> new PreciseNumber(TemperatureConverter.Convert((TemperatureUnit)_current.FromUnit, (TemperatureUnit)_current.ToUnit, fromValue.Value)),
+				UnitType.Time			=> new PreciseNumber(TimeConverter.Convert((TimeUnit)_current.FromUnit, (TimeUnit)_current.ToUnit, fromValue.Value)),
+				UnitType.Volume		=> new PreciseNumber(VolumeConverter.Convert((VolumeUnit)_current.FromUnit, (VolumeUnit)_current.ToUnit, fromValue.Value)),
+				_							=> throw new ArgumentOutOfRangeException(nameof(operands)),
+			};
 		}
 
 
@@ -107,7 +110,7 @@ namespace MathExpressions
 			foreach (int x in Enumerable.Range(0, a.Length))
 			{
 				MemberInfo parentInfo = GetMemberInfo(enumType, Enum.GetName(enumType, x));
-				string parrentKey = AttributeReader.GetAbbreviation(parentInfo);
+				string parentKey = AttributeReader.GetAbbreviation(parentInfo);
 
 				foreach (int i in Enumerable.Range(0, a.Length))
 				{
@@ -121,7 +124,7 @@ namespace MathExpressions
 					string key = String.Format(
 						 CultureInfo.InvariantCulture,
 						 KeyExpressionFormat2,
-						 parrentKey,
+						 parentKey,
 						 AttributeReader.GetAbbreviation(info));
 
 					_conversionCache.Add(key, new ConversionMap(unitType, x, i));
@@ -129,14 +132,14 @@ namespace MathExpressions
 			}
 		}
 
-		private static MemberInfo GetMemberInfo(Type type, string name)
+		private static MemberInfo GetMemberInfo(Type type, string? name)
 		{
-			MemberInfo[] info = type.GetMember(name) ?? new MemberInfo[0];
-			if (info.Length == 0)
+			if (name is null)
 			{
-				return null;
+				throw new ArgumentNullException(nameof(name));
 			}
 
+			MemberInfo[] info = type.GetMember(name) ?? throw new ArgumentException("Unable to load member.", nameof(name));
 			return info[0];
 		}
 

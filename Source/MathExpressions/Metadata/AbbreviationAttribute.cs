@@ -32,9 +32,6 @@ namespace MathExpressions.Metadata
 		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
 		/// </returns>
 		/// <filterPriority>2</filterPriority>
-		public override string ToString()
-		{
-			return _text;
-		}
+		public override string ToString() => _text;
 	}
 }

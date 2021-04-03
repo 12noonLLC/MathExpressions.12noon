@@ -16,7 +16,7 @@ namespace MathExpressions
 	/// <code>
 	/// MathEvaluator eval = new MathEvaluator();
 	/// //basic math
-	/// double result = eval.Evaluate("(2 + 1) * (1 + 2)");
+	/// decimal result = eval.Evaluate("(2 + 1) * (1 + 2)");
 	/// //calling a function
 	/// result = eval.Evaluate("sqrt(4)");
 	/// //evaluate trigonometric 
@@ -27,20 +27,19 @@ namespace MathExpressions
 	/// result = eval.Evaluate("answer * 10");
 	/// </code>
 	/// </example>
-	public class MathEvaluator : IDisposable
+	public class MathEvaluator
 	{
 		/// <summary>The name of the answer variable.</summary>
 		/// <seealso cref="Variables"/>
 		public const string AnswerVariable = "answer";
 
-		private readonly Stack<string> _symbolStack = new Stack<string>();
-		private readonly Queue<IExpression> _expressionQueue = new Queue<IExpression>();
-		private readonly Dictionary<string, IExpression> _expressionCache = new Dictionary<string, IExpression>(StringComparer.OrdinalIgnoreCase);
+		private readonly Dictionary<string, IExpression> _expressionCache = new(StringComparer.OrdinalIgnoreCase);
 		private readonly List<string> _innerFunctions;
+
+		/// Used only during a call to <see	cref="Evaluate(string)"/>.
+		private readonly Queue<IExpression> _expressionQueue = new();
+		private readonly Stack<string> _symbolStack = new();
 		private uint _nestedFunctionDepth = 0;
-		private uint _nestedGroupDepth = 0;
-		private StringReader _expressionReader;
-		private StringBuilder _expressionBuilder;   // We need a copy to validate function arguments.
 		private char _currentChar;
 
 
@@ -74,24 +73,26 @@ namespace MathExpressions
 
 		/// <summary>Evaluates the specified expression.</summary>
 		/// <param name="expression">The expression to evaluate.</param>
-		/// <returns>The result of the evaluated expression.</returns>
+		/// <returns>The result of the evaluated expression. (Can be NaN, PositiveInfinity, or NegativeInfinity.) Null if a variable is deleted.</returns>
 		/// <exception cref="ArgumentNullException">When expression is null or empty.</exception>
 		/// <exception cref="ParseException">When there is an error parsing the expression.</exception>
-		public double Evaluate(string expression)
+		public double? Evaluate(string expression)
 		{
 			if (String.IsNullOrEmpty(expression))
 			{
 				throw new ArgumentNullException(nameof(expression));
 			}
 
+			// Remove any leading and trailing spaces.
 			// Note: We cannot remove all whitespace because:
 			// "41 25" => "4125"
 			// "s q r t" => "sqrt"
 			// "p i" => "pi"
+			expression = expression.Trim();
 
 			// Is the expression assigned to a variable?
 			// Parse for `string=`.
-			string variableName = null;
+			string? variableName = null;
 			Match m = Regex.Match(expression, @"^\s*(\w+)\s*=\s*(.*)$");
 			if (m.Success)
 			{
@@ -103,17 +104,25 @@ namespace MathExpressions
 				else
 				{
 					expression = m.Groups[2].Value;
+
+					// If no expression follows the assignment operator, clear the variable.
+					// (Keep the last result as the answer value.)
+					if (String.IsNullOrEmpty(expression))
+					{
+						Variables.Remove(variableName);
+						return null;
+					}
 				}
 			}
 
-			_expressionReader = new StringReader(expression);
-			_expressionBuilder = new StringBuilder(expression);
+			using StringReader expressionReader = new(expression);
+			// We need a copy to validate function arguments.
+			StringBuilder expressionBuilder = new(expression);
 			_expressionQueue.Clear();
 			_symbolStack.Clear();
 			_nestedFunctionDepth = 0;
-			_nestedGroupDepth = 0;
 
-			ParseExpressionToQueue();
+			ParseExpressionToQueue(expressionReader, expressionBuilder);
 
 			double result = CalculateFromQueue();
 
@@ -142,10 +151,6 @@ namespace MathExpressions
 			{
 				throw new ArgumentNullException(nameof(expression));
 			}
-			if (expression.Evaluate is null)
-			{
-				throw new ArgumentException(Resources.EvaluatePropertyCanNotBeNull, nameof(expression));
-			}
 			if (IsFunction(functionName))
 			{
 				throw new ArgumentException(String.Format(Resources.FunctionNameRegistered1, functionName), nameof(functionName));
@@ -164,7 +169,7 @@ namespace MathExpressions
 			return (_innerFunctions.BinarySearch(name, StringComparer.OrdinalIgnoreCase) >= 0);
 		}
 
-		private void ParseExpressionToQueue()
+		private void ParseExpressionToQueue(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
 			char lastChar = '\0';
 			_currentChar = '\0';
@@ -177,8 +182,8 @@ namespace MathExpressions
 					lastChar = _currentChar;
 				}
 
-				_currentChar = (char)_expressionReader.Read();
-				_expressionBuilder.Remove(startIndex: 0, length: 1);
+				_currentChar = (char)expressionReader.Read();
+				expressionBuilder.Remove(startIndex: 0, length: 1);
 
 				if (Char.IsWhiteSpace(_currentChar))
 				{
@@ -186,7 +191,7 @@ namespace MathExpressions
 				}
 
 				// Test for number before operator in case of negative sign.
-				if (TryNumber(lastChar))
+				if (TryNumber(expressionReader, expressionBuilder, lastChar))
 				{
 					continue;
 				}
@@ -196,66 +201,66 @@ namespace MathExpressions
 					continue;
 				}
 
-				if (TryComma())
+				if (TryComma(expressionReader, expressionBuilder))
 				{
 					continue;
 				}
 
-				if (TryStartGroup())
+				if (TryStartGroup(expressionReader, expressionBuilder))
 				{
 					continue;
 				}
 
-				if (TryEndGroup())
+				if (TryEndGroup(expressionReader, expressionBuilder))
 				{
 					continue;
 				}
 
-				if (TryString())
+				if (TryString(expressionReader, expressionBuilder))
 				{
 					continue;
 				}
 
-				if (TryConvert())
+				if (TryConvert(expressionReader, expressionBuilder))
 				{
 					continue;
 				}
 
 				throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
-			} while (_expressionReader.Peek() != -1);
+			} while (expressionReader.Peek() != -1);
 
 			ProcessSymbolStack();
 		}
 
-		private bool TryConvert()
+		private bool TryConvert(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
 			if (_currentChar != '[')
 			{
 				return false;
 			}
 
-			StringBuilder buffer = new StringBuilder();
+			StringBuilder buffer = new();
 			buffer.Append(_currentChar);
 
-			char p = (char)_expressionReader.Peek();
+			char p = (char)expressionReader.Peek();
 			while (Char.IsLetter(p) || Char.IsWhiteSpace(p) || (p == '-') || (p == '>') || (p == ']'))
 			{
 				if (!Char.IsWhiteSpace(p))
 				{
-					buffer.Append((char)_expressionReader.Read());
+					buffer.Append((char)expressionReader.Read());
 				}
 				else
 				{
-					_expressionReader.Read();
+					expressionReader.Read();
 				}
-				_expressionBuilder.Remove(startIndex: 0, length: 1);
+				expressionBuilder.Remove(startIndex: 0, length: 1);
 
 				if (p == ']')
 				{
 					break;
 				}
 
-				p = (char)_expressionReader.Peek();
+				p = (char)expressionReader.Peek();
 			}
 
 			if (ConvertExpression.IsConvertExpression(buffer.ToString()))
@@ -268,20 +273,20 @@ namespace MathExpressions
 			throw new ParseException(String.Format(Resources.InvalidConversionExpression1, buffer));
 		}
 
-		private bool TryString()
+		private bool TryString(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
 			if (!Char.IsLetter(_currentChar))
 			{
 				return false;
 			}
 
-			StringBuilder buffer = new StringBuilder();
+			StringBuilder buffer = new();
 			buffer.Append(_currentChar);
 
-			while (char.IsLetterOrDigit((char)_expressionReader.Peek()))
+			while (char.IsLetterOrDigit((char)expressionReader.Peek()))
 			{
-				buffer.Append((char)_expressionReader.Read());
-				_expressionBuilder.Remove(startIndex: 0, length: 1);
+				buffer.Append((char)expressionReader.Read());
+				expressionBuilder.Remove(startIndex: 0, length: 1);
 			}
 
 			string name = buffer.ToString();
@@ -294,7 +299,7 @@ namespace MathExpressions
 				++_nestedFunctionDepth;
 
 				// Verify the number of arguments is correct.
-				var nArgs = CountFunctionArguments(name, _expressionBuilder.ToString());
+				var nArgs = CountFunctionArguments(name, expressionBuilder.ToString());
 				var fexpr = GetExpressionFromSymbol(name);
 				if (nArgs != fexpr.ArgumentCount)
 				{
@@ -307,12 +312,12 @@ namespace MathExpressions
 			if (Variables.ContainsKey(name))
 			{
 				double value = Variables[name];
-				NumberExpression expression = new NumberExpression(value);
+				NumberExpression expression = new((decimal)value);
 				_expressionQueue.Enqueue(expression);
 
 				// Variable can be followed by a group.
 				// If there is no operator, assume multiplication.
-				char nextChar = PeekNextNonWhitespaceChar();
+				char nextChar = PeekNextNonWhitespaceChar(expressionReader, expressionBuilder);
 				if ((nextChar == '('))
 				{
 					_symbolStack.Push(((char)MathOperator.Multiply).ToString());
@@ -339,7 +344,7 @@ namespace MathExpressions
 		/// <param name="subExpression">The rest of the expression, beginning with the first character after the function name.</param>
 		/// <returns>The number of arguments in the function.</returns>
 		/// <exception cref="ParseException"/>
-		private int CountFunctionArguments(string name, string subExpression)
+		private static int CountFunctionArguments(string name, string subExpression)
 		{
 			int nArgs = 1; // BUG: We assume one arg, but there could be zero. See below.
 
@@ -399,24 +404,23 @@ namespace MathExpressions
 			throw new ParseException(String.Format(Resources.InvalidArgumentCount1, name));
 		}
 
-		private bool TryStartGroup()
+		private bool TryStartGroup(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
 			if (_currentChar != '(')
 			{
 				return false;
 			}
 
-			if (PeekNextNonWhitespaceChar() == ',')
+			if (PeekNextNonWhitespaceChar(expressionReader, expressionBuilder) == ',')
 			{
 				throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, ","));
 			}
 
 			_symbolStack.Push(_currentChar.ToString());
-			++_nestedGroupDepth;
 			return true;
 		}
 
-		private bool TryComma()
+		private bool TryComma(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
 			if (_currentChar != ',')
 			{
@@ -432,7 +436,7 @@ namespace MathExpressions
 				throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
 			}
 
-			char nextChar = PeekNextNonWhitespaceChar();
+			char nextChar = PeekNextNonWhitespaceChar(expressionReader, expressionBuilder);
 			if (nextChar == ')' || nextChar == ',')
 			{
 				throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
@@ -441,21 +445,21 @@ namespace MathExpressions
 			return true;
 		}
 
-		private char PeekNextNonWhitespaceChar()
+		private static char PeekNextNonWhitespaceChar(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
-			int next = _expressionReader.Peek();
+			int next = expressionReader.Peek();
 			while ((next != -1) && Char.IsWhiteSpace((char)next))
 			{
-				_expressionReader.Read();
-				_expressionBuilder.Remove(startIndex: 0, length: 1);
+				expressionReader.Read();
+				expressionBuilder.Remove(startIndex: 0, length: 1);
 
-				next = _expressionReader.Peek();
+				next = expressionReader.Peek();
 			}
 			return (char)next;
 		}
 
 
-		private bool TryEndGroup()
+		private bool TryEndGroup(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
 			if (_currentChar != ')')
 			{
@@ -484,8 +488,6 @@ namespace MathExpressions
 						_expressionQueue.Enqueue(f);
 						--_nestedFunctionDepth;
 					}
-
-					--_nestedGroupDepth;
 					break;
 				}
 
@@ -500,7 +502,7 @@ namespace MathExpressions
 
 			// Group or function can be followed by a group, number >= 0, function, or variable.
 			// If there is no operator, assume multiplication.
-			char nextChar = PeekNextNonWhitespaceChar();
+			char nextChar = PeekNextNonWhitespaceChar(expressionReader, expressionBuilder);
 			if ((nextChar == '(') || Char.IsLetterOrDigit(nextChar))
 			{
 				_symbolStack.Push(((char)MathOperator.Multiply).ToString());
@@ -517,25 +519,31 @@ namespace MathExpressions
 			}
 
 			bool repeat;
-			string s = _currentChar.ToString();
+			string op = _currentChar.ToString();
 			do
 			{
-				string p = _symbolStack.Any() ? _symbolStack.Peek() : String.Empty;
 				repeat = false;
 				if (!_symbolStack.Any())
 				{
-					_symbolStack.Push(s);
+					// No previous operator, so hold operator to see if a future one has a higher precedence.
+					_symbolStack.Push(op);
+					continue;
 				}
-				else if (p == "(")
+
+				string prevOp = _symbolStack.Peek();
+				if (prevOp == "(")
 				{
-					_symbolStack.Push(s);
+					// No previous operator, so hold operator to see if a future one has a higher precedence.
+					_symbolStack.Push(op);
 				}
-				else if (OperatorExpression.Precedence(s) > OperatorExpression.Precedence(p))
+				else if (OperatorExpression.Precedence(op) > OperatorExpression.Precedence(prevOp))
 				{
-					_symbolStack.Push(s);
+					// This operator has higher precedence, so hold it to see if a future one has higher precedence.
+					_symbolStack.Push(op);
 				}
 				else
 				{
+					// The previous operator has higher (or same) precedence, so move it from stack to expression queue.
 					IExpression e = GetExpressionFromSymbol(_symbolStack.Pop());
 					_expressionQueue.Enqueue(e);
 					repeat = true;
@@ -545,7 +553,7 @@ namespace MathExpressions
 			return true;
 		}
 
-		private bool TryNumber(char lastChar)
+		private bool TryNumber(StringReader expressionReader, StringBuilder expressionBuilder, char lastChar)
 		{
 			bool isNumber = NumberExpression.IsNumber(_currentChar);
 			// only negative when last char is group start or symbol
@@ -557,29 +565,29 @@ namespace MathExpressions
 				return false;
 			}
 
-			StringBuilder buffer = new StringBuilder();
+			StringBuilder buffer = new();
 			buffer.Append(_currentChar);
 
-			char p = (char)_expressionReader.Peek();
+			char p = (char)expressionReader.Peek();
 			while (NumberExpression.IsNumber(p))
 			{
-				_currentChar = (char)_expressionReader.Read();
-				_expressionBuilder.Remove(startIndex: 0, length: 1);
+				_currentChar = (char)expressionReader.Read();
+				expressionBuilder.Remove(startIndex: 0, length: 1);
 				buffer.Append(_currentChar);
-				p = (char)_expressionReader.Peek();
+				p = (char)expressionReader.Peek();
 			}
 
-			if (!Double.TryParse(buffer.ToString(), out double value))
+			if (!Decimal.TryParse(buffer.ToString(), out decimal value))
 			{
 				throw new ParseException(String.Format(Resources.InvalidNumberFormat1, buffer));
 			}
 
-			NumberExpression expression = new NumberExpression(value);
+			NumberExpression expression = new(value);
 			_expressionQueue.Enqueue(expression);
 
 			// Number can be followed by a group, function, or variable.
 			// If there is no operator, assume multiplication.
-			char nextChar = PeekNextNonWhitespaceChar();
+			char nextChar = PeekNextNonWhitespaceChar(expressionReader, expressionBuilder);
 			if ((nextChar == '(') || Char.IsLetter(nextChar))
 			{
 				_symbolStack.Push(((char)MathOperator.Multiply).ToString());
@@ -593,7 +601,7 @@ namespace MathExpressions
 			while (_symbolStack.Any())
 			{
 				string p = _symbolStack.Pop();
-				if ((p.Length == 1) && (p == "("))
+				if (p == "(")
 				{
 					throw new ParseException(Resources.UnbalancedParentheses);
 				}
@@ -609,34 +617,41 @@ namespace MathExpressions
 
 			if (_expressionCache.ContainsKey(p))
 			{
-				e = _expressionCache[p];
+				return _expressionCache[p];
 			}
-			else if (OperatorExpression.IsSymbol(p))
+
+			if (OperatorExpression.IsSymbol(p))
 			{
 				e = new OperatorExpression(p);
-				_expressionCache.Add(p, e);
 			}
 			else if (FunctionExpression.IsFunction(p))
 			{
 				e = new FunctionExpression(p);
-				_expressionCache.Add(p, e);
 			}
 			else if (ConvertExpression.IsConvertExpression(p))
 			{
 				e = new ConvertExpression(p);
-				_expressionCache.Add(p, e);
 			}
 			else
 			{
 				throw new ParseException(String.Format(Resources.InvalidSymbolOnStack1, p));
 			}
 
+			_expressionCache.Add(p, e);
 			return e;
 		}
 
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <remarks>
+		/// Need to return Decimal and Double.PositiveInfinity and Double.NegativeInfinity and Double.NaN.
+		/// </remarks>
+		/// <returns></returns>
 		private double CalculateFromQueue()
 		{
-			Stack<double> calculationStack = new Stack<double>();
+			Stack<PreciseNumber> calculationStack = new();
 
 			foreach (IExpression expression in _expressionQueue)
 			{
@@ -645,13 +660,14 @@ namespace MathExpressions
 					throw new ParseException(String.Format(Resources.NotEnoughNumbers1, expression));
 				}
 
-				Stack<double> parameters = new Stack<double>(capacity: 2);
+				Stack<PreciseNumber> parameters = new(capacity: 2);
 				foreach (int _ in Enumerable.Range(0, expression.ArgumentCount))
 				{
 					parameters.Push(calculationStack.Pop());
 				}
 
-				calculationStack.Push(expression.Evaluate.Invoke(parameters.ToArray()));
+				PreciseNumber subResult = expression.Evaluate(parameters.ToArray());
+				calculationStack.Push(subResult);
 			}
 
 			// The remaining element is the result.
@@ -660,42 +676,10 @@ namespace MathExpressions
 			// If there are more elements, there is a parsing error.
 			if (calculationStack.Any())
 			{
-				throw new ParseException(String.Format("{0} items '{1}' remain on the calculation stack.", calculationStack.Count(), String.Join(",", calculationStack)));
+				throw new ParseException(String.Format("{0} items '{1}' remain on the calculation stack.", calculationStack.Count, String.Join(",", calculationStack)));
 			}
 
-			return result;
+			return result.AsDouble;
 		}
-
-		#region IDisposable Members
-
-		/// <summary>
-		/// Releases unmanaged and - optionally - managed resources
-		/// </summary>
-		public void Dispose()
-		{
-			Dispose(true);
-			GC.SuppressFinalize(this);
-		}
-
-		/// <summary>
-		/// Releases unmanaged and  managed resources
-		/// </summary>
-		/// <param name="disposing">
-		/// <c>true</c> to release both managed and unmanaged resources; 
-		/// <c>false</c> to release only unmanaged resources.
-		/// </param>
-		protected virtual void Dispose(bool disposing)
-		{
-			if (disposing)
-			{
-				if (_expressionReader != null)
-				{
-					_expressionReader.Dispose();
-					_expressionReader = null;
-				}
-			}
-		}
-
-		#endregion
 	}
 }
