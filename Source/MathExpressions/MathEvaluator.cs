@@ -556,10 +556,9 @@ namespace MathExpressions
 		private bool TryNumber(StringReader expressionReader, StringBuilder expressionBuilder, char lastChar)
 		{
 			bool isNumber = NumberExpression.IsNumber(_currentChar);
-			// only negative when last char is group start or symbol
+			// only negative when last char is group start, comma, or symbol
 			bool isNegative = NumberExpression.IsNegativeSign(_currentChar) &&
-									((lastChar == '\0') || (lastChar == '(') || OperatorExpression.IsSymbol(lastChar));
-
+									((lastChar == '\0') || (lastChar == '(') || (lastChar == ',') || OperatorExpression.IsSymbol(lastChar));
 			if (!isNumber && !isNegative)
 			{
 				return false;
