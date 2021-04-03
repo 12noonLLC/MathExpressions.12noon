@@ -63,11 +63,14 @@ namespace MathExpressions
 			MathFunctions.Add("TAN",		new MathFunction(nameof(Math.Tan),		(operands) => Math.Tan(operands[0].AsDouble), 1));
 			MathFunctions.Add("TANH",		new MathFunction(nameof(Math.Tanh),		(operands) => Math.Tanh(operands[0].AsDouble), 1));
 			MathFunctions.Add("ATAN",		new MathFunction(nameof(Math.Atan),		(operands) => Math.Atan(operands[0].AsDouble), 1));
+			MathFunctions.Add("ATAN2",	new MathFunction(nameof(Math.Atan2),		(operands) => Math.Atan2(operands[0].AsDouble, operands[1].AsDouble), 2));
+			MathFunctions.Add("ATANH",	new MathFunction(nameof(Math.Atanh),		(operands) => Math.Atanh(operands[0].AsDouble), 1));
 
 			// Logarithmic functions
 			MathFunctions.Add("EXP",		new MathFunction(nameof(Math.Exp),		(operands) => Math.Exp(operands[0].AsDouble), 1));
 			MathFunctions.Add("LOG",		new MathFunction(nameof(Math.Log),		(operands) => Math.Log(operands[0].AsDouble), 1));
 			MathFunctions.Add("LOG10",	new MathFunction(nameof(Math.Log10),		(operands) => Math.Log10(operands[0].AsDouble), 1));
+			MathFunctions.Add("LOG2",		new MathFunction(nameof(Math.Log2),		(operands) => Math.Log2(operands[0].AsDouble), 1));
 		}
 
 
