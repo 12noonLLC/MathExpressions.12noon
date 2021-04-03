@@ -1,0 +1,174 @@
+﻿<Window x:Class="CalculateX.MainWindow"
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:local="clr-namespace:CalculateX"
+	xmlns:shared="clr-namespace:Shared"
+	mc:Ignorable="d"
+	Title="CalculateX" Width="450" Height="350"
+	Loaded="Window_Loaded"
+>
+	<Window.Resources>
+		<BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
+	</Window.Resources>
+	<Window.CommandBindings>
+		<CommandBinding Command="{x:Static local:MainWindow.ClearInput}" Executed="ClearInput_Executed" CanExecute="ClearInput_CanExecute" />
+		<CommandBinding Command="{x:Static local:MainWindow.ClearHistory}" Executed="ClearHistory_Executed" CanExecute="ClearHistory_CanExecute" />
+		<CommandBinding Command="{x:Static local:MainWindow.HistoryPrevious}" Executed="HistoryPrevious_Executed" CanExecute="HistoryPrevious_CanExecute" />
+		<CommandBinding Command="{x:Static local:MainWindow.HistoryNext}" Executed="HistoryNext_Executed" CanExecute="HistoryNext_CanExecute" />
+	</Window.CommandBindings>
+	<Grid>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" />	<!-- Input and History -->
+			<ColumnDefinition Width="*" />	<!-- Variables -->
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />		<!-- History -->
+			<RowDefinition Height="Auto" />	<!-- Input -->
+		</Grid.RowDefinitions>
+
+		<!-- Input & History -->
+		<Grid Grid.Column="0" Grid.Row="0">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="Auto" />	<!-- Input Label -->
+				<ColumnDefinition Width="*" />		<!-- Input TextBox -->
+				<ColumnDefinition Width="Auto" />	<!-- Clear button -->
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />		<!-- Header -->
+				<RowDefinition Height="*" />			<!-- Variables -->
+				<RowDefinition Height="Auto" />		<!-- Help -->
+			</Grid.RowDefinitions>
+
+			<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Padding="10,5" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White" Background="SteelBlue" Content="History" />
+			<Button Grid.Column="2" Grid.Row="0" Padding="10,0" Content="{Binding Command.Text, RelativeSource={RelativeSource Self}}" Command="{x:Static local:MainWindow.ClearHistory}" />
+
+			<RichTextBox x:Name="HistoryDisplay" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" IsReadOnly="True" FontSize="14" FontWeight="DemiBold" ScrollViewer.VerticalScrollBarVisibility="Auto">
+				<RichTextBox.Resources>
+					<Style TargetType="{x:Type Paragraph}">
+						<Setter Property="Margin" Value="0" />
+					</Style>
+				</RichTextBox.Resources>
+			</RichTextBox>
+
+			<Label Grid.Column="0" Grid.Row="2" Padding="10,5" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White" Background="SteelBlue" Content="Input" />
+			<TextBox Grid.Column="1" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
+				TextChanged="InputTextBox_TextChanged"
+				Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
+			>
+				<i:Interaction.Behaviors>
+					<shared:FocusOnLoadBehavior />
+				</i:Interaction.Behaviors>
+				<TextBox.InputBindings>
+					<KeyBinding Command="{x:Static local:MainWindow.HistoryPrevious}" Key="Up" />
+					<KeyBinding Command="{x:Static local:MainWindow.HistoryNext}" Key="Down" />
+				</TextBox.InputBindings>
+			</TextBox>
+			<Button Grid.Column="2" Grid.Row="2" Padding="5,0" FontSize="24" Content="↩️" IsDefault="True" Click="EvaluateButton_Click" />
+		</Grid>
+
+		<!-- Variables -->
+		<Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="*" />		<!-- Variables -->
+				<ColumnDefinition Width="Auto" />	<!-- Help button -->
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto" />		<!-- Header -->
+				<RowDefinition Height="*" />			<!-- Variables -->
+				<RowDefinition Height="Auto" />		<!-- Help -->
+			</Grid.RowDefinitions>
+
+			<Label Grid.Column="0" Grid.Row="0" Padding="10,5" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White" Background="SteelBlue" Content="Variables" />
+			<Button Grid.Column="1" Grid.Row="0" Content="ℹ️" FontSize="14" Foreground="White" Background="SteelBlue" Click="HelpButton_Click" />
+			<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}">
+				<ListView.View>
+					<GridView>
+						<GridView.Columns>
+							<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Key}" Width="Auto" />
+							<GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value}" Width="Auto" />
+						</GridView.Columns>
+					</GridView>
+				</ListView.View>
+			</ListView>
+			<FlowDocumentScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" VerticalScrollBarVisibility="Auto"
+				Visibility="{Binding ShowHelp, Converter={StaticResource BooleanToVisibility}}" Zoom="125"
+			>
+				<FlowDocument FontFamily="Segoe UI" FontSize="10" PagePadding="10,5" TextAlignment="Left">
+					<Table>
+						<Table.Columns>
+							<TableColumn />
+							<TableColumn />
+						</Table.Columns>
+						<TableRowGroup>
+							<TableRow>
+								<TableCell><Paragraph><Bold>sqrt</Bold>(n)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>abs</Bold>(n)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>pow</Bold>(n, x)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>round</Bold>(d, n)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>min</Bold>(a, b)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>floor</Bold>(n)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>max</Bold>(a, b)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>ceiling</Bold>(n)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>cos</Bold>(t)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>cosh</Bold>(t)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>sin</Bold>(t)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>sinh</Bold>(t)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>tan</Bold>(t)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>tanh</Bold>(t)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>acos</Bold>(t)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>atan</Bold>(t)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>asin</Bold>(n)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>atanh</Bold>(t)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>log</Bold>(n)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>atan2</Bold>(x, y)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>log10</Bold>(n)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>log2</Bold>(n)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
+								<TableCell><Paragraph><Bold>exp</Bold>(x)</Paragraph></TableCell>
+								<TableCell>
+									<Paragraph FontSize="12">
+										<Hyperlink NavigateUri="https://github.com/skst/CalculateX">Help
+											<i:Interaction.Behaviors>
+												<shared:HyperlinkBehaviorFlow />
+											</i:Interaction.Behaviors>
+										</Hyperlink>
+									</Paragraph>
+								</TableCell>
+							</TableRow>
+								<TableRow>
+									<TableCell ColumnSpan="2">
+										<Paragraph>Convert: n<Bold>[from->to]</Bold>
+										</Paragraph>
+									</TableCell>
+								</TableRow>
+						</TableRowGroup>
+					</Table>
+				</FlowDocument>
+			</FlowDocumentScrollViewer>
+		</Grid>
+	</Grid>
+</Window>
