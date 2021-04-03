@@ -428,10 +428,7 @@ namespace MathExpressions
 			}
 
 			// If we are not inside a function, commas are invalid.
-			// OR if we are inside fewer functions than groups.
-			if ((_nestedFunctionDepth == 0) ||
-				 //This fails for "(3 * Min(45,50))" because the function is INSIDE a group. [fctDepth = 1; grpDepth = 2]
-				 (_nestedFunctionDepth < _nestedGroupDepth))
+			if (_nestedFunctionDepth == 0)
 			{
 				throw new ParseException(String.Format(Resources.InvalidCharacterEncountered1, _currentChar));
 			}
