@@ -1,11 +1,12 @@
-﻿CalculateX
-==========
+﻿# CalculateX [![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yaml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yaml)
 
-CalculateX - Calculator that evaluates math expressions
+A calculator that evaluates math expressions.
 
 [12noon.com](https://12noon.com)
 
-[Get it from Microsoft](https://microsoft.com/en-us/p/calculatex/9NWLKMVZPJD3)
+<a href='//www.microsoft.com/store/apps/9NWLKMVZPJD3?cid=storebadge&ocid=badge'>
+    <img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' style='width: 284px; height: 104px;'/>
+</a>
 
 ![CalculateX](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
 
@@ -39,7 +40,7 @@ Press the **up-** and **down-arrows** to cycle through the input history.
 
 ### Basic Mathematical Operators
 
-CalculateX supports the basic mathematical operators: addition, subtraction,
+*CalculateX* supports the basic mathematical operators: addition, subtraction,
 multiplication, division, modulo, and exponent.
 You can use parentheses to group expressions and give them precedence.
 
@@ -63,17 +64,17 @@ You can also use algebraic (implied) multiplication in many cases:
 
 ### Variables
 
-You can set and access variables in your expressions.
+You can create variables and access them in your expressions.
 Variables must start with a letter, and they can contain digits.
 All variables and their current values are displayed in the list on the right.
 
 Examples:
 ````
-x
-y2
-x2y
-result
-subtotal3
+x = 23.68
+y2 = sqrt(146)
+x2y = x * y2
+result = 12 + 8.4
+subtotal3 = result - x2y + 87
 ````
 
 The `pi` and `e` variables are pre-defined.
@@ -91,13 +92,13 @@ x + 1
 📌 If you type an operator into an empty input field,
 it automatically enters "*answer*" in the field for you.
 
-You can clear a variable (and remove it from the variable pane) by assigning nothing to it.
+You can clear a variable (and remove it from the variable pane) by setting it to nothing.
 
 ````
 x =
 ````
 
-### Basic Mathematical Functions
+### Basic Functions
 
 - sqrt(n) - square root of `n`
 - abs(n) - absolute value of `n`
@@ -192,14 +193,16 @@ Example: `80[kph->mph]`
 - Cup `cup`
 - Ounce `oz`
 
+------------
+
 ## MathExpressions Library
 
-The library supports math expressions, functions, unit conversion, and variables.
+The library supports mathematical expressions, functions, unit conversion, and variables.
 
 Below are some C# examples of using the library directly.
 
-````
-MathEvaluator eval = new MathEvaluator();
+````C#
+MathEvaluator eval = new();
 //basic math
 double result = eval.Evaluate("(2 + 1) * (1 + 2)");
 //calling a function
@@ -217,4 +220,4 @@ result = eval.Evaluate("x * 10");
 
 ------------
 
-*This project was forked from [Calculator.NET](https://github.com/loresoft/Calculator).*
+*This project was originally forked from [Calculator.NET](https://github.com/loresoft/Calculator).*
