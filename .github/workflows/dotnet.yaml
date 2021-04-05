@@ -1,0 +1,40 @@
+name: .NET
+
+on:
+  workflow_dispatch:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+      - 'CalculateX.png'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+      - 'CalculateX.png'
+
+jobs:
+  build:
+    if: github.event_name == 'push' && !contains(toJson(github.event.commits.*.message), '***NO_CI***') && !contains(toJson(github.event.commits.*.message), '[ci skip]') && !contains(toJson(github.event.commits.*.message), '[skip ci]')
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 5.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore
+    - name: Test
+      run: dotnet test --no-build --verbosity normal
