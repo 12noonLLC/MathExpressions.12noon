@@ -32,6 +32,8 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
+    - name: Change to solution folder
+      run: cd Source
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
