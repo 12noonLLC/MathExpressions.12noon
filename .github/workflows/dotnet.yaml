@@ -23,6 +23,10 @@ jobs:
     if: github.event_name == 'push' && !contains(toJson(github.event.commits.*.message), '***NO_CI***') && !contains(toJson(github.event.commits.*.message), '[ci skip]') && !contains(toJson(github.event.commits.*.message), '[skip ci]')
 
     runs-on: windows-latest
+#    defaults:
+#      run:
+#        # Change to solution folder
+#        working-directory: ./Source
 
     steps:
     - uses: actions/checkout@v2
@@ -32,11 +36,12 @@ jobs:
       with:
         dotnet-version: 5.0.x
 
-    - name: Change to solution folder
-      run: cd Source
     - name: Restore dependencies
+      working-directory: ./Source
       run: dotnet restore
     - name: Build
+      working-directory: ./Source
       run: dotnet build --no-restore
     - name: Test
+      working-directory: ./Source
       run: dotnet test --no-build --verbosity normal
