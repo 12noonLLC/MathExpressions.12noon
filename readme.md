@@ -5,7 +5,7 @@ A calculator that evaluates math expressions.
 [12noon.com](https://12noon.com)
 
 <a href='//www.microsoft.com/store/apps/9NWLKMVZPJD3?cid=storebadge&ocid=badge'>
-    <img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' style='width: 284px; height: 104px;'/>
+    <img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="284" height="104" />
 </a>
 
 ![CalculateX](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
