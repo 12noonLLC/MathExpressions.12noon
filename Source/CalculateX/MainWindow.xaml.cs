@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -215,7 +216,7 @@ namespace CalculateX
 				}
 				else
 				{
-					AppendHistoryEntry(input, d.Value.ToString(), Brushes.Blue);
+					AppendHistoryEntry(input, Numbers.FormatNumberWithCommas(d.Value), Brushes.Blue);
 				}
 			}
 			catch (Exception ex)
