@@ -45,12 +45,14 @@ namespace MathExpressions
 
 			// Basic functions
 			MathFunctions.Add("SQRT",		new MathFunction(nameof(Math.Sqrt),		(operands) => Math.Sqrt(operands[0].AsDouble), 1));
+			MathFunctions.Add("CBRT",		new MathFunction(nameof(Math.Cbrt),		(operands) => Math.Cbrt(operands[0].AsDouble), 1));
 			MathFunctions.Add("ABS",		new MathFunction(nameof(Math.Abs),		(operands) => Math.Abs(operands[0].AsDouble), 1));
 			MathFunctions.Add("POW",		new MathFunction(nameof(Math.Pow),		(operands) => Math.Pow(operands[0].AsDouble, operands[1].AsDouble), 2));
 			MathFunctions.Add("MIN",		new MathFunction(nameof(Math.Min),		(operands) => Math.Min(operands[0].AsDouble, operands[1].AsDouble), 2));
 			MathFunctions.Add("MAX",		new MathFunction(nameof(Math.Max),		(operands) => Math.Max(operands[0].AsDouble, operands[1].AsDouble), 2));
-			MathFunctions.Add("ROUND",	new MathFunction(nameof(Math.Round),		(operands) => Math.Round(operands[0].AsDouble, (int)operands[1].AsDouble), 2));
-			MathFunctions.Add("FLOOR",	new MathFunction(nameof(Math.Floor),		(operands) => Math.Floor(operands[0].AsDouble), 1));
+			MathFunctions.Add("ROUND",		new MathFunction(nameof(Math.Round),		(operands) => Math.Round(operands[0].AsDouble, (int)operands[1].AsDouble), 2));
+			MathFunctions.Add("TRUNCATE",	new MathFunction(nameof(Math.Truncate),	(operands) => Math.Truncate(operands[0].AsDouble), 1));
+			MathFunctions.Add("FLOOR",		new MathFunction(nameof(Math.Floor),		(operands) => Math.Floor(operands[0].AsDouble), 1));
 			MathFunctions.Add("CEILING",	new MathFunction(nameof(Math.Ceiling),	(operands) => Math.Ceiling(operands[0].AsDouble), 1));
 
 			// Trigonometric functions
@@ -63,13 +65,13 @@ namespace MathExpressions
 			MathFunctions.Add("TAN",		new MathFunction(nameof(Math.Tan),		(operands) => Math.Tan(operands[0].AsDouble), 1));
 			MathFunctions.Add("TANH",		new MathFunction(nameof(Math.Tanh),		(operands) => Math.Tanh(operands[0].AsDouble), 1));
 			MathFunctions.Add("ATAN",		new MathFunction(nameof(Math.Atan),		(operands) => Math.Atan(operands[0].AsDouble), 1));
-			MathFunctions.Add("ATAN2",	new MathFunction(nameof(Math.Atan2),		(operands) => Math.Atan2(operands[0].AsDouble, operands[1].AsDouble), 2));
-			MathFunctions.Add("ATANH",	new MathFunction(nameof(Math.Atanh),		(operands) => Math.Atanh(operands[0].AsDouble), 1));
+			MathFunctions.Add("ATAN2",		new MathFunction(nameof(Math.Atan2),		(operands) => Math.Atan2(operands[0].AsDouble, operands[1].AsDouble), 2));
+			MathFunctions.Add("ATANH",		new MathFunction(nameof(Math.Atanh),		(operands) => Math.Atanh(operands[0].AsDouble), 1));
 
 			// Logarithmic functions
 			MathFunctions.Add("EXP",		new MathFunction(nameof(Math.Exp),		(operands) => Math.Exp(operands[0].AsDouble), 1));
 			MathFunctions.Add("LOG",		new MathFunction(nameof(Math.Log),		(operands) => Math.Log(operands[0].AsDouble), 1));
-			MathFunctions.Add("LOG10",	new MathFunction(nameof(Math.Log10),		(operands) => Math.Log10(operands[0].AsDouble), 1));
+			MathFunctions.Add("LOG10",		new MathFunction(nameof(Math.Log10),		(operands) => Math.Log10(operands[0].AsDouble), 1));
 			MathFunctions.Add("LOG2",		new MathFunction(nameof(Math.Log2),		(operands) => Math.Log2(operands[0].AsDouble), 1));
 		}
 
