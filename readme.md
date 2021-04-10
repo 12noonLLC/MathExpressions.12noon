@@ -101,11 +101,13 @@ x =
 ### Basic Functions
 
 - sqrt(n) - square root of `n`
+- cbrt(n) - cube root of `n`
 - abs(n) - absolute value of `n`
 - pow(n, x) - `n` to the power of `x`
 - min(a, b) - smallest of `a` and `b`
 - max(a, b) - largest of `a` and `b`
 - round(d, n) - `d` rounded to `n` decimal places
+- truncate(d) - `d` without decimal portion
 - floor(n) - largest integer smaller than `n`
 - ceiling(n) - smallest integer larger than `n`
 

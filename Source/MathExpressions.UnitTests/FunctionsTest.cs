@@ -38,6 +38,13 @@ namespace MathExpressions.UnitTests
 		}
 
 		[TestMethod]
+		public void TestCbrt()
+		{
+			Assert.AreEqual(Math.Cbrt(512), eval.Evaluate("cbrt(512)").GetValueOrDefault());
+			Assert.AreEqual(Math.Cbrt(1221), eval.Evaluate("CBRT(1221)").GetValueOrDefault());
+		}
+
+		[TestMethod]
 		public void TestAbs()
 		{
 			Assert.AreEqual(Math.Abs(121), eval.Evaluate("abs(121)").GetValueOrDefault());
@@ -107,6 +114,27 @@ namespace MathExpressions.UnitTests
 
 			Assert.AreEqual(Math.Round(5d + Math.Pow(188d, 2), 4), eval.Evaluate("round(5 + 188 ^ 2, 4)").GetValueOrDefault());
 			Assert.AreEqual(4.4994, eval.Evaluate("round(5sin(40) + cos(188) ^ 2, 4)").GetValueOrDefault());
+		}
+
+		[TestMethod]
+		public void TestTruncate()
+		{
+			Assert.AreEqual(Math.Truncate(0.0), eval.Evaluate("Truncate(0)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(0.0), eval.Evaluate("Truncate(0.0)").GetValueOrDefault());
+
+			Assert.AreEqual(Math.Truncate(0.1234), eval.Evaluate("Truncate(0.1234)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(0.123456789), eval.Evaluate("Truncate(0.123456789)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(4.0), eval.Evaluate("Truncate(4)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(4.53), eval.Evaluate("Truncate(4.53)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(189.4), eval.Evaluate("Truncate(189.4)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(104.53), eval.Evaluate("Truncate(104.53)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(2345.0), eval.Evaluate("Truncate(2345)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(2345.58), eval.Evaluate("Truncate(2345.58)").GetValueOrDefault());
+
+			Assert.AreEqual(Math.Truncate(0.989669363564753), eval.Evaluate("Truncate(0.989669363564753)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(5.989669363564753), eval.Evaluate("Truncate(5.989669363564753)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(989669363564753.0), eval.Evaluate("Truncate(989669363564753)").GetValueOrDefault());
+			Assert.AreEqual(Math.Truncate(3456789.123456789), eval.Evaluate("Truncate(3456789.123456789)").GetValueOrDefault());
 		}
 
 		[TestMethod]
