@@ -29,8 +29,10 @@ jobs:
 
     # Work around https://github.com/actions/setup-dotnet/issues/155
     - name: Clean Solution
+      working-directory: ./Source
       run: dotnet clean --configuration Release
     - name: Clean NuGet
+      working-directory: ./Source
       run: dotnet nuget locals all --clear
 
     - name: Setup .NET
