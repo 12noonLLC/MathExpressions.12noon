@@ -105,11 +105,15 @@
 						<TableRowGroup>
 							<TableRow>
 								<TableCell><Paragraph><Bold>sqrt</Bold>(n)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>abs</Bold>(n)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>cbrt</Bold>(n)</Paragraph></TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell><Paragraph><Bold>pow</Bold>(n, x)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>abs</Bold>(n)</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
 								<TableCell><Paragraph><Bold>round</Bold>(d, n)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>truncate</Bold>(d)</Paragraph></TableCell>
 							</TableRow>
 							<TableRow>
 								<TableCell><Paragraph><Bold>min</Bold>(a, b)</Paragraph></TableCell>
