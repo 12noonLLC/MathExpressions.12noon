@@ -23,13 +23,15 @@ jobs:
     if: github.event_name == 'push' && !contains(toJson(github.event.commits.*.message), '***NO_CI***') && !contains(toJson(github.event.commits.*.message), '[ci skip]') && !contains(toJson(github.event.commits.*.message), '[skip ci]')
 
     runs-on: windows-latest
-#    defaults:
-#      run:
-#        # Change to solution folder
-#        working-directory: ./Source
 
     steps:
     - uses: actions/checkout@v2
+
+    # Work around https://github.com/actions/setup-dotnet/issues/155
+    - name: Clean Solution
+      run: dotnet clean --configuration Release
+    - name: Clean NuGet
+      run: dotnet nuget locals all --clear
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
