@@ -13,7 +13,7 @@
   <ItemGroup>
     <Compile Include="..\CalculateX\CircularHistory.cs" Link="CircularHistory.cs" />
     <Compile Include="..\CalculateX\Shared\MyStorage.cs" Link="MyStorage.cs" />
-    <Compile Include="..\CalculateX\Shared\NumberToAddCommasConverter.cs" Link="NumberToAddCommasConverter.cs" />
+    <Compile Include="..\CalculateX\Shared\Numbers.cs" Link="Numbers.cs" />
     <Compile Include="..\CalculateX\Shared\StoreStringsOrdered.cs" Link="StoreStringsOrdered.cs" />
   </ItemGroup>
 
