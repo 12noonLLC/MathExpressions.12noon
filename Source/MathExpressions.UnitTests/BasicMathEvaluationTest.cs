@@ -6,10 +6,10 @@ namespace MathExpressions.UnitTests
 	[TestClass]
 	public class BasicMathEvaluationTest
 	{
-		private readonly MathEvaluator eval = new MathEvaluator();
+		private readonly MathEvaluator eval = new();
 
 		[ClassInitialize]
-		public static void ClassSetup(TestContext testContext)
+		public static void ClassSetup(TestContext _)
 		{
 		}
 

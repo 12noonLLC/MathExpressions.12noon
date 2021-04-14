@@ -8,10 +8,10 @@ namespace MathExpressions.UnitTests
 	{
 		//public TestContext TestContext { get; set; }
 
-		private readonly MathEvaluator eval = new MathEvaluator();
+		private readonly MathEvaluator eval = new();
 
 		[ClassInitialize]
-		public static void ClassSetup(TestContext testContext)
+		public static void ClassSetup(TestContext _)
 		{
 		}
 
