@@ -7,7 +7,7 @@ namespace CalculateX.UnitTests
 	public class FormatTest
 	{
 		[ClassInitialize]
-		public static void ClassSetup(TestContext testContext)
+		public static void ClassSetup(TestContext _)
 		{
 		}
 
