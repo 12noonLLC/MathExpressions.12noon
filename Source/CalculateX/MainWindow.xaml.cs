@@ -216,7 +216,7 @@ namespace CalculateX
 				}
 				else
 				{
-					AppendHistoryEntry(input, Numbers.FormatNumberWithCommas(d.Value), Brushes.Blue);
+					AppendHistoryEntry(input, Shared.NumberToAddCommasConverter.FormatNumberWithGroupSeparators(d.Value), Brushes.Blue);
 				}
 			}
 			catch (Exception ex)
