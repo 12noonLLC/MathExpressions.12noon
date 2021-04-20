@@ -270,6 +270,41 @@ namespace CalculateX
 			HistoryDisplay.ScrollToEnd();
 		}
 
+
+		/// <summary>
+		/// When the user selects text, copy it to the input control.
+		/// </summary>
+		/// <remarks>
+		/// The MouseUp and MouseLeftButtonUp events are not called, so we use Preview.
+		/// The SelectionChanged event is called while the mouse moves, so it's not useful.
+		/// The MouseDoubleClick event works but is redundant because this is called for
+		/// a double-click, too.
+		/// </remarks>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0057:Use range operator", Justification = "Unwanted")]
+		private void HistoryDisplay_MouseUp(object /*RichTextBox*/ sender, MouseButtonEventArgs e)
+		{
+			RichTextBox historyDisplay = (RichTextBox)sender;
+			if (historyDisplay.Selection.IsEmpty)
+			{
+				return;
+			}
+
+			int saveSelectionStart = InputControl.SelectionStart;
+			string selected = historyDisplay.Selection.Text;
+
+			var s = InputControl.Text.Substring(0, InputControl.SelectionStart) +
+						selected +
+						InputControl.Text.Substring(InputControl.SelectionStart + InputControl.SelectionLength);
+			InputControl.Text = s;
+
+			// Position cursor at the end of the new text
+			InputControl.Select(saveSelectionStart + selected.Length, 0);
+
+			InputControl.Focus();
+		}
+
 		#region Implement IRaisePropertyChanged
 
 		public event PropertyChangedEventHandler? PropertyChanged;
