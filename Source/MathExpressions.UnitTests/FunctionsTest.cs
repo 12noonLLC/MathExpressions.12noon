@@ -1,12 +1,13 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Linq;
 
 namespace MathExpressions.UnitTests
 {
 	[TestClass]
 	public class FunctionsTest
 	{
-		private readonly MathEvaluator eval = new MathEvaluator();
+		private readonly MathEvaluator eval = new();
 
 		[ClassInitialize]
 		public static void ClassSetup(TestContext testContext)
@@ -169,6 +170,60 @@ namespace MathExpressions.UnitTests
 			Assert.AreEqual(Math.Ceiling(-0.1), eval.Evaluate("CEILING(-0.1)").GetValueOrDefault());
 			Assert.AreEqual(Math.Ceiling(0.1), eval.Evaluate("ceiling(0.1)").GetValueOrDefault());
 			Assert.AreEqual(Math.Ceiling(1.1), eval.Evaluate("CEILING(1.1)").GetValueOrDefault());
+		}
+
+		[TestMethod]
+		public void TestRandom1()
+		{
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate("Random1(666)"));
+
+			double max = 1;
+			double? r1 = eval.Evaluate("Random1()");
+			double? r2 = eval.Evaluate("Random1()");
+			double? r3 = eval.Evaluate("Random1()");
+			Assert.IsNotNull(r1);
+			Assert.IsNotNull(r2);
+			Assert.IsNotNull(r3);
+			Assert.IsTrue(r1 < max);
+			Assert.IsTrue(r2 < max);
+			Assert.IsTrue(r3 < max);
+
+			// Yes, random numbers can repeat, but it's highly unlikely.
+			Assert.AreNotEqual(r1, r2);
+			Assert.AreNotEqual(r1, r3);
+			Assert.AreNotEqual(r2, r3);
+
+			foreach (var n in Enumerable.Range(0, 1_000))
+			{
+				Assert.IsTrue(eval.Evaluate("Random1()") < max);
+			}
+		}
+
+		[TestMethod]
+		public void TestRandomN()
+		{
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate("RandomN()"));
+
+			int max = 100;
+			double? r1 = eval.Evaluate($"RandomN({max})");
+			double? r2 = eval.Evaluate($"RandomN({max})");
+			double? r3 = eval.Evaluate($"RandomN({max})");
+			Assert.IsNotNull(r1);
+			Assert.IsNotNull(r2);
+			Assert.IsNotNull(r3);
+			Assert.IsTrue(r1 < max);
+			Assert.IsTrue(r2 < max);
+			Assert.IsTrue(r3 < max);
+
+			// Yes, random numbers can repeat, but it's highly unlikely.
+			Assert.AreNotEqual(r1, r2);
+			Assert.AreNotEqual(r1, r3);
+			Assert.AreNotEqual(r2, r3);
+
+			foreach (var n in Enumerable.Range(0, 1_000))
+			{
+				Assert.IsTrue(eval.Evaluate($"RandomN({max})") < max);
+			}
 		}
 
 
