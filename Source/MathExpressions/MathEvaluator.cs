@@ -346,8 +346,6 @@ namespace MathExpressions
 		/// <exception cref="ParseException"/>
 		private static int CountFunctionArguments(string name, string subExpression)
 		{
-			int nArgs = 1; // BUG: We assume one arg, but there could be zero. See below.
-
 			var feeder = subExpression.AsEnumerable();
 			// Read whitespace until (
 			feeder = feeder.SkipWhile(c => Char.IsWhiteSpace(c));
@@ -357,6 +355,13 @@ namespace MathExpressions
 			}
 			feeder = feeder.Skip(1);
 
+			// Special case: if next character is end-of-function, no arguments.
+			if (feeder.SkipWhile(c => Char.IsWhiteSpace(c)).First() == ')')
+			{
+				return 0;
+			}
+
+			int nArgs = 1; // At least one argument.
 			int nGroupLevel = 0;
 
 			// If the groups are matched, we should finish before the end of the string.
