@@ -10,7 +10,7 @@
     <Authors>12noon, Stefan K.S. Tucker</Authors>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathExpressions.snk</AssemblyOriginatorKeyFile>
-    <Version>3.1.0</Version>
+    <Version>3.2.0</Version>
     <AssemblyVersion>3.1.0.0</AssemblyVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
