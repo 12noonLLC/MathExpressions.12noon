@@ -26,8 +26,8 @@ A calculator that evaluates math expressions.
 
 Enter simple or complex mathematical expressions and immediately calculate the result.
 From adding your grocery bill to calculating cosine, *CalculateX* does it all.
-Results are added to a history tape,
-so you don't have to write them down to remember them.
+Results are automatically added to a history record, so you don't have to write them down
+to remember them.
 Those results are even saved and restored when you exit and restart the application.
 
 ### Usage
@@ -36,7 +36,10 @@ Type an expression in the input field and press **Enter**.
 
 Press **ESC** to clear the input field.
 
-Press the **up-** and **down-arrows** to cycle through the input history.
+Press the **up-** and **down-arrows** to cycle through previous inputs.
+
+Use the mouse to select text in the history, and it is automatically copied
+to the input control.
 
 ### Basic Mathematical Operators
 
