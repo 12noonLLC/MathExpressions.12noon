@@ -54,6 +54,8 @@ namespace MathExpressions
 			MathFunctions.Add("TRUNCATE",	new MathFunction(nameof(Math.Truncate),	(operands) => Math.Truncate(operands[0].AsDouble), 1));
 			MathFunctions.Add("FLOOR",		new MathFunction(nameof(Math.Floor),		(operands) => Math.Floor(operands[0].AsDouble), 1));
 			MathFunctions.Add("CEILING",	new MathFunction(nameof(Math.Ceiling),	(operands) => Math.Ceiling(operands[0].AsDouble), 1));
+			MathFunctions.Add("RANDOM1",	new MathFunction(nameof(Random) + "1",	(operands) => new Random().NextDouble(), 0));
+			MathFunctions.Add("RANDOMN",	new MathFunction(nameof(Random) + "N",	(operands) => new Random().Next((int)operands[0].AsDouble), 1));
 
 			// Trigonometric functions
 			MathFunctions.Add("COS",		new MathFunction(nameof(Math.Cos),		(operands) => Math.Cos(operands[0].AsDouble), 1));

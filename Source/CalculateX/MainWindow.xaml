@@ -125,6 +125,10 @@
 								<TableCell><Paragraph><Bold>ceiling</Bold>(n)</Paragraph></TableCell>
 							</TableRow>
 							<TableRow>
+								<TableCell><Paragraph><Bold>randomN</Bold>(n)</Paragraph></TableCell>
+								<TableCell><Paragraph><Bold>random1</Bold>()</Paragraph></TableCell>
+							</TableRow>
+							<TableRow>
 								<TableCell><Paragraph><Bold>cos</Bold>(t)</Paragraph></TableCell>
 								<TableCell><Paragraph><Bold>cosh</Bold>(t)</Paragraph></TableCell>
 							</TableRow>

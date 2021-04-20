@@ -110,6 +110,8 @@ x =
 - truncate(d) - `d` without decimal portion
 - floor(n) - largest integer smaller than `n`
 - ceiling(n) - smallest integer larger than `n`
+- random1() - random number `r` less than 1 (0 <= r < 1)
+- randomN(n) - random number `r` between 0 and `n` (0 <= r < n)
 
 ### Trigonometric Functions
 
