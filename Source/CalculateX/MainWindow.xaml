@@ -71,7 +71,7 @@
 					<KeyBinding Command="{x:Static local:MainWindow.HistoryNext}" Key="Down" />
 				</TextBox.InputBindings>
 			</TextBox>
-			<Button Grid.Column="2" Grid.Row="2" Padding="5,0" FontSize="24" Content="↩️" IsDefault="True" Click="EvaluateButton_Click" />
+			<Button Grid.Column="2" Grid.Row="2" Padding="5,0" FontSize="24" Content="=" IsDefault="True" Click="EvaluateButton_Click" />
 		</Grid>
 
 		<!-- Variables -->
