@@ -59,8 +59,9 @@
 
 			<Label Grid.Column="0" Grid.Row="2" Padding="10,5" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White" Background="SteelBlue" Content="Input" />
 			<TextBox x:Name="InputControl" Grid.Column="1" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
-				TextChanged="InputTextBox_TextChanged"
+				TextWrapping="Wrap"
 				Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
+				TextChanged="InputTextBox_TextChanged"
 			>
 				<i:Interaction.Behaviors>
 					<shared:FocusOnLoadBehavior />
