@@ -18,7 +18,7 @@ namespace Shared
 		public static void WriteStrings(string tag, IEnumerable<string> strings)
 		{
 			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			using IsolatedStorageFileStream stm = new(tag, FileMode.OpenOrCreate, isf);
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
 			using StreamWriter stmWriter = new(stm);
 
 			strings.ToList().ForEach(s => stmWriter.WriteLine(s));
@@ -35,7 +35,7 @@ namespace Shared
 				return Enumerable.Empty<string>().ToList();
 			}
 
-			using IsolatedStorageFileStream stm = new(tag, FileMode.OpenOrCreate, isf);
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
 			if (stm is null)
 			{
 				return Enumerable.Empty<string>().ToList();
@@ -87,7 +87,7 @@ namespace Shared
 		public static void WriteElement(string tag, XElement xml)
 		{
 			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			using IsolatedStorageFileStream stm = new(tag, FileMode.OpenOrCreate, isf);
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
 			using StreamWriter stmWriter = new(stm);
 
 			xml.Save(stmWriter);
@@ -107,7 +107,7 @@ namespace Shared
 				return null;
 			}
 
-			using IsolatedStorageFileStream stm = new(tag, FileMode.OpenOrCreate, isf);
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
 			if (stm is null)
 			{
 				return null;
