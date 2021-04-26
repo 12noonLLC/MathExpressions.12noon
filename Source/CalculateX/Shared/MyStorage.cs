@@ -8,12 +8,8 @@ using System.Xml.Linq;
 namespace Shared
 {
 	/// <summary>
-	/// This class saves and restores XML data in isolated storage.
+	/// This class saves and restores data in isolated storage.
 	/// </summary>
-	/// <example>
-	///	MyStorage.Write("fish", new XElement("parent", "some value"));
-	///	XElement position = MyStorage.Read("fish");
-	/// </example>
 	public static class MyStorage
 	{
 		/// <summary>
@@ -33,21 +29,21 @@ namespace Shared
 
 		public static List<string> ReadStrings(string tag)
 		{
-			List<string> strings = new();
-
 			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
 			if (!isf.FileExists(tag))
 			{
-				return strings;
+				return Enumerable.Empty<string>().ToList();
 			}
 
 			using IsolatedStorageFileStream stm = new(tag, FileMode.OpenOrCreate, isf);
 			if (stm is null)
 			{
-				return strings;
+				return Enumerable.Empty<string>().ToList();
 			}
 
 			using StreamReader stmReader = new(stm);
+
+			List<string> strings = new();
 
 			// If this hasn't been created yet, EOS true.
 			while (!stmReader.EndOfStream)
@@ -75,11 +71,19 @@ namespace Shared
 		}
 
 
+		/// <summary>
+		/// These two methods write and read an XML element.
+		/// </summary>
 		/// <example>
 		/// XDocument xdoc = ...
-		/// Write(xdoc.Root);
+		/// WriteElement(xdoc.Root);
 		/// xdoc = new XDocument(MyStorage.ReadElement("fish"));
+		///
+		/// MyStorage.WriteElement("fish", new XElement("parent", "some value"));
+		/// XElement position = MyStorage.ReadElement("fish");
 		/// </example>
+		/// <param name="tag">unique name for isolated storage</param>
+		/// <param name="xml">XML element to save to storage</param>
 		public static void WriteElement(string tag, XElement xml)
 		{
 			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
@@ -92,13 +96,7 @@ namespace Shared
 			//This calls Dispose, so we don't need to. stm.Close();
 		}
 
-		/// <summary>
-		/// These two methods write and read an XML element.
-		/// </summary>
-		/// <example>
-		/// MyStorage.Write("fish", new XElement("parent", "some value"));
-		/// XElement position = MyStorage.Read("fish");
-		/// </example>
+
 		/// <param name="tag">unique name for isolated storage</param>
 		/// <returns>XML element that was read from storage; null if nothing is found</returns>
 		public static XElement? ReadElement(string tag)
@@ -117,7 +115,7 @@ namespace Shared
 
 			using StreamReader stmReader = new(stm);
 
-			// if this hasn't been created yet, just return
+			// If this hasn't been created yet, EOS is true.
 			if (stmReader.EndOfStream)
 			{
 				return null;
