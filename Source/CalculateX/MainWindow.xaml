@@ -13,6 +13,18 @@
 	<Window.Resources>
 		<BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
 		<shared:NumberToAddCommasConverter x:Key="NumberToAddCommasConverter" />
+		<Style x:Key="StyleLabel" TargetType="ContentControl">
+			<Style.Setters>
+				<Setter Property="FontSize" Value="14" />
+				<Setter Property="FontWeight" Value="Bold" />
+				<Setter Property="Foreground" Value="White" />
+				<Setter Property="Background" Value="SteelBlue" />
+				<Setter Property="VerticalContentAlignment" Value="Center" />
+			</Style.Setters>
+		</Style>
+		<Style x:Key="StyleHelp" TargetType="Button" BasedOn="{StaticResource StyleLabel}">
+			<Setter Property="FontWeight" Value="Normal" />
+		</Style>
 	</Window.Resources>
 	<Window.CommandBindings>
 		<CommandBinding Command="{x:Static local:MainWindow.ClearInput}" Executed="ClearInput_Executed" CanExecute="ClearInput_CanExecute" />
@@ -43,7 +55,7 @@
 				<RowDefinition Height="Auto" />		<!-- Help -->
 			</Grid.RowDefinitions>
 
-			<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Padding="10,5" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White" Background="SteelBlue" Content="History" />
+			<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="History" />
 			<Button Grid.Column="2" Grid.Row="0" Padding="10,0" Content="{Binding Command.Text, RelativeSource={RelativeSource Self}}" Command="{x:Static local:MainWindow.ClearHistory}" />
 
 			<RichTextBox x:Name="HistoryDisplay" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" IsReadOnly="True"
@@ -57,7 +69,7 @@
 				</RichTextBox.Resources>
 			</RichTextBox>
 
-			<Label Grid.Column="0" Grid.Row="2" Padding="10,5" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White" Background="SteelBlue" Content="Input" />
+			<Label Grid.Column="0" Grid.Row="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Input" />
 			<TextBox x:Name="InputControl" Grid.Column="1" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
 				TextWrapping="Wrap"
 				Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
@@ -71,7 +83,7 @@
 					<KeyBinding Command="{x:Static local:MainWindow.HistoryNext}" Key="Down" />
 				</TextBox.InputBindings>
 			</TextBox>
-			<Button Grid.Column="2" Grid.Row="2" Padding="5,0" FontSize="24" Content="=" IsDefault="True" Click="EvaluateButton_Click" />
+			<Button Grid.Column="2" Grid.Row="2" Padding="0" FontSize="24" Content="=" IsDefault="True" Click="EvaluateButton_Click" />
 		</Grid>
 
 		<!-- Variables -->
@@ -86,8 +98,8 @@
 				<RowDefinition Height="Auto" />		<!-- Help -->
 			</Grid.RowDefinitions>
 
-			<Label Grid.Column="0" Grid.Row="0" Padding="10,5" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="White" Background="SteelBlue" Content="Variables" />
-			<Button Grid.Column="1" Grid.Row="0" Content="ℹ️" FontSize="14" Foreground="White" Background="SteelBlue" Click="HelpButton_Click" />
+			<Label Grid.Column="0" Grid.Row="0" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Variables" />
+			<Button Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleHelp}" Content="ℹ️" Click="HelpButton_Click" />
 			<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}">
 				<ListView.View>
 					<GridView>
