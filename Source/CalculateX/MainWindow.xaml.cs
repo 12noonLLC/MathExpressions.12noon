@@ -272,7 +272,11 @@ namespace CalculateX
 
 
 		/// <summary>
-		/// When the user selects text, copy it to the input control.
+		/// When the user selects text, copy it to the clipboard.
+		/// We no longer automatically paste it to the input field because
+		/// it can be an unwanted selection or unwanted action altogether.
+		/// We do, however, set focus to the input field so the user can quickly
+		/// paste it if desired.
 		/// </summary>
 		/// <remarks>
 		/// The MouseUp and MouseLeftButtonUp events are not called, so we use Preview.
@@ -291,16 +295,8 @@ namespace CalculateX
 				return;
 			}
 
-			int saveSelectionStart = InputControl.SelectionStart;
 			string selected = historyDisplay.Selection.Text;
-
-			var s = InputControl.Text.Substring(0, InputControl.SelectionStart) +
-						selected +
-						InputControl.Text.Substring(InputControl.SelectionStart + InputControl.SelectionLength);
-			InputControl.Text = s;
-
-			// Position cursor at the end of the new text
-			InputControl.Select(saveSelectionStart + selected.Length, 0);
+			Clipboard.SetText(selected);
 
 			InputControl.Focus();
 		}

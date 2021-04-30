@@ -38,8 +38,8 @@ Press **ESC** to clear the input field.
 
 Press the **up-** and **down-arrows** to cycle through previous inputs.
 
-Use the mouse to select text in the history, and it is automatically copied
-to the input control.
+If you use the mouse to select text in the history, it is automatically copied to the clipboard.
+The focus is also set on the input field so that you can quickly paste the selected text if desired.
 
 ### Basic Mathematical Operators
 
