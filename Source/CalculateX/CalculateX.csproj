@@ -12,7 +12,7 @@
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
     <Copyright>(c) 2020-2021 12noon, Stefan K.S. Tucker</Copyright>
     <Nullable>enable</Nullable>
-    <Version>3.2.2</Version>
+    <Version>3.3.0</Version>
     <RepositoryUrl>https://github.com/skst/CalculateX</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <Description>Enter simple or complex mathematical expressions and immediately calculate the result. From adding your grocery bill to calculating cosine to doing your taxes, CalculateX does it all. Results are added to a history tape, so you don’t have to write them down to remember them. Use the special variable answer to refer to the most recent result. Use the up- and down-arrows to cycle through previous calculations. CalculateX also supports conversions for mass, volume, temperature, speed, time, and length.</Description>
