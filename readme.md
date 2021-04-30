@@ -40,6 +40,8 @@ Press the **up-** and **down-arrows** to cycle through previous inputs.
 
 If you use the mouse to select text in the history, it is automatically copied to the clipboard.
 The focus is also set on the input field so that you can quickly paste the selected text if desired.
+When pasting a number, any currency symbol and grouping separators are removed
+since they are not allowed in expressions.
 
 ### Basic Mathematical Operators
 

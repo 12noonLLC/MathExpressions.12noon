@@ -1,9 +1,7 @@
 ﻿using MathExpressions;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -83,6 +81,35 @@ namespace CalculateX
 			CollectionViewSource.GetDefaultView(Variables).Refresh();
 
 			HistoryDisplay.ScrollToEnd();
+
+			DataObject.AddPastingHandler(InputControl, SanitizeTextPastingHandler);
+		}
+
+		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0057:Use range operator", Justification = "Unwanted")]
+		void SanitizeTextPastingHandler(object /*TextBox*/ sender, DataObjectPastingEventArgs e)
+		{
+			// If any pasting is to be done, we will do it manually.
+			e.CancelCommand();
+
+			TextBox textBox = (TextBox)sender;
+
+			if (e.DataObject.GetData(typeof(string)) is not string pasteText)
+			{
+				return;
+			}
+
+			pasteText = Shared.Numbers.RemoveCurrencySymbolAndGroupingSeparators(pasteText);
+
+			// Insert text at the cursor
+			int saveSelectionStart = textBox.SelectionStart;
+
+			var s = textBox.Text.Substring(0, textBox.SelectionStart) +
+						pasteText +
+						textBox.Text.Substring(textBox.SelectionStart + textBox.SelectionLength);
+			textBox.Text = s;
+
+			// Position cursor at the end of the new text
+			textBox.Select(saveSelectionStart + pasteText.Length, 0);
 		}
 
 
@@ -286,7 +313,6 @@ namespace CalculateX
 		/// </remarks>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0057:Use range operator", Justification = "Unwanted")]
 		private void HistoryDisplay_MouseUp(object /*RichTextBox*/ sender, MouseButtonEventArgs e)
 		{
 			RichTextBox historyDisplay = (RichTextBox)sender;

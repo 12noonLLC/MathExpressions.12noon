@@ -52,5 +52,33 @@ namespace CalculateX.UnitTests
 
 			Assert.AreEqual(expected, Shared.Numbers.FormatNumberWithGroupingSeparators(input));
 		}
+
+
+		[DataTestMethod]
+		[DataRow("",						"")]
+		[DataRow("  ",						"  ")]
+		[DataRow("cat",					"cat")]
+		[DataRow("0",						"0")]
+		[DataRow("0cat",					"0cat")]
+		[DataRow("1234",					"1,234")]
+		[DataRow("1234.56789",			"1,234.56789")]
+		[DataRow("1234567",				"1,234,567")]
+		[DataRow("1234567.8901",		"1,234,567.8901")]
+		[DataRow("1234567.8901",		"1234,,567.8901")]
+		[DataRow("1234",					"$1,234")]
+		[DataRow("1234.56789",			"$1,234.56789")]
+		[DataRow("1234567",				"$1,234,567")]
+		[DataRow("1234567.8901",		"$1,234,567.8901")]
+		[DataRow("1234567.8901",		"$1234,,567.8901")]
+		[DataRow("1234567.89",			"$1,234,567.89")]
+		[DataRow("1234567.8901234",	"$1,234,567.8901234")]
+		public void TestRemoveCurrencySymbolAndGroupingSeparators(string expected, string input)
+		{
+			Assert.AreEqual("$", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol);
+			Assert.AreEqual(",", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator);
+			Assert.AreEqual(".", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
+
+			Assert.AreEqual(expected, Shared.Numbers.RemoveCurrencySymbolAndGroupingSeparators(input));
+		}
 	}
 }
