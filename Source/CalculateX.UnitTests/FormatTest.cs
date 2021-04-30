@@ -28,27 +28,29 @@ namespace CalculateX.UnitTests
 		}
 
 
-		[TestMethod]
-		public void TestClear()
+		[DataTestMethod]
+		[DataRow("0",							0)]
+		[DataRow("0",							0.0)]
+		[DataRow("4",							4)]
+		[DataRow("4",							4.0)]
+		[DataRow("4.53",						4.53)]
+		[DataRow("104.53",					104.53)]
+		[DataRow("2,134",						2134)]
+		[DataRow("2,345.53",					2345.53)]
+		[DataRow("2,345.123456789",		2345.123456789)]
+		[DataRow("0.1234",					0.1234)]
+		[DataRow("0.123456789",				0.123456789)]
+		[DataRow("0.989669363564753",		0.989669363564753)]
+		[DataRow("5.989669363564753",		5.989669363564753)]
+		[DataRow("3,456,789.123456789",	3456789.123456789)]
+		[DataRow("989,669,363,564,753",	989669363564753)]
+		public void TestFormatNumberWithGroupingSeparators(string expected, double input)
 		{
-			Assert.AreEqual("0", Shared.Numbers.FormatNumberWithGroupSeparators(0));
-			Assert.AreEqual("0", Shared.Numbers.FormatNumberWithGroupSeparators(0.0));
+			Assert.AreEqual("$", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.CurrencySymbol);
+			Assert.AreEqual(",", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator);
+			Assert.AreEqual(".", System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 
-			Assert.AreEqual("4", Shared.Numbers.FormatNumberWithGroupSeparators(4));
-			Assert.AreEqual("4", Shared.Numbers.FormatNumberWithGroupSeparators(4.0));
-			Assert.AreEqual("4.53", Shared.Numbers.FormatNumberWithGroupSeparators(4.53));
-			Assert.AreEqual("104.53", Shared.Numbers.FormatNumberWithGroupSeparators(104.53));
-			Assert.AreEqual("2,134", Shared.Numbers.FormatNumberWithGroupSeparators(2134));
-			Assert.AreEqual("2,345.53", Shared.Numbers.FormatNumberWithGroupSeparators(2345.53));
-			Assert.AreEqual("2,345.123456789", Shared.Numbers.FormatNumberWithGroupSeparators(2345.123456789));
-
-			Assert.AreEqual("0.1234", Shared.Numbers.FormatNumberWithGroupSeparators(0.1234));
-			Assert.AreEqual("0.123456789", Shared.Numbers.FormatNumberWithGroupSeparators(0.123456789));
-			Assert.AreEqual("0.989669363564753", Shared.Numbers.FormatNumberWithGroupSeparators(0.989669363564753));
-			Assert.AreEqual("5.989669363564753", Shared.Numbers.FormatNumberWithGroupSeparators(5.989669363564753));
-			Assert.AreEqual("3,456,789.123456789", Shared.Numbers.FormatNumberWithGroupSeparators(3456789.123456789));
-
-			Assert.AreEqual("989,669,363,564,753", Shared.Numbers.FormatNumberWithGroupSeparators(989669363564753));
+			Assert.AreEqual(expected, Shared.Numbers.FormatNumberWithGroupingSeparators(input));
 		}
 	}
 }

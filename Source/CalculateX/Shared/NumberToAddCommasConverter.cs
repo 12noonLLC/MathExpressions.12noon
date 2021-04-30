@@ -14,7 +14,7 @@ namespace Shared
 		{
 			double v = (double)value;
 
-			return Numbers.FormatNumberWithGroupSeparators(v);
+			return Numbers.FormatNumberWithGroupingSeparators(v);
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
