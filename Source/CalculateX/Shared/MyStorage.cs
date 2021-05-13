@@ -17,7 +17,7 @@ namespace Shared
 		/// </summary>
 		public static void WriteStrings(string tag, IEnumerable<string> strings)
 		{
-			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
 			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
 			using StreamWriter stmWriter = new(stm);
 
@@ -29,7 +29,7 @@ namespace Shared
 
 		public static List<string> ReadStrings(string tag)
 		{
-			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
 			if (!isf.FileExists(tag))
 			{
 				return Enumerable.Empty<string>().ToList();
@@ -86,7 +86,7 @@ namespace Shared
 		/// <param name="xml">XML element to save to storage</param>
 		public static void WriteElement(string tag, XElement xml)
 		{
-			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
 			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
 			using StreamWriter stmWriter = new(stm);
 
@@ -101,7 +101,7 @@ namespace Shared
 		/// <returns>XML element that was read from storage; null if nothing is found</returns>
 		public static XElement? ReadElement(string tag)
 		{
-			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
 			if (!isf.FileExists(tag))
 			{
 				return null;
@@ -139,7 +139,7 @@ namespace Shared
 
 		public static void Delete(string tag)
 		{
-			IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
 			if (isf.FileExists(tag))
 			{
 				isf.DeleteFile(tag);
