@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO.IsolatedStorage;
 using System.Xml;
 using System.Xml.Linq;
+using System;
 
 namespace Shared
 {
@@ -17,57 +18,70 @@ namespace Shared
 		/// </summary>
 		public static void WriteStrings(string tag, IEnumerable<string> strings)
 		{
-			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
-			using StreamWriter stmWriter = new(stm);
+			try
+			{
+				using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+				using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
+				using StreamWriter stmWriter = new(stm);
 
-			strings.ToList().ForEach(s => stmWriter.WriteLine(s));
+				strings.ToList().ForEach(s => stmWriter.WriteLine(s));
 
-			//This calls Dispose, so we don't need to. stmWriter.Close();
-			//This calls Dispose, so we don't need to. stm.Close();
+				//This calls Dispose, so we don't need to. stmWriter.Close();
+				//This calls Dispose, so we don't need to. stm.Close();
+			}
+			catch (NotSupportedException)
+			{
+			}
 		}
 
 		public static List<string> ReadStrings(string tag)
 		{
-			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			if (!isf.FileExists(tag))
+			try
 			{
-				return Enumerable.Empty<string>().ToList();
-			}
-
-			using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
-			if (stm is null)
-			{
-				return Enumerable.Empty<string>().ToList();
-			}
-
-			using StreamReader stmReader = new(stm);
-
-			List<string> strings = new();
-
-			// If this hasn't been created yet, EOS true.
-			while (!stmReader.EndOfStream)
-			{
-				try
+				using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+				if (!isf.FileExists(tag))
 				{
-					string? s = stmReader.ReadLine();
-					if (s is not null)
+					return Enumerable.Empty<string>().ToList();
+				}
+
+				using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
+				if (stm is null)
+				{
+					return Enumerable.Empty<string>().ToList();
+				}
+
+				using StreamReader stmReader = new(stm);
+
+				List<string> strings = new();
+
+				// If this hasn't been created yet, EOS true.
+				while (!stmReader.EndOfStream)
+				{
+					try
 					{
-						strings.Add(s);
+						string? s = stmReader.ReadLine();
+						if (s is not null)
+						{
+							strings.Add(s);
+						}
+					}
+					catch (XmlException)
+					{
+						stm.SetLength(0);
+						break;
 					}
 				}
-				catch (XmlException)
-				{
-					stm.SetLength(0);
-					break;
-				}
+
+				return strings;
+
+				//This calls Dispose, so we don't need to. stmReader.Close();
+				//This calls Dispose, so we don't need to. stm.Close();
+				// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
 			}
-
-			return strings;
-
-			//This calls Dispose, so we don't need to. stmReader.Close();
-			//This calls Dispose, so we don't need to. stm.Close();
-			// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
+			catch (NotSupportedException)
+			{
+				return Enumerable.Empty<string>().ToList();
+			}
 		}
 
 
@@ -86,14 +100,20 @@ namespace Shared
 		/// <param name="xml">XML element to save to storage</param>
 		public static void WriteElement(string tag, XElement xml)
 		{
-			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
-			using StreamWriter stmWriter = new(stm);
+			try
+			{
+				using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+				using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
+				using StreamWriter stmWriter = new(stm);
 
-			xml.Save(stmWriter);
+				xml.Save(stmWriter);
 
-			//This calls Dispose, so we don't need to. stmWriter.Close();
-			//This calls Dispose, so we don't need to. stm.Close();
+				//This calls Dispose, so we don't need to. stmWriter.Close();
+				//This calls Dispose, so we don't need to. stm.Close();
+			}
+			catch (NotSupportedException)
+			{
+			}
 		}
 
 
@@ -101,48 +121,61 @@ namespace Shared
 		/// <returns>XML element that was read from storage; null if nothing is found</returns>
 		public static XElement? ReadElement(string tag)
 		{
-			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			if (!isf.FileExists(tag))
-			{
-				return null;
-			}
-
-			using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
-			if (stm is null)
-			{
-				return null;
-			}
-
-			using StreamReader stmReader = new(stm);
-
-			// If this hasn't been created yet, EOS is true.
-			if (stmReader.EndOfStream)
-			{
-				return null;
-			}
-
 			try
 			{
-				return XElement.Load(stmReader);
+				using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+				if (!isf.FileExists(tag))
+				{
+					return null;
+				}
+
+				using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
+				if (stm is null)
+				{
+					return null;
+				}
+
+				using StreamReader stmReader = new(stm);
+
+				// If this hasn't been created yet, EOS is true.
+				if (stmReader.EndOfStream)
+				{
+					return null;
+				}
+
+				try
+				{
+					return XElement.Load(stmReader);
+				}
+				catch (XmlException)
+				{
+					stm.SetLength(0);
+					return null;
+				}
+
+				//This calls Dispose, so we don't need to. stmReader.Close();
+				//This calls Dispose, so we don't need to. stm.Close();
+				// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
 			}
-			catch (XmlException)
+			catch (NotSupportedException)
 			{
-				stm.SetLength(0);
 				return null;
 			}
-
-			//This calls Dispose, so we don't need to. stmReader.Close();
-			//This calls Dispose, so we don't need to. stm.Close();
-			// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
 		}
 
 
 		public static void Delete(string tag)
 		{
-			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			if (isf.FileExists(tag))
+			try
 			{
-				isf.DeleteFile(tag);
+				using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+				if (isf.FileExists(tag))
+				{
+					isf.DeleteFile(tag);
+				}
+			}
+			catch (NotSupportedException)
+			{
 			}
 		}
 	}
