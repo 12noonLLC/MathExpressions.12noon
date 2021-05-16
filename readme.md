@@ -1,4 +1,4 @@
-﻿# CalculateX [![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yaml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yaml)
+﻿# CalculateX [![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
 
 A calculator that evaluates math expressions.
 
