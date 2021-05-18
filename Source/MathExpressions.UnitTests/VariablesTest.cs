@@ -114,6 +114,46 @@ namespace MathExpressions.UnitTests
 		}
 
 		[TestMethod]
+		public void TestVariableNamesUnderscore()
+		{
+			Assert.IsTrue(VariableDictionary.IsValidVariableNameCharacter('A'));
+			Assert.IsTrue(VariableDictionary.IsValidVariableNameCharacter('z'));
+			Assert.IsTrue(VariableDictionary.IsValidVariableNameCharacter('0'));
+			Assert.IsTrue(VariableDictionary.IsValidVariableNameCharacter('9'));
+			Assert.IsTrue(VariableDictionary.IsValidVariableNameCharacter('_'));
+
+			Assert.IsFalse(VariableDictionary.IsValidVariableNameCharacter('.'));
+			Assert.IsFalse(VariableDictionary.IsValidVariableNameCharacter('%'));
+			Assert.IsFalse(VariableDictionary.IsValidVariableNameCharacter('!'));
+
+			Assert.IsTrue(eval.Variables.IsValidVariableName("a"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("a_"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("a1"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("a1_"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("abc"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("abc_"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("abc123"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("abc123_"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("abc_123"));
+			Assert.IsTrue(eval.Variables.IsValidVariableName("abc_123_"));
+
+			Assert.IsFalse(eval.Variables.IsValidVariableName("1"));
+			Assert.IsFalse(eval.Variables.IsValidVariableName("1a"));
+			Assert.IsFalse(eval.Variables.IsValidVariableName("_a"));
+			Assert.IsFalse(eval.Variables.IsValidVariableName("a."));
+			Assert.IsFalse(eval.Variables.IsValidVariableName("a#"));
+
+			var x1 = 11d;
+			var x2 = 22d;
+			Assert.AreEqual(x1, eval.Evaluate("x_1=11"));
+			Assert.AreEqual(x2, eval.Evaluate("x2_=22"));
+			Assert.ThrowsException<ParseException>(() => eval.Evaluate("_x3=33"), "Variables must start with letter.");
+			var answer = x1 * x2;
+			Assert.AreEqual(answer, eval.Evaluate("x_1 * x2_"));
+			Assert.AreEqual(answer + x1 - x2, eval.Evaluate("answer+x_1 -x2_"));
+		}
+
+		[TestMethod]
 		public void TestVariableNameError()
 		{
 			VariableDictionary dct = new(new MathEvaluator());

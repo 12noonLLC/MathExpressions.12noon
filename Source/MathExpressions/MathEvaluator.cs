@@ -93,15 +93,11 @@ namespace MathExpressions
 			// Is the expression assigned to a variable?
 			// Parse for `string=`.
 			string? variableName = null;
-			Match m = Regex.Match(expression, @"^\s*(\w+)\s*=\s*(.*)$");
+			Match m = Regex.Match(expression, @"^\s*([\w_]+)\s*=\s*(.*)$");
 			if (m.Success)
 			{
 				variableName = m.Groups[1].Value;
-				if (IsFunction(variableName))
-				{
-					variableName = null;
-				}
-				else
+				if (Variables.IsValidVariableName(variableName))
 				{
 					expression = m.Groups[2].Value;
 
@@ -112,6 +108,11 @@ namespace MathExpressions
 						Variables.Remove(variableName);
 						return null;
 					}
+				}
+				else
+				{
+					// If there is an assignment, it must be preceded by a variable name.
+					throw new ParseException(Resources.VariableNameContainsLetters);
 				}
 			}
 
@@ -127,7 +128,7 @@ namespace MathExpressions
 			double result = CalculateFromQueue();
 
 			Variables[AnswerVariable] = result;
-			if (variableName != null)
+			if (variableName is not null)
 			{
 				Variables[variableName] = result;
 			}
@@ -275,6 +276,7 @@ namespace MathExpressions
 
 		private bool TryString(StringReader expressionReader, StringBuilder expressionBuilder)
 		{
+			// Functions and variables must start with a letter.
 			if (!Char.IsLetter(_currentChar))
 			{
 				return false;
@@ -283,7 +285,9 @@ namespace MathExpressions
 			StringBuilder buffer = new();
 			buffer.Append(_currentChar);
 
-			while (char.IsLetterOrDigit((char)expressionReader.Peek()))
+			// read valid function name or variable name
+			while (FunctionExpression.IsValidFunctionNameCharacter((char)expressionReader.Peek()) ||
+					 VariableDictionary.IsValidVariableNameCharacter((char)expressionReader.Peek()))
 			{
 				buffer.Append((char)expressionReader.Read());
 				expressionBuilder.Remove(startIndex: 0, length: 1);

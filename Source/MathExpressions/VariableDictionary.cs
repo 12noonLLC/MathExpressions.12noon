@@ -62,6 +62,18 @@ namespace MathExpressions
 		}
 
 
+		public bool IsValidVariableName(string name)
+		{
+			try
+			{
+				Validate(name);
+				return true;
+			}
+			catch (Exception)
+			{
+				return false;
+			}
+		}
 		private void Validate(string name)
 		{
 			if (string.IsNullOrEmpty(name))
@@ -74,10 +86,12 @@ namespace MathExpressions
 				throw new ArgumentException(String.Format(Resources.VariableNameConflict1, name), nameof(name));
 			}
 
-			if (name.Any(c => !Char.IsLetterOrDigit(c)))
+			// Allow letters, digits, and underscores, but first character must be a letter.
+			if (!Char.IsLetter(name.First()) || name.Any(c => !IsValidVariableNameCharacter(c)))
 			{
 				throw new ArgumentException(Resources.VariableNameContainsLetters, nameof(name));
 			}
 		}
+		public static bool IsValidVariableNameCharacter(char c) => Char.IsLetterOrDigit(c) || (c == '_');
 	}
 }

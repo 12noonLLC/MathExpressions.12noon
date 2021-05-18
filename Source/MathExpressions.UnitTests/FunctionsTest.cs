@@ -32,6 +32,20 @@ namespace MathExpressions.UnitTests
 
 
 		[TestMethod]
+		public void TestFunctionNames()
+		{
+			Assert.IsTrue(FunctionExpression.IsValidFunctionNameCharacter('A'));
+			Assert.IsTrue(FunctionExpression.IsValidFunctionNameCharacter('z'));
+			Assert.IsTrue(FunctionExpression.IsValidFunctionNameCharacter('0'));
+			Assert.IsTrue(FunctionExpression.IsValidFunctionNameCharacter('9'));
+
+			Assert.IsFalse(FunctionExpression.IsValidFunctionNameCharacter('.'));
+			Assert.IsFalse(FunctionExpression.IsValidFunctionNameCharacter('%'));
+			Assert.IsFalse(FunctionExpression.IsValidFunctionNameCharacter('!'));
+		}
+
+
+		[TestMethod]
 		public void TestSqrt()
 		{
 			Assert.AreEqual(Math.Sqrt(121), eval.Evaluate("sqrt(121)").GetValueOrDefault());

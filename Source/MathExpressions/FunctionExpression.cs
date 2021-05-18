@@ -112,6 +112,8 @@ namespace MathExpressions
 		/// <returns><c>true</c> if the specified name is a function; otherwise, <c>false</c>.</returns>
 		public static bool IsFunction(string function) => MathFunctions.ContainsKey(function.ToUpperInvariant());
 
+		public static bool IsValidFunctionNameCharacter(char c) => Char.IsLetterOrDigit(c);
+
 		/// <summary>Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.</summary>
 		/// <returns>A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.</returns>
 		/// <filterPriority>2</filterPriority>

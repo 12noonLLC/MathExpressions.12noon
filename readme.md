@@ -70,7 +70,7 @@ You can also use algebraic (implied) multiplication in many cases:
 ### Variables
 
 You can create variables and access them in your expressions.
-Variables must start with a letter, and they can contain digits.
+Variables can contain letters, digits, and underscores, but they must start with a letter.
 All variables and their current values are displayed in the list on the right.
 
 Examples:
