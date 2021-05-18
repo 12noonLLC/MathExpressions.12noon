@@ -150,9 +150,6 @@
   <data name="VariableNameConflict1" xml:space="preserve">
     <value>The variable name conflicts with function '{0}'.</value>
   </data>
-  <data name="VariableNameContainsLetters" xml:space="preserve">
-    <value>The variable name can only contain letters.</value>
-  </data>
   <data name="InvalidMathExpression" xml:space="preserve">
     <value>Invalid math expression.</value>
   </data>
@@ -161,5 +158,8 @@
   </data>
   <data name="NotEnoughNumbers1" xml:space="preserve">
     <value>Invalid number for expression: {0}</value>
+  </data>
+  <data name="VariableNameContainsLetters" xml:space="preserve">
+    <value>The variable name can contain only letters,digits, and underscores and must start with a letter.</value>
   </data>
 </root>
