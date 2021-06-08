@@ -16,9 +16,9 @@ namespace Shared
 		private Window _window;
 		private readonly string _tag;
 
-		private Rect _bounds = new();
-		private bool _bMinimized = false;
-		private bool _bMaximized = false;
+		private Rect _bounds;
+		private bool _bMinimized;
+		private bool _bMaximized;
 
 		private const string KEY_ATTRIBUTE_LEFT = "left";
 		private const string KEY_ATTRIBUTE_TOP = "top";

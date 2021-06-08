@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
 using System.IO.IsolatedStorage;
 using System.Xml;
 using System.Xml.Linq;
-using System;
 
 namespace Shared
 {
@@ -13,76 +11,76 @@ namespace Shared
 	/// </summary>
 	public static class MyStorage
 	{
-		/// <summary>
-		/// These two methods write and read a collection of strings.
-		/// </summary>
-		public static void WriteStrings(string tag, IEnumerable<string> strings)
-		{
-			try
-			{
-				using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-				using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
-				using StreamWriter stmWriter = new(stm);
+		///// <summary>
+		///// These two methods write and read a collection of strings.
+		///// </summary>
+		//public static void WriteStrings(string tag, IEnumerable<string> strings)
+		//{
+		//	try
+		//	{
+		//		using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+		//		using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
+		//		using StreamWriter stmWriter = new(stm);
 
-				strings.ToList().ForEach(s => stmWriter.WriteLine(s));
+		//		strings.ToList().ForEach(s => stmWriter.WriteLine(s));
 
-				//This calls Dispose, so we don't need to. stmWriter.Close();
-				//This calls Dispose, so we don't need to. stm.Close();
-			}
-			catch (NotSupportedException)
-			{
-			}
-		}
+		//		//This calls Dispose, so we don't need to. stmWriter.Close();
+		//		//This calls Dispose, so we don't need to. stm.Close();
+		//	}
+		//	catch (NotSupportedException)
+		//	{
+		//	}
+		//}
 
-		public static List<string> ReadStrings(string tag)
-		{
-			try
-			{
-				using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-				if (!isf.FileExists(tag))
-				{
-					return Enumerable.Empty<string>().ToList();
-				}
+		//public static List<string> ReadStrings(string tag)
+		//{
+		//	try
+		//	{
+		//		using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+		//		if (!isf.FileExists(tag))
+		//		{
+		//			return Enumerable.Empty<string>().ToList();
+		//		}
 
-				using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
-				if (stm is null)
-				{
-					return Enumerable.Empty<string>().ToList();
-				}
+		//		using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
+		//		if (stm is null)
+		//		{
+		//			return Enumerable.Empty<string>().ToList();
+		//		}
 
-				using StreamReader stmReader = new(stm);
+		//		using StreamReader stmReader = new(stm);
 
-				List<string> strings = new();
+		//		List<string> strings = new();
 
-				// If this hasn't been created yet, EOS true.
-				while (!stmReader.EndOfStream)
-				{
-					try
-					{
-						string? s = stmReader.ReadLine();
-						if (s is not null)
-						{
-							strings.Add(s);
-						}
-					}
-					catch (XmlException)
-					{
-						stm.SetLength(0);
-						break;
-					}
-				}
+		//		// If this hasn't been created yet, EOS true.
+		//		while (!stmReader.EndOfStream)
+		//		{
+		//			try
+		//			{
+		//				string? s = stmReader.ReadLine();
+		//				if (s is not null)
+		//				{
+		//					strings.Add(s);
+		//				}
+		//			}
+		//			catch (XmlException)
+		//			{
+		//				stm.SetLength(0);
+		//				break;
+		//			}
+		//		}
 
-				return strings;
+		//		return strings;
 
-				//This calls Dispose, so we don't need to. stmReader.Close();
-				//This calls Dispose, so we don't need to. stm.Close();
-				// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
-			}
-			catch (NotSupportedException)
-			{
-				return Enumerable.Empty<string>().ToList();
-			}
-		}
+		//		//This calls Dispose, so we don't need to. stmReader.Close();
+		//		//This calls Dispose, so we don't need to. stm.Close();
+		//		// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
+		//	}
+		//	catch (NotSupportedException)
+		//	{
+		//		return Enumerable.Empty<string>().ToList();
+		//	}
+		//}
 
 
 		/// <summary>
