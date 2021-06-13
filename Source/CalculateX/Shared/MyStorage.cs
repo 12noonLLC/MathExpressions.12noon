@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -83,6 +85,8 @@ namespace Shared
 		//}
 
 
+		private static string BuildTemporaryFilename(string tag) => Path.Combine(Path.GetTempPath(), $"CalculateX-{tag}.xml");
+
 		/// <summary>
 		/// These two methods write and read an XML element.
 		/// </summary>
@@ -111,6 +115,15 @@ namespace Shared
 			}
 			catch (NotSupportedException)
 			{
+				try
+				{
+					string path = BuildTemporaryFilename(tag);
+					using StreamWriter stmWriter = new(path);
+					xml.Save(stmWriter);
+				}
+				catch (Exception)
+				{
+				}
 			}
 		}
 
@@ -157,7 +170,16 @@ namespace Shared
 			}
 			catch (NotSupportedException)
 			{
-				return null;
+				try
+				{
+					string path = BuildTemporaryFilename(tag);
+					using StreamReader stmReader = new(path);
+					return XElement.Load(stmReader);
+				}
+				catch (Exception)
+				{
+					return null;
+				}
 			}
 		}
 
@@ -174,6 +196,13 @@ namespace Shared
 			}
 			catch (NotSupportedException)
 			{
+				try
+				{
+					File.Delete(BuildTemporaryFilename(tag));
+				}
+				catch (Exception)
+				{
+				}
 			}
 		}
 	}
