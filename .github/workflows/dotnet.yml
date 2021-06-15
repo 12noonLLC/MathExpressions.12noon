@@ -71,10 +71,10 @@ jobs:
       # Upload release artifact to share with next job
       # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
       # https://github.com/marketplace/actions/upload-a-build-artifact
-      - name: Upload deployment folder as a build artfiact
+      - name: Upload deployment folder as a build artifact
         uses: actions/upload-artifact@v2.2.3
         with:
-          name: publish-calculatex
+          name: publish-package
           path: ./release/
           retention-days: 1
         # Use always() to always run this step even when there are failures
@@ -96,7 +96,7 @@ jobs:
       - name: Download deployment folder as a build artifact
         uses: actions/download-artifact@v2.0.9
         with:
-          name: publish-calculatex
+          name: publish-package
           path: ./release/
 
       # Delete publish artifact so it does not count against storage
@@ -104,7 +104,7 @@ jobs:
       - name: Delete build artifact
         uses: GeekyEggo/delete-artifact@v1.0.0
         with:
-          name: publish-calculatex
+          name: publish-package
           failOnError: false
 
       - name: List folder
@@ -150,8 +150,8 @@ jobs:
           tag: ${{ steps.StepBump.outputs.new_tag }}
           name: ${{ steps.StepTagNoV.outputs.new_tag }}
           body: |
-            The build in this ZIP file cannot save history or variables when closed and re-opened.
-            CalculateX in the Microsoft Store supports all of these features.
+            The build in this ZIP file saves history and variables to temporary files.
+            CalculateX in the Microsoft Store saves this information to permanent storage.
           # Note: Using "./release/*" uploads the individual files.
           artifacts: CalculateX.zip
           token: ${{ secrets.GITHUB_TOKEN }}
