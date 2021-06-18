@@ -86,7 +86,7 @@ namespace CalculateX
 		}
 
 		[System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE0057:Use range operator", Justification = "Unwanted")]
-		void SanitizeTextPastingHandler(object /*TextBox*/ sender, DataObjectPastingEventArgs e)
+		private void SanitizeTextPastingHandler(object /*TextBox*/ sender, DataObjectPastingEventArgs e)
 		{
 			// If any pasting is to be done, we will do it manually.
 			e.CancelCommand();

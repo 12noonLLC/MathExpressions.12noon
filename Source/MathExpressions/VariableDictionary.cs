@@ -12,7 +12,6 @@ namespace MathExpressions
 	/// Variable names can only contain letters and numbers. Symbols are not allowed.
 	/// Must store Double for all results, which may be Double.NaN, Double.PositiveInfinity, etc.
 	/// </remarks>
-	[Serializable]
 	public class VariableDictionary : Dictionary<string, double>
 	{
 		private readonly MathEvaluator _evaluator;
