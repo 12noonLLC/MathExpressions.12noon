@@ -104,8 +104,8 @@
 				<ListView.View>
 					<GridView>
 						<GridView.Columns>
-							<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Key}" Width="Auto" />
-							<GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={StaticResource NumberToAddCommasConverter}}" Width="Auto" />
+							<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Key}" Width="100" />
+							<GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={StaticResource NumberToAddCommasConverter}}" />
 						</GridView.Columns>
 					</GridView>
 				</ListView.View>
