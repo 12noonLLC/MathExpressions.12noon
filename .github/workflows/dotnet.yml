@@ -53,15 +53,16 @@ jobs:
         with:
           dotnet-version: 5.0.x
 
-      - name: Restore dependencies
-        working-directory: ./Source
-        run: dotnet restore
+      # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
         working-directory: ./Source
-        run: dotnet build --no-restore
+        run: dotnet build CalculateX/CalculateX.csproj --nologo --configuration Release --runtime win-x64
+
       - name: Test
         working-directory: ./Source
-        run: dotnet test --no-build --verbosity normal
+        run: |
+          dotnet test MathExpressions.UnitTests/MathExpressions.UnitTests.csproj --nologo --no-build --verbosity normal --configuration Release --runtime win-x64
+          dotnet test CalculateX.UnitTests/CalculateX.UnitTests.csproj --nologo --no-build --verbosity normal --configuration Release --runtime win-x64
 
       - name: Build single-file deployment
         working-directory: ./Source
