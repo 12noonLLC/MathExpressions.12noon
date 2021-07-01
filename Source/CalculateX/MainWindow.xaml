@@ -6,6 +6,8 @@
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:local="clr-namespace:CalculateX"
 	xmlns:shared="clr-namespace:Shared"
+	xmlns:b="clr-namespace:Behaviors"
+	xmlns:props="clr-namespace:CalculateX.Properties"
 	mc:Ignorable="d"
 	Title="CalculateX" Width="450" Height="350"
 	Loaded="Window_Loaded"
@@ -101,6 +103,9 @@
 			<Label Grid.Column="0" Grid.Row="0" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Variables" />
 			<Button Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleHelp}" Content="ℹ️" Click="HelpButton_Click" />
 			<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}">
+				<i:Interaction.Behaviors>
+					<b:ListViewPersistBehavior MySettings="{x:Static props:Settings.Default}" Setting_Widths="Variables_Widths" />
+				</i:Interaction.Behaviors>
 				<ListView.View>
 					<GridView>
 						<GridView.Columns>
