@@ -61,8 +61,8 @@ jobs:
       - name: Test
         working-directory: ./Source
         run: |
-          dotnet test MathExpressions.UnitTests/MathExpressions.UnitTests.csproj --nologo --no-build --verbosity normal --configuration Release --runtime win-x64
-          dotnet test CalculateX.UnitTests/CalculateX.UnitTests.csproj --nologo --no-build --verbosity normal --configuration Release --runtime win-x64
+          dotnet test MathExpressions.UnitTests/MathExpressions.UnitTests.csproj --nologo --verbosity normal --configuration Debug --runtime win-x64
+          dotnet test CalculateX.UnitTests/CalculateX.UnitTests.csproj           --nologo --verbosity normal --configuration Debug --runtime win-x64
 
       - name: Build single-file deployment
         working-directory: ./Source
