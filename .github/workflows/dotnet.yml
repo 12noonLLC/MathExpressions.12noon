@@ -40,6 +40,11 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v2
 
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
       # Work around https://github.com/actions/setup-dotnet/issues/155
       - name: Clean solution
         working-directory: ./Source
@@ -48,15 +53,10 @@ jobs:
         working-directory: ./Source
         run: dotnet nuget locals all --clear
 
-      - name: Set up .NET
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 5.0.x
-
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
         working-directory: ./Source
-        run: dotnet build CalculateX/CalculateX.csproj --nologo --configuration Release --runtime win-x64
+        run: dotnet build CalculateX/CalculateX.csproj --nologo --self-contained --configuration Release --runtime win-x64
 
       - name: Test
         working-directory: ./Source

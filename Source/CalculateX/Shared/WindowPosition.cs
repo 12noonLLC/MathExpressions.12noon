@@ -86,7 +86,7 @@ namespace Shared
 				SetWindowPosition();
 			};
 
-			_window.Closing += (object sender, CancelEventArgs e) =>
+			_window.Closing += (object? sender, CancelEventArgs e) =>
 			{
 				System.Diagnostics.Debug.Assert(sender as Window == _window);
 
