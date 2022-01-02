@@ -1,17 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <Company>12noon</Company>
     <Product>CalculateX</Product>
-    <Copyright>(c) 2020-2021 12noon, Stefan K.S. Tucker</Copyright>
+    <Copyright>(c) 2020-2022 12noon, Stefan K.S. Tucker</Copyright>
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathExpressions.snk</AssemblyOriginatorKeyFile>
     <Version>3.5.0</Version>
-    <AssemblyVersion>3.5.0.0</AssemblyVersion>
+    <AssemblyVersion>3.5.6.0</AssemblyVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
