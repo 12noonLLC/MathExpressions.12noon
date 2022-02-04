@@ -135,6 +135,11 @@ namespace CalculateX
 		}
 		private void ClearHistory_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
+			if (MessageBox.Show("This will clear the input history and all variables. Do you want to continue?", nameof(CalculateX), MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
+			{
+				return;
+			}
+
 			InputRecord.Clear();
 			InputRecord.Save();
 
