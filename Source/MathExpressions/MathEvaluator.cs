@@ -78,7 +78,7 @@ namespace MathExpressions
 		/// <exception cref="ParseException">When there is an error parsing the expression.</exception>
 		public double? Evaluate(string expression)
 		{
-			if (String.IsNullOrEmpty(expression))
+			if (String.IsNullOrWhiteSpace(expression))
 			{
 				throw new ArgumentNullException(nameof(expression));
 			}

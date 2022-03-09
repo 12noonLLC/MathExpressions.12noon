@@ -33,6 +33,14 @@ namespace MathExpressions.UnitTests
 
 
       [TestMethod]
+      public void EvaluateEmpty()
+		{
+         Assert.ThrowsException<ArgumentNullException>(() => eval.Evaluate(@"   "));
+         Assert.ThrowsException<ArgumentNullException>(() => eval.Evaluate(string.Empty));
+		}
+
+
+      [TestMethod]
       public void EvaluateNegative()
       {
          double expected = 2d + -1d;
