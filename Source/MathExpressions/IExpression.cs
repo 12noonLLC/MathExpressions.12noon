@@ -22,10 +22,6 @@ public interface IExpression
 	/// <exception cref="ArgumentException">When the length of numbers do not equal <see cref="ArgumentCount"/>.</exception>
 	public void Validate(PreciseNumber[] operands)
 	{
-		if (operands is null)
-		{
-			throw new ArgumentNullException(nameof(operands));
-		}
 		if (operands.Length != ArgumentCount)
 		{
 			throw new ArgumentException(Resources.InvalidLengthOfArray, nameof(operands));

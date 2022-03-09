@@ -85,11 +85,6 @@ public static class AttributeReader
 	/// <returns>The instance of the member's attribute or null.</returns>
 	private static T? GetAttribute<T>(MemberInfo info) where T : class
 	{
-		if (info is null)
-		{
-			throw new ArgumentNullException(nameof(info));
-		}
-
 		object[] attributes = info.GetCustomAttributes(typeof(T), false) ?? Array.Empty<object>();
 		if (attributes.Length == 0)
 		{

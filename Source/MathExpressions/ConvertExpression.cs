@@ -134,10 +134,7 @@ public class ConvertExpression : IExpression
 
 	private static MemberInfo GetMemberInfo(Type type, string? name)
 	{
-		if (name is null)
-		{
-			throw new ArgumentNullException(nameof(name));
-		}
+		ArgumentNullException.ThrowIfNull(name);
 
 		MemberInfo[] info = type.GetMember(name) ?? throw new ArgumentException("Unable to load member.", nameof(name));
 		return info[0];
