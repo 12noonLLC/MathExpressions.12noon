@@ -1,38 +1,37 @@
 ﻿using System.Windows;
 
-namespace CalculateX
+namespace CalculateX;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
 {
-	/// <summary>
-	/// Interaction logic for App.xaml
-	/// </summary>
-	public partial class App : Application
+	private const string _appGUID = "28CCE173-97C9-4B59-B483-2A5CEA4435B9";
+	private readonly Shared.SingleInstance _singleInstance = new(_appGUID);
+
+
+	protected override void OnStartup(StartupEventArgs e)
 	{
-		private const string _appGUID = "28CCE173-97C9-4B59-B483-2A5CEA4435B9";
-		private readonly Shared.SingleInstance _singleInstance = new(_appGUID);
+		_singleInstance.PreventAnotherInstance(applicationName: nameof(CalculateX), typeMainWindow: typeof(MainWindow));
 
+		base.OnStartup(e);
 
-		protected override void OnStartup(StartupEventArgs e)
-		{
-			_singleInstance.PreventAnotherInstance(applicationName: nameof(CalculateX), typeMainWindow: typeof(MainWindow));
-
-			base.OnStartup(e);
-
-			Shared.ApplicationRecoveryAndRestart.Register();
+		Shared.ApplicationRecoveryAndRestart.Register();
 
 #if DEBUG
-			if (e.Args.Length > 0)
-			{
-				// If the application was restarted, Args.First() == ApplicationRecoveryAndRestart.RestartSwitch.
-				System.Diagnostics.Debugger.Break();
-			}
-#endif
-		}
-
-		protected override void OnExit(ExitEventArgs e)
+		if (e.Args.Length > 0)
 		{
-			Shared.ApplicationRecoveryAndRestart.Unregister();
-
-			base.OnExit(e);
+			// If the application was restarted, Args.First() == ApplicationRecoveryAndRestart.RestartSwitch.
+			System.Diagnostics.Debugger.Break();
 		}
+#endif
+	}
+
+	protected override void OnExit(ExitEventArgs e)
+	{
+		Shared.ApplicationRecoveryAndRestart.Unregister();
+
+		base.OnExit(e);
 	}
 }
