@@ -77,10 +77,7 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void AssociatedObject_Loaded(object sender, RoutedEventArgs e)
 	{
-		if (MySettings is null)
-		{
-			throw new ArgumentNullException(nameof(MySettings));
-		}
+		ArgumentNullException.ThrowIfNull(MySettings);
 		if (AssociatedObject.View is not GridView gridView)
 		{
 			throw new ArgumentException($"This behavior is for {nameof(GridView)} only.");
@@ -118,10 +115,7 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void LoadColumnOrder(GridViewColumnCollection columns)
 	{
-		if (MySettings is null)
-		{
-			throw new ArgumentNullException(nameof(MySettings));
-		}
+		ArgumentNullException.ThrowIfNull(MySettings);
 		if (Setting_Order is null)
 		{
 			return;
@@ -162,10 +156,7 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void LoadColumnWidths(GridViewColumnCollection columns)
 	{
-		if (MySettings is null)
-		{
-			throw new ArgumentNullException(nameof(MySettings));
-		}
+		ArgumentNullException.ThrowIfNull(MySettings);
 		string strWidths = (string)MySettings[Setting_Widths];
 		if (!String.IsNullOrWhiteSpace(strWidths))
 		{
@@ -243,10 +234,7 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void SaveColumnWidthsAndOrder(GridViewColumnCollection columns)
 	{
-		if (MySettings is null)
-		{
-			throw new ArgumentNullException(nameof(MySettings));
-		}
+		ArgumentNullException.ThrowIfNull(MySettings);
 
 		/*
 		 * Save column widths

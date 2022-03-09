@@ -77,7 +77,7 @@ public class WindowPosition
 	[MemberNotNull(nameof(_window))]
 	public void SetWindow(Window w)
 	{
-		_window = w ?? throw new ArgumentNullException(nameof(w));
+		_window = w;
 
 		_window.Loaded += (object sender, RoutedEventArgs e) =>
 		{

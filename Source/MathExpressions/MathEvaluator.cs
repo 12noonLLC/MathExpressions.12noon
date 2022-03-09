@@ -144,13 +144,9 @@ public class MathEvaluator
 	/// <seealso cref="IExpression"/>
 	public void RegisterFunction(string functionName, IExpression expression)
 	{
-		if (String.IsNullOrEmpty(functionName))
+		if (String.IsNullOrWhiteSpace(functionName))
 		{
 			throw new ArgumentNullException(nameof(functionName));
-		}
-		if (expression is null)
-		{
-			throw new ArgumentNullException(nameof(expression));
 		}
 		if (IsFunction(functionName))
 		{
