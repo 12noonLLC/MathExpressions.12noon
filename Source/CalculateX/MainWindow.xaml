@@ -6,12 +6,15 @@
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:local="clr-namespace:CalculateX"
 	xmlns:shared="clr-namespace:Shared"
-	xmlns:b="clr-namespace:Behaviors"
 	xmlns:props="clr-namespace:CalculateX.Properties"
 	mc:Ignorable="d"
 	Title="CalculateX" Width="450" Height="350"
 	Loaded="Window_Loaded"
 >
+<!--
+Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/behaviors}Interaction.Behaviors'.'
+	xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors.dll"
+-->
 	<Window.Resources>
 		<BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
 		<shared:NumberToAddCommasConverter x:Key="NumberToAddCommasConverter" />
@@ -27,178 +30,224 @@
 		<Style x:Key="StyleHelp" TargetType="Button" BasedOn="{StaticResource StyleLabel}">
 			<Setter Property="FontWeight" Value="Normal" />
 		</Style>
+      <DataTemplate x:Key="TemplateWorkspace">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="*" />	<!-- Input and History -->
+					<ColumnDefinition Width="*" />	<!-- Variables -->
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="*" />		<!-- History -->
+					<RowDefinition Height="Auto" />	<!-- Input -->
+				</Grid.RowDefinitions>
+
+				<!-- Input & History -->
+				<Grid Grid.Column="0" Grid.Row="0">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto" />	<!-- Input Label -->
+						<ColumnDefinition Width="*" />		<!-- Input TextBox -->
+						<ColumnDefinition Width="Auto" />	<!-- Clear button -->
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />		<!-- Header -->
+						<RowDefinition Height="*" />			<!-- Variables -->
+						<RowDefinition Height="Auto" />		<!-- Help -->
+					</Grid.RowDefinitions>
+
+					<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="History" />
+					<Button Grid.Column="2" Grid.Row="0" Padding="10,0" Content="{Binding Command.Text, RelativeSource={RelativeSource Self}}" Command="{x:Static local:MainWindow.ClearHistory}" />
+
+					<RichTextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" IsReadOnly="True"
+						FontSize="14" FontWeight="DemiBold" ScrollViewer.VerticalScrollBarVisibility="Auto"
+						shared:RichTextBoxBinding.DocumentFlow="{Binding ContentFlow}"
+						shared:RichTextBoxBinding.ScrollToEnd="True"
+						PreviewMouseLeftButtonUp="HistoryDisplay_MouseUp"
+					/>
+
+					<Label Grid.Column="0" Grid.Row="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Input" />
+					<TextBox x:Name="InputTextBox" Grid.Column="1" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
+						TextWrapping="Wrap"
+						Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
+						TextChanged="InputTextBox_TextChanged"
+						Loaded="InputControlTextBox_Loaded"
+					>
+						<TextBox.InputBindings>
+							<KeyBinding Command="{x:Static local:MainWindow.HistoryPrevious}" Key="Up" />
+							<KeyBinding Command="{x:Static local:MainWindow.HistoryNext}" Key="Down" />
+                     <KeyBinding Command="{x:Static local:MainWindow.WorkspacePrevious}" Key="PageUp" Modifiers="Ctrl" />
+                     <KeyBinding Command="{x:Static local:MainWindow.WorkspaceNext}" Key="PageDown" Modifiers="Ctrl" />
+                     <KeyBinding Command="{x:Static local:MainWindow.CmdNewWorkspace}" Key="T" Modifiers="Ctrl" />
+                     <KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="W" Modifiers="Ctrl" />
+                     <KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="F4" Modifiers="Ctrl" />
+                  </TextBox.InputBindings>
+					</TextBox>
+					<Button Grid.Column="2" Grid.Row="2" Padding="0" FontSize="24" Content="=" IsDefault="True" Click="EvaluateButton_Click" />
+				</Grid>
+
+				<!-- Variables -->
+				<Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="*" />		<!-- Variables -->
+						<ColumnDefinition Width="Auto" />	<!-- Help button -->
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="Auto" />		<!-- Header -->
+						<RowDefinition Height="*" />			<!-- Variables -->
+						<RowDefinition Height="Auto" />		<!-- Help -->
+					</Grid.RowDefinitions>
+
+					<Label Grid.Column="0" Grid.Row="0" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Variables" />
+					<Button Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleHelp}" Content="ℹ️" Click="HelpButton_Click" />
+					<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}">
+						<i:Interaction.Behaviors>
+							<shared:ListViewPersistBehavior MySettings="{x:Static props:Settings.Default}" Setting_Widths="Variables_Widths" />
+						</i:Interaction.Behaviors>
+						<ListView.View>
+							<GridView>
+								<GridView.Columns>
+									<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Key}" Width="100" />
+									<GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={StaticResource NumberToAddCommasConverter}}" />
+								</GridView.Columns>
+							</GridView>
+						</ListView.View>
+					</ListView>
+					<FlowDocumentScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" VerticalScrollBarVisibility="Auto"
+						Visibility="{Binding ShowHelp, Converter={StaticResource BooleanToVisibility}}"
+					>
+						<FlowDocument FontFamily="Segoe UI" FontSize="12" PagePadding="10,5" TextAlignment="Left">
+							<Table>
+								<Table.Columns>
+									<TableColumn />
+									<TableColumn />
+								</Table.Columns>
+								<TableRowGroup>
+									<TableRow>
+										<TableCell><Paragraph><Bold>sqrt</Bold>(n)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>cbrt</Bold>(n)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>pow</Bold>(n, x)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>abs</Bold>(n)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>round</Bold>(d, n)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>truncate</Bold>(d)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>min</Bold>(a, b)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>floor</Bold>(n)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>max</Bold>(a, b)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>ceiling</Bold>(n)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>randomN</Bold>(n)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>random1</Bold>()</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>cos</Bold>(t)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>cosh</Bold>(t)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>sin</Bold>(t)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>sinh</Bold>(t)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>tan</Bold>(t)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>tanh</Bold>(t)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>acos</Bold>(t)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>atan</Bold>(t)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>asin</Bold>(n)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>atanh</Bold>(t)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>log</Bold>(n)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>atan2</Bold>(x, y)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>log10</Bold>(n)</Paragraph></TableCell>
+										<TableCell><Paragraph><Bold>log2</Bold>(n)</Paragraph></TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell><Paragraph><Bold>exp</Bold>(x)</Paragraph></TableCell>
+										<TableCell>
+											<Paragraph FontSize="12">
+												<Hyperlink NavigateUri="https://github.com/skst/CalculateX">Help
+													<i:Interaction.Behaviors>
+														<shared:HyperlinkBehaviorFlow />
+													</i:Interaction.Behaviors>
+												</Hyperlink>
+											</Paragraph>
+										</TableCell>
+									</TableRow>
+									<TableRow>
+										<TableCell ColumnSpan="2">
+											<Paragraph>Convert: n<Bold>[from->to]</Bold></Paragraph>
+										</TableCell>
+									</TableRow>
+								</TableRowGroup>
+							</Table>
+						</FlowDocument>
+					</FlowDocumentScrollViewer>
+				</Grid>
+			</Grid>
+      </DataTemplate>
 	</Window.Resources>
 	<Window.CommandBindings>
 		<CommandBinding Command="{x:Static local:MainWindow.ClearInput}" Executed="ClearInput_Executed" CanExecute="ClearInput_CanExecute" />
 		<CommandBinding Command="{x:Static local:MainWindow.ClearHistory}" Executed="ClearHistory_Executed" CanExecute="ClearHistory_CanExecute" />
 		<CommandBinding Command="{x:Static local:MainWindow.HistoryPrevious}" Executed="HistoryPrevious_Executed" CanExecute="HistoryPrevious_CanExecute" />
 		<CommandBinding Command="{x:Static local:MainWindow.HistoryNext}" Executed="HistoryNext_Executed" CanExecute="HistoryNext_CanExecute" />
+      <CommandBinding Command="{x:Static local:MainWindow.WorkspacePrevious}" Executed="WorkspacePrevious_Executed" CanExecute="WorkspacePrevious_CanExecute" />
+      <CommandBinding Command="{x:Static local:MainWindow.WorkspaceNext}" Executed="WorkspaceNext_Executed" CanExecute="WorkspaceNext_CanExecute" />
+      <CommandBinding Command="{x:Static local:MainWindow.CmdNewWorkspace}" Executed="NewWorkspace_Executed" />
+      <CommandBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Executed="CloseWorkspace_Executed" />
 	</Window.CommandBindings>
-	<Grid>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" />	<!-- Input and History -->
-			<ColumnDefinition Width="*" />	<!-- Variables -->
-		</Grid.ColumnDefinitions>
-		<Grid.RowDefinitions>
-			<RowDefinition Height="*" />		<!-- History -->
-			<RowDefinition Height="Auto" />	<!-- Input -->
-		</Grid.RowDefinitions>
-
-		<!-- Input & History -->
-		<Grid Grid.Column="0" Grid.Row="0">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="Auto" />	<!-- Input Label -->
-				<ColumnDefinition Width="*" />		<!-- Input TextBox -->
-				<ColumnDefinition Width="Auto" />	<!-- Clear button -->
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />		<!-- Header -->
-				<RowDefinition Height="*" />			<!-- Variables -->
-				<RowDefinition Height="Auto" />		<!-- Help -->
-			</Grid.RowDefinitions>
-
-			<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="History" />
-			<Button Grid.Column="2" Grid.Row="0" Padding="10,0" Content="{Binding Command.Text, RelativeSource={RelativeSource Self}}" Command="{x:Static local:MainWindow.ClearHistory}" />
-
-			<RichTextBox x:Name="HistoryDisplay" Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" IsReadOnly="True"
-				FontSize="14" FontWeight="DemiBold" ScrollViewer.VerticalScrollBarVisibility="Auto"
-				PreviewMouseLeftButtonUp="HistoryDisplay_MouseUp"
-			>
-				<RichTextBox.Resources>
-					<Style TargetType="{x:Type Paragraph}">
-						<Setter Property="Margin" Value="0" />
-					</Style>
-				</RichTextBox.Resources>
-			</RichTextBox>
-
-			<Label Grid.Column="0" Grid.Row="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Input" />
-			<TextBox x:Name="InputControl" Grid.Column="1" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
-				TextWrapping="Wrap"
-				Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
-				TextChanged="InputTextBox_TextChanged"
-			>
-				<i:Interaction.Behaviors>
-					<shared:FocusOnLoadBehavior />
-				</i:Interaction.Behaviors>
-				<TextBox.InputBindings>
-					<KeyBinding Command="{x:Static local:MainWindow.HistoryPrevious}" Key="Up" />
-					<KeyBinding Command="{x:Static local:MainWindow.HistoryNext}" Key="Down" />
-				</TextBox.InputBindings>
-			</TextBox>
-			<Button Grid.Column="2" Grid.Row="2" Padding="0" FontSize="24" Content="=" IsDefault="True" Click="EvaluateButton_Click" />
-		</Grid>
-
-		<!-- Variables -->
-		<Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="*" />		<!-- Variables -->
-				<ColumnDefinition Width="Auto" />	<!-- Help button -->
-			</Grid.ColumnDefinitions>
-			<Grid.RowDefinitions>
-				<RowDefinition Height="Auto" />		<!-- Header -->
-				<RowDefinition Height="*" />			<!-- Variables -->
-				<RowDefinition Height="Auto" />		<!-- Help -->
-			</Grid.RowDefinitions>
-
-			<Label Grid.Column="0" Grid.Row="0" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Variables" />
-			<Button Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleHelp}" Content="ℹ️" Click="HelpButton_Click" />
-			<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}">
-				<i:Interaction.Behaviors>
-					<b:ListViewPersistBehavior MySettings="{x:Static props:Settings.Default}" Setting_Widths="Variables_Widths" />
-				</i:Interaction.Behaviors>
-				<ListView.View>
-					<GridView>
-						<GridView.Columns>
-							<GridViewColumn Header="Name" DisplayMemberBinding="{Binding Key}" Width="100" />
-							<GridViewColumn Header="Value" DisplayMemberBinding="{Binding Value, Converter={StaticResource NumberToAddCommasConverter}}" />
-						</GridView.Columns>
-					</GridView>
-				</ListView.View>
-			</ListView>
-			<FlowDocumentScrollViewer Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" VerticalScrollBarVisibility="Auto"
-				Visibility="{Binding ShowHelp, Converter={StaticResource BooleanToVisibility}}" Zoom="125"
-			>
-				<FlowDocument FontFamily="Segoe UI" FontSize="10" PagePadding="10,5" TextAlignment="Left">
-					<Table>
-						<Table.Columns>
-							<TableColumn />
-							<TableColumn />
-						</Table.Columns>
-						<TableRowGroup>
-							<TableRow>
-								<TableCell><Paragraph><Bold>sqrt</Bold>(n)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>cbrt</Bold>(n)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>pow</Bold>(n, x)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>abs</Bold>(n)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>round</Bold>(d, n)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>truncate</Bold>(d)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>min</Bold>(a, b)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>floor</Bold>(n)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>max</Bold>(a, b)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>ceiling</Bold>(n)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>randomN</Bold>(n)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>random1</Bold>()</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>cos</Bold>(t)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>cosh</Bold>(t)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>sin</Bold>(t)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>sinh</Bold>(t)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>tan</Bold>(t)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>tanh</Bold>(t)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>acos</Bold>(t)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>atan</Bold>(t)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>asin</Bold>(n)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>atanh</Bold>(t)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>log</Bold>(n)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>atan2</Bold>(x, y)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>log10</Bold>(n)</Paragraph></TableCell>
-								<TableCell><Paragraph><Bold>log2</Bold>(n)</Paragraph></TableCell>
-							</TableRow>
-							<TableRow>
-								<TableCell><Paragraph><Bold>exp</Bold>(x)</Paragraph></TableCell>
-								<TableCell>
-									<Paragraph FontSize="12">
-										<Hyperlink NavigateUri="https://github.com/skst/CalculateX">Help
-											<i:Interaction.Behaviors>
-												<shared:HyperlinkBehaviorFlow />
-											</i:Interaction.Behaviors>
-										</Hyperlink>
-									</Paragraph>
-								</TableCell>
-							</TableRow>
-								<TableRow>
-									<TableCell ColumnSpan="2">
-										<Paragraph>Convert: n<Bold>[from->to]</Bold>
-										</Paragraph>
-									</TableCell>
-								</TableRow>
-						</TableRowGroup>
-					</Table>
-				</FlowDocument>
-			</FlowDocumentScrollViewer>
-		</Grid>
-	</Grid>
+	<!-- https://stackoverflow.com/questions/4058003/wpf-tabcontrol-datatemplates -->
+   <TabControl
+      Margin="0,2,0,0"
+		IsSynchronizedWithCurrentItem="True"
+		ItemsSource="{Binding Workspaces}"
+		SelectionChanged="WorkspaceTabControl_SelectionChanged"
+		SelectedItem="{Binding CurrentWorkspace}"
+		ContentTemplate="{StaticResource TemplateWorkspace}"
+      d:SelectedIndex="0"
+	>
+      <TabControl.Resources>
+			<ResourceDictionary>
+				<ResourceDictionary.MergedDictionaries>
+					<ResourceDictionary Source="Shared\EditableTabHeaderDictionary.xaml" />
+				</ResourceDictionary.MergedDictionaries>
+			</ResourceDictionary>
+		</TabControl.Resources>
+      <i:Interaction.Behaviors>
+         <shared:FocusTabControlSelectionChangedBehavior ElementName="InputTextBox" />
+      </i:Interaction.Behaviors>
+      <TabControl.InputBindings>
+         <!-- These key bindings are for other controls on the tab, such as Clear History button. -->
+         <KeyBinding Command="{x:Static local:MainWindow.WorkspacePrevious}" Key="PageUp" Modifiers="Ctrl" />
+         <KeyBinding Command="{x:Static local:MainWindow.WorkspaceNext}" Key="PageDown" Modifiers="Ctrl" />
+			<KeyBinding Command="{x:Static local:MainWindow.CmdNewWorkspace}" Key="T" Modifiers="Ctrl" />
+			<KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="W" Modifiers="Ctrl" />
+			<KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="F4" Modifiers="Ctrl" />
+      </TabControl.InputBindings>
+      <TabControl.ItemTemplate>
+         <DataTemplate>
+				<shared:EditableTabHeaderControl Content="{Binding Name, Mode=TwoWay}" />
+         </DataTemplate>
+      </TabControl.ItemTemplate>
+      <d:TabControl.ItemsSource>
+         <x:Array Type="{x:Type local:Workspace}">
+            <local:Workspace Name="Mortgage" />
+            <local:Workspace Name="Sales" />
+            <local:Workspace Name="Temp" />
+            <local:Workspace Name="+" CanCloseTab="False" />
+         </x:Array>
+      </d:TabControl.ItemsSource>
+	</TabControl>
 </Window>

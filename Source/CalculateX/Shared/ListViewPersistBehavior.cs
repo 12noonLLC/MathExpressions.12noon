@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace Behaviors;
+namespace Shared;
 
 /// <summary>
 /// This behavior will save and restore the following settings:
@@ -48,10 +47,9 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 		}
 
 		AssociatedObject.Loaded += AssociatedObject_Loaded;
-		AssociatedObject.Unloaded += AssociatedObject_Unloaded;
-
 		Application.Current.Exit += Application_Exit;
 
+		// We can't use the Unloaded event. It's raised when the control is destroyed, but the view is null by then.
 		// We can't use the SizeChanged event. It's raised only when WPF sets the initial widths.
 	}
 
@@ -62,8 +60,6 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 		gridView.Columns.CollectionChanged -= Columns_CollectionChanged;
 
 		Application.Current.Exit -= Application_Exit;
-
-		AssociatedObject.Unloaded -= AssociatedObject_Unloaded;
 		AssociatedObject.Loaded -= AssociatedObject_Loaded;
 	}
 
@@ -74,7 +70,6 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 	/// </summary>
 	/// <param name="sender"></param>
 	/// <param name="e"></param>
-	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void AssociatedObject_Loaded(object sender, RoutedEventArgs e)
 	{
 		ArgumentNullException.ThrowIfNull(MySettings);
@@ -91,7 +86,6 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 		try
 		{
 			LoadColumnOrder(columns);
-
 			LoadColumnWidths(columns);
 		}
 		catch (System.Configuration.SettingsPropertyNotFoundException)
@@ -112,7 +106,6 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 	/// Load column order (if any).
 	/// </summary>
 	/// <param name="columns"></param>
-	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void LoadColumnOrder(GridViewColumnCollection columns)
 	{
 		ArgumentNullException.ThrowIfNull(MySettings);
@@ -153,7 +146,6 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 	/// Note: Load them AFTER the order because they were saved under this new order.
 	/// </summary>
 	/// <param name="columns"></param>
-	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void LoadColumnWidths(GridViewColumnCollection columns)
 	{
 		ArgumentNullException.ThrowIfNull(MySettings);
@@ -203,35 +195,23 @@ public class ListViewPersistBehavior : Microsoft.Xaml.Behaviors.Behavior<ListVie
 		}
 	}
 
+	/// <summary>
+	/// Save state on exit.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
 	private void Application_Exit(object sender, ExitEventArgs e)
 	{
 		GridView gridView = (GridView)AssociatedObject.View;
+		if (gridView is null)
+		{
+			return;
+		}
 		GridViewColumnCollection columns = gridView.Columns;
 
 		SaveColumnWidthsAndOrder(columns);
 	}
 
-	/// <summary>
-	/// If the control is unloaded, save the state.
-	/// </summary>
-	/// <remarks>
-	/// This is not called for MainWindow.
-	/// It is called for the search window.
-	/// </remarks>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void AssociatedObject_Unloaded(object sender, RoutedEventArgs e)
-	{
-		// We'll save now, so we don't need (or want) to keep this alive for exit.
-		Application.Current.Exit -= Application_Exit;
-
-		GridView gridView = (GridView)AssociatedObject.View;
-		GridViewColumnCollection columns = gridView.Columns;
-
-		SaveColumnWidthsAndOrder(columns);
-	}
-
-	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Special case")]
 	private void SaveColumnWidthsAndOrder(GridViewColumnCollection columns)
 	{
 		ArgumentNullException.ThrowIfNull(MySettings);

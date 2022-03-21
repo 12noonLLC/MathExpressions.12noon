@@ -26,7 +26,7 @@ namespace Shared;
 /// 	</i:Interaction.Behaviors>
 /// </Label>
 /// </example>
-class HyperlinkBehavior : Behavior<FrameworkElement>
+public class HyperlinkBehavior : Behavior<FrameworkElement>
 {
 	// Hyperlink to open when this control is clicked.
 	public string Hyperlink
@@ -38,7 +38,7 @@ class HyperlinkBehavior : Behavior<FrameworkElement>
 		DependencyProperty.Register(nameof(Hyperlink), typeof(string), typeof(HyperlinkBehavior));
 
 
-	private FrameworkElement TheControl => (FrameworkElement)AssociatedObject;
+	private FrameworkElement TheControl => AssociatedObject;
 
 
 	protected override void OnAttached()
@@ -71,9 +71,9 @@ class HyperlinkBehavior : Behavior<FrameworkElement>
 /// 	</Hyperlink>
 /// </Paragraph>
 /// </example>
-class HyperlinkBehaviorFlow : Behavior<Hyperlink>
+public class HyperlinkBehaviorFlow : Behavior<Hyperlink>
 {
-	private Hyperlink TheControl => (Hyperlink)AssociatedObject;
+	private Hyperlink TheControl => AssociatedObject;
 
 
 	protected override void OnAttached()

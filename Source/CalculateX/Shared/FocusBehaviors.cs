@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using Microsoft.Xaml.Behaviors;
+using System;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 
 namespace Shared;
@@ -17,7 +20,7 @@ namespace Shared;
 ///			<shared:FocusFirstBehavior />
 ///		</i:Interaction.Behaviors>
 /// </example>
-public class FocusFirstBehavior : Microsoft.Xaml.Behaviors.Behavior<FrameworkElement>
+public class FocusFirstBehavior : Behavior<FrameworkElement>
 {
 	protected override void OnAttached()
 	{
@@ -37,6 +40,71 @@ public class FocusFirstBehavior : Microsoft.Xaml.Behaviors.Behavior<FrameworkEle
 
 
 /// <summary>
+/// This behavior casuses a TabControl to set focus to the named control when tab selection changes.
+/// </summary>
+/// <example>
+///	<TabControl>
+///		<i:Interaction.Behaviors>
+///			<shared:FocusTabControlSelectionChangedBehavior ElementName="SomeTextBox" />
+///		</i:Interaction.Behaviors>
+///		<TabControl.ContentTemplate>
+///			<DataTemplate>
+///				<TextBox x:Name="SomeTextBox" />
+///			</DataTemplate>
+///		</TabControl.ContentTemplate>
+///	</TabControl>
+/// </example>
+public class FocusTabControlSelectionChangedBehavior : Behavior<TabControl>
+{
+	public string ElementName
+	{
+		get => (string)GetValue(ElementNameProperty);
+		set => SetValue(ElementNameProperty, value);
+	}
+	public static readonly DependencyProperty ElementNameProperty =
+		DependencyProperty.Register(nameof(ElementName), typeof(string), typeof(FocusTabControlSelectionChangedBehavior));
+
+
+	protected override void OnAttached()
+	{
+		AssociatedObject.SelectionChanged += AssociatedObject_SelectionChanged;
+	}
+
+	protected override void OnDetaching()
+	{
+		AssociatedObject.SelectionChanged -= AssociatedObject_SelectionChanged;
+	}
+
+	private void AssociatedObject_SelectionChanged(object /*TabControl*/ sender, RoutedEventArgs e)
+	{
+		if (string.IsNullOrEmpty(ElementName))
+		{
+			return;
+		}
+
+		TabControl tabControl = (TabControl)sender;
+
+		// Invoke this code to give the tab time to generate the tree.
+		Dispatcher.BeginInvoke(() =>
+		{
+			/// Get the ContentPresenter for the TabControl.
+			ContentPresenter? contentPresenter = MyExtensions.FindVisualChild<ContentPresenter>(tabControl);
+			ArgumentNullException.ThrowIfNull(contentPresenter);
+
+			/// Get the data template for this preseenter.
+			DataTemplate dataTemplate = contentPresenter.ContentTemplate;
+
+			/// Use this data template to search the presenter for an element with the specified name.
+			FrameworkElement focusElement = (FrameworkElement)dataTemplate.FindName(ElementName, contentPresenter);
+
+			/// Set focus to this control.
+			focusElement.Focus();
+		});
+	}
+}
+
+
+/// <summary>
 /// This behavior sets focus to the associated objet when it's loaded.
 /// </summary>
 /// <example>
@@ -50,7 +118,7 @@ public class FocusFirstBehavior : Microsoft.Xaml.Behaviors.Behavior<FrameworkEle
 ///			<shared:FocusOnLoadBehavior />
 ///		</i:Interaction.Behaviors>
 /// </example>
-public class FocusOnLoadBehavior : Microsoft.Xaml.Behaviors.Behavior<FrameworkElement>
+public class FocusOnLoadBehavior : Behavior<FrameworkElement>
 {
 	protected override void OnAttached()
 	{

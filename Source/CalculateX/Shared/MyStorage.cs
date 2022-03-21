@@ -74,7 +74,7 @@ public static class MyStorage
 
 	//		//This calls Dispose, so we don't need to. stmReader.Close();
 	//		//This calls Dispose, so we don't need to. stm.Close();
-	//		// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
+	//		// http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
 	//	}
 	//	catch (NotSupportedException)
 	//	{
@@ -89,16 +89,40 @@ public static class MyStorage
 	/// These two methods write and read an XML element.
 	/// </summary>
 	/// <example>
-	/// XDocument xdoc = ...
-	/// WriteElement(xdoc.Root);
-	/// xdoc = new XDocument(MyStorage.ReadElement("fish"));
-	///
-	/// MyStorage.WriteElement("fish", new XElement("parent", "some value"));
-	/// XElement position = MyStorage.ReadElement("fish");
+	/// XDocument xdoc = new(...);
+	/// WriteXDocument(xdoc);
+	/// xdoc = MyStorage.ReadXDocument("fish");
 	/// </example>
 	/// <param name="tag">unique name for isolated storage</param>
 	/// <param name="xml">XML element to save to storage</param>
-	public static void WriteElement(string tag, XElement xml)
+	public static void WriteXDocument(string tag, XDocument xml)
+	{
+		try
+		{
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
+			using StreamWriter stmWriter = new(stm);
+
+			xml.Save(stmWriter);
+
+			//This calls Dispose, so we don't need to. stmWriter.Close();
+			//This calls Dispose, so we don't need to. stm.Close();
+		}
+		catch (NotSupportedException)
+		{
+			try
+			{
+				string path = BuildTemporaryFilename(tag);
+				using StreamWriter stmWriter = new(path);
+				xml.Save(stmWriter);
+			}
+			catch (Exception)
+			{
+			}
+		}
+	}
+	/// Cannot constrain template to XDocument or XElement, so we have to duplicate it.
+	public static void WriteXElement(string tag, XElement xml)
 	{
 		try
 		{
@@ -128,7 +152,60 @@ public static class MyStorage
 
 	/// <param name="tag">unique name for isolated storage</param>
 	/// <returns>XML element that was read from storage; null if nothing is found</returns>
-	public static XElement? ReadElement(string tag)
+	public static XDocument? ReadXDocument(string tag)
+	{
+		try
+		{
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			if (!isf.FileExists(tag))
+			{
+				return null;
+			}
+
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
+			if (stm is null)
+			{
+				return null;
+			}
+
+			using StreamReader stmReader = new(stm);
+
+			// If this hasn't been created yet, EOS is true.
+			if (stmReader.EndOfStream)
+			{
+				return null;
+			}
+
+			try
+			{
+				return XDocument.Load(stmReader);
+			}
+			catch (XmlException)
+			{
+				stm.SetLength(0);
+				return null;
+			}
+
+			//This calls Dispose, so we don't need to. stmReader.Close();
+			//This calls Dispose, so we don't need to. stm.Close();
+			// http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
+		}
+		catch (NotSupportedException)
+		{
+			try
+			{
+				string path = BuildTemporaryFilename(tag);
+				using StreamReader stmReader = new(path);
+				return XDocument.Load(stmReader);
+			}
+			catch (Exception)
+			{
+				return null;
+			}
+		}
+	}
+	/// Cannot constrain template to XDocument or XElement, so we have to duplicate it.
+	public static XElement? ReadXElement(string tag)
 	{
 		try
 		{
@@ -164,7 +241,7 @@ public static class MyStorage
 
 			//This calls Dispose, so we don't need to. stmReader.Close();
 			//This calls Dispose, so we don't need to. stm.Close();
-			// REF: http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
+			// http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
 		}
 		catch (NotSupportedException)
 		{

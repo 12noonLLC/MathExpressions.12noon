@@ -42,7 +42,7 @@ public class WindowPosition
 		_tag = tag;
 
 		// Read the current position from storage
-		XElement? position = MyStorage.ReadElement(_tag);
+		XElement? position = MyStorage.ReadXElement(_tag);
 		if (position is null)
 		{
 			_bounds = w.RestoreBounds;
@@ -94,7 +94,7 @@ public class WindowPosition
 			_bMinimized = (_window.WindowState == WindowState.Minimized);
 			_bMaximized = (_window.WindowState == WindowState.Maximized);
 
-			MyStorage.WriteElement(_tag, new XElement(nameof(WindowPosition), ToXML()));
+			MyStorage.WriteXElement(_tag, new XElement(nameof(WindowPosition), ToXML()));
 		};
 	}
 
