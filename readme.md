@@ -23,6 +23,7 @@ A calculator that evaluates math expressions.
     - Mass
     - Volume
 - Supports variables including last answer.
+- Supports multiple workspaces with their own history and variables.
 
 Enter simple or complex mathematical expressions and immediately calculate the result.
 From adding your grocery bill to calculating cosine, *CalculateX* does it all.
@@ -42,6 +43,28 @@ If you use the mouse to select text in the history, it is automatically copied t
 The focus is also set on the input field so that you can quickly paste the selected text if desired.
 When pasting a number, any currency symbol and grouping separators are removed
 since they are not allowed in expressions.
+
+### Workspaces
+
+You can use workspaces to separate different calculation tasks.
+Use one for working on your taxes, another for adding your utility bills,
+and another for measuring the wood to build those bookcases.
+
+Each workspace has its own input history and variables.
+
+Double-click a tab to edit its name.
+
+Click the "x" in a tab to close that workspace.
+
+Click the "+" tab to create a new workspace.
+
+| Key | Action |
+|-----|--------|
+| Ctrl+T | Create new workspace |
+| Ctrl+W | Close current workspace |
+| Ctrl+F4 | Close current workspace |
+| Ctrl+PageUp | Select previous workspace |
+| Ctrl+PageDown | Select next workspace |
 
 ### Basic Mathematical Operators
 
