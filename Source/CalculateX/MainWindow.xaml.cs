@@ -430,8 +430,11 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	}
 
 
+	private static string GetWorkspacesFilePath() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "CalculateX.xml");
+
+
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <example>
 	///	<calculatex>
@@ -450,70 +453,74 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	/// </example>
 	public void SaveWorkspaces()
 	{
-		Shared.MyStorage.WriteXDocument(NAME_ELEMENT_ROOT,
-			new XDocument(
-				new XElement(NAME_ELEMENT_WORKSPACES,
-					Workspaces
-					.Take(0..^1)   // Do not save last "+" tab.
-					.Select(w =>
-						new XElement(NAME_ELEMENT_WORKSPACE,
-							new XAttribute(NAME_ATTRIBUTE_NAME, w.Name),
-							new XAttribute(NAME_ATTRIBUTE_SELECTED, object.ReferenceEquals(CurrentWorkspace, w)),
-							w.InputRecord.Aggregate(
-								seed: (new XElement(NAME_ELEMENT_INPUTS), 0),
-								func:
-								((XElement root, int n) t, string input) =>
-								{
-									++t.n;	// advance ordinal
-									t.root.Add(
-										new XElement(NAME_ELEMENT_KEY,
-											new XAttribute(NAME_ATTRIBUTE_ORDINAL, t.n),
-											input
-										)
-									);
-									return t;
-								}
-							)
-							.Item1
+		XDocument xdoc = new(
+			new XElement(NAME_ELEMENT_WORKSPACES,
+				Workspaces
+				.Take(0..^1)   // Do not save last "+" tab.
+				.Select(w =>
+					new XElement(NAME_ELEMENT_WORKSPACE,
+						new XAttribute(NAME_ATTRIBUTE_NAME, w.Name),
+						new XAttribute(NAME_ATTRIBUTE_SELECTED, object.ReferenceEquals(CurrentWorkspace, w)),
+						w.InputRecord.Aggregate(
+							seed: (new XElement(NAME_ELEMENT_INPUTS), 0),
+							func:
+							((XElement root, int n) t, string input) =>
+							{
+								++t.n;   // advance ordinal
+								t.root.Add(
+									new XElement(NAME_ELEMENT_KEY,
+										new XAttribute(NAME_ATTRIBUTE_ORDINAL, t.n),
+										input
+									)
+								);
+								return t;
+							}
 						)
-					))
-				)
+						.Item1
+					)
+				))
 			);
+		xdoc.Save(GetWorkspacesFilePath());
+
+		//Shared.MyStorage.WriteXDocument(NAME_ELEMENT_ROOT,
+		//	new XDocument(
+		//		//...
+		//		)
+		//	);
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <returns>Selected workspace (or null)</returns>
 	private Workspace? LoadWorkspaces()
 	{
 		Workspace? selectedWorkspace = null;
+		XDocument? xdoc = null;
 
-		/// TODO: We can remove the legacy load after everyone upgrades.
-		XElement? root = ReadXElementLegacy("inputs");
-		if (root is not null)
+		/// Try to load workspaces from Documents folder
+		string filePath = GetWorkspacesFilePath();
+		if (File.Exists(filePath))
 		{
-			Workspace workspace = new("Legacy", canCloseTab: true);
-			workspace.InputRecord.AddRange(
-				root.Elements()
-					.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
-					.OrderBy(t => t.ordinal)
-					.Select(t => t.value)
-			);
-			Workspaces.Add(workspace);
-
-			Shared.MyStorage.Delete("inputs");
-
-			selectedWorkspace = workspace;
+			try
+			{
+				xdoc = XDocument.Load(filePath);
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show($"There was an error reading the workspaces file {filePath} : {ex.Message}");
+				return null;
+			}
 		}
 		else
 		{
-			XDocument? xdoc = Shared.MyStorage.ReadXDocument(NAME_ELEMENT_ROOT);
-			if (xdoc is null)
-			{
-				return null;
-			}
+			/// TODO: We can remove this legacy load after everyone upgrades. [Oct 2022]
+			/// Try to load multiple workspaces from isolated storage
+			xdoc = Shared.MyStorage.ReadXDocument(NAME_ELEMENT_ROOT);
+		}
 
+		if (xdoc is not null)
+		{
 			foreach (XElement xWorkspace in xdoc.Element(NAME_ELEMENT_WORKSPACES)?.Elements(NAME_ELEMENT_WORKSPACE) ?? Enumerable.Empty<XElement>())
 			{
 				Workspace workspace = new(xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)?.Value ?? "New", canCloseTab: true);
@@ -531,6 +538,28 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 					.Select(t => t.value));
 				Workspaces.Add(workspace);
 			}
+			Shared.MyStorage.Delete(NAME_ELEMENT_ROOT);	// if it exists, delete the legacy isolated storage
+			return selectedWorkspace;
+		}
+
+		/// TODO: We can remove the legacy load after everyone upgrades. [Apr 2022]
+		/// Try to load single workspace from isolated storage
+		XElement? root = ReadXElementLegacy("inputs");
+		if (root is not null)
+		{
+			Workspace workspace = new("Legacy", canCloseTab: true);
+			workspace.InputRecord.AddRange(
+				root.Elements()
+					.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
+					.OrderBy(t => t.ordinal)
+					.Select(t => t.value)
+			);
+			Workspaces.Add(workspace);
+
+			Shared.MyStorage.Delete("inputs");
+
+			selectedWorkspace = workspace;
+			return selectedWorkspace;
 		}
 
 		return selectedWorkspace;

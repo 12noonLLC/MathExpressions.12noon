@@ -227,6 +227,23 @@ Example: `80[kph->mph]`
 
 ------------
 
+## Save File
+
+CalculateX saves the workspaces in your *Documents* folder in a file called `CalculateX.xml`.
+
+If you are familiar with XML, you can exit CalculateX and edit this file
+to add or remove calculations or workspaces.
+
+If you use cloud storage, such as OneDrive or DropBox,
+you can synchronize this file between multiple computers.
+At the moment, CalculateX only opens the file when it starts
+and does not detect changes in the file while it is running.
+This means it is possible that it will overwrite changes made on
+another computer and synchronized while it is running.
+Therefore, it is recommended that you close CalculateX when you are done using your computer.
+
+------------
+
 ## MathExpressions Library
 
 The library supports mathematical expressions, functions, unit conversion, and variables.
