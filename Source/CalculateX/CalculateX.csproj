@@ -2,23 +2,23 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
-    <SignAssembly>true</SignAssembly>
+    <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Calculator.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>CalculateX.ico</ApplicationIcon>
     <Company>12noon</Company>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
-    <Copyright>\u00A9 2020-2022 12noon, Stefan K.S. Tucker</Copyright>
+    <Copyright>\u00A9 2020-2023 12noon, Stefan K.S. Tucker</Copyright>
     <Nullable>enable</Nullable>
-    <Version>3.8.0</Version>
     <RepositoryUrl>https://github.com/skst/CalculateX</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
     <Description>Enter simple or complex mathematical expressions and immediately calculate the result. From adding your grocery bill to calculating cosine to doing your taxes, CalculateX does it all. Results are added to a history tape, so you don’t have to write them down to remember them. Use the special variable answer to refer to the most recent result. Use the up- and down-arrows to cycle through previous calculations. CalculateX also supports conversions for mass, volume, temperature, speed, time, and length.</Description>
     <PackageIcon>CalculateX.png</PackageIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <PackageReadmeFile>readme.md</PackageReadmeFile>
+    <Version>3.8.11</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -44,6 +44,10 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Calculator.snk" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.39" />
