@@ -1,11 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <Company>12noon</Company>
     <Product>CalculateX</Product>
-    <Copyright>(c) 2020-2022 12noon, Stefan K.S. Tucker</Copyright>
+    <Copyright>(c) 2020-2023 12noon, Stefan K.S. Tucker</Copyright>
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
     <SignAssembly>true</SignAssembly>
