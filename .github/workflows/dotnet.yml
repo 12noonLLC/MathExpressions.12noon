@@ -73,7 +73,7 @@ jobs:
       # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: Upload deployment folder as a build artifact
-        uses: actions/upload-artifact@v2.2.3
+        uses: actions/upload-artifact@v3
         with:
           name: publish-package
           path: ./release/
