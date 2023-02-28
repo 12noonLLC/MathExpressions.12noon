@@ -90,7 +90,7 @@ jobs:
 
     steps:
       - name: Check out repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Download publish artifact from previous job
       # https://github.com/marketplace/actions/download-a-build-artifact
