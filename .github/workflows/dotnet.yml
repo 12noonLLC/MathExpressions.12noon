@@ -95,7 +95,7 @@ jobs:
       # Download publish artifact from previous job
       # https://github.com/marketplace/actions/download-a-build-artifact
       - name: Download deployment folder as a build artifact
-        uses: actions/download-artifact@v2.0.9
+        uses: actions/download-artifact@v3
         with:
           name: publish-package
           path: ./release/
@@ -103,7 +103,7 @@ jobs:
       # Delete publish artifact so it does not count against storage
       # https://github.com/marketplace/actions/delete-artifact
       - name: Delete build artifact
-        uses: GeekyEggo/delete-artifact@v1.0.0
+        uses: GeekyEggo/delete-artifact@v2
         with:
           name: publish-package
           failOnError: false
