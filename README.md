@@ -1,4 +1,4 @@
-﻿# CalculateX [![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
+﻿# Calculate X [![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
 
 A calculator that evaluates math expressions.
 
@@ -8,7 +8,7 @@ A calculator that evaluates math expressions.
     <img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="284" height="104" />
 </a>
 
-![CalculateX](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
+![Calculate X](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
 
 ## Features
 
@@ -26,7 +26,7 @@ A calculator that evaluates math expressions.
 - Supports multiple workspaces with their own history and variables.
 
 Enter simple or complex mathematical expressions and immediately calculate the result.
-From adding your grocery bill to calculating cosine, *CalculateX* does it all.
+From adding your grocery bill to calculating cosine, *Calculate X* does it all.
 Results are automatically added to a history record, so you don't have to write them down
 to remember them.
 Those results are even saved and restored when you exit and restart the application.
@@ -68,7 +68,7 @@ Click the "+" tab to create a new workspace.
 
 ### Basic Mathematical Operators
 
-*CalculateX* supports the basic mathematical operators: addition, subtraction,
+*Calculate X* supports the basic mathematical operators: addition, subtraction,
 multiplication, division, modulo, and exponent.
 You can use parentheses to group expressions and give them precedence.
 
@@ -211,7 +211,7 @@ Example: `80[kph->mph]`
 - Gram `g`
 - Milligram `mg`
 - Ton `ton`
-- Pound `lg`
+- Pound `lb`
 - Ounce `oz`
 
 #### volume
@@ -229,18 +229,18 @@ Example: `80[kph->mph]`
 
 ## Save File
 
-CalculateX saves the workspaces in your *Documents* folder in a file called `CalculateX.xml`.
+*Calculate X* saves the workspaces in your *Documents* folder in a file called `CalculateX.xml`.
 
-If you are familiar with XML, you can exit CalculateX and edit this file
+If you are familiar with XML, you can exit *Calculate X* and edit this file
 to add or remove calculations or workspaces.
 
 If you use cloud storage, such as OneDrive or DropBox,
 you can synchronize this file between multiple computers.
-At the moment, CalculateX only opens the file when it starts
+At the moment, *Calculate X* only opens the file when it starts
 and does not detect changes in the file while it is running.
 This means it is possible that it will overwrite changes made on
 another computer and synchronized while it is running.
-Therefore, it is recommended that you close CalculateX when you are done using your computer.
+Therefore, it is recommended that you close *Calculate X* when you are done using your computer.
 
 ------------
 

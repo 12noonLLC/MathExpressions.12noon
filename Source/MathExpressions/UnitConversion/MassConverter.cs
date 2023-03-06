@@ -38,7 +38,7 @@ public static class MassConverter
 		1m,							//kilogram
 		0.45359237m / 16m,		//ounce
 		0.45359237m,				//pound
-		0.45359237m * 2_000m,	//ton [short, US]      
+		0.45359237m * 2_000m,	//ton [short, US]
 	};
 
 	/// <summary>
