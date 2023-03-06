@@ -8,7 +8,7 @@
 	xmlns:shared="clr-namespace:Shared"
 	xmlns:props="clr-namespace:CalculateX.Properties"
 	mc:Ignorable="d"
-	Title="CalculateX" Width="450" Height="350"
+	Title="Calculate X" Width="450" Height="350"
 	Loaded="Window_Loaded"
 >
 <!--

@@ -13,7 +13,7 @@ public partial class App : Application
 
 	protected override void OnStartup(StartupEventArgs e)
 	{
-		_singleInstance.PreventAnotherInstance(applicationName: nameof(CalculateX), typeMainWindow: typeof(MainWindow));
+		_singleInstance.PreventAnotherInstance(applicationName: "Calculate X", typeMainWindow: typeof(MainWindow));
 
 		base.OnStartup(e);
 
