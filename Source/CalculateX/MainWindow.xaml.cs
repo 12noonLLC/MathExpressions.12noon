@@ -1,5 +1,6 @@
 ﻿using MathExpressions;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -65,7 +66,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		Workspace? selectedWorkspace = LoadWorkspaces();
 		if (!Workspaces.Any())
 		{
-			Workspaces.Add(new(FormWindowName(), canCloseTab: true));
+			Workspaces.Add(new(FormWindowName(Workspaces.Select(w => w.Name)), canCloseTab: true));
 		}
 		Workspaces.Add(new("+", canCloseTab: false));
 		CurrentWorkspace = selectedWorkspace ?? Workspaces.First();
@@ -107,7 +108,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		}
 
 		/// Change the non-closable tab to closable and name it.
-		CurrentWorkspace.Name = FormWindowName();
+		CurrentWorkspace.Name = FormWindowName(Workspaces.Select(w => w.Name));
 		CurrentWorkspace.CanCloseTab = true;
 
 		// Create new non-closable tab.
@@ -178,7 +179,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		//var textBox = (TextBox)e.OriginalSource;
 		//var tabControl = (TabControl)e.Source;
 
-		Workspaces.Insert(Workspaces.IndexOf(CurrentWorkspace) + 1, new(FormWindowName(), canCloseTab: true));
+		Workspaces.Insert(Workspaces.IndexOf(CurrentWorkspace) + 1, new(FormWindowName(Workspaces.Select(w => w.Name)), canCloseTab: true));
 		SelectNextWorkspace();
 
 		SaveWorkspaces();
@@ -209,11 +210,13 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	{
 		if (closedWorkspace == CurrentWorkspace)
 		{
+			var remainingWorkspaces = Workspaces.Except(new[] { closedWorkspace });
+
 			/// If closing last tab (except for "+" tab), create one.
-			if (Workspaces.Count(w => w.CanCloseTab) == 1)
+			if (!remainingWorkspaces.Any(w => w.CanCloseTab))
 			{
 				/// [closed][+]
-				Workspaces.Insert(0, new Workspace(FormWindowName(), canCloseTab: true));
+				Workspaces.Insert(0, new Workspace(FormWindowName(remainingWorkspaces.Select(w => w.Name)), canCloseTab: true));
 				/// [new][closed][+]
 			}
 
@@ -236,7 +239,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	}
 
 
-	private string FormWindowName()
+	private string FormWindowName(IEnumerable<string> bannedNames)
 	{
 		/// If we are closing the last tab, reset the window ID.
 		/// (This prevents the ID from incrementing when we close the last tab.)
@@ -250,7 +253,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		{
 			++_windowId;
 			name = $"{nameof(Workspace)}{_windowId}";
-		} while (Workspaces.Any(w => w.Name == name));
+		} while (bannedNames.Any(n => n == name));
 
 		return name;
 	}
