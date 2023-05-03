@@ -18,7 +18,7 @@
     <PackageIcon>CalculateX.png</PackageIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>3.9.0</Version>
+    <Version>3.9.4</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
