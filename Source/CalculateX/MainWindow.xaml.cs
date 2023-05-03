@@ -238,6 +238,13 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 
 	private string FormWindowName()
 	{
+		/// If we are closing the last tab, reset the window ID.
+		/// (This prevents the ID from incrementing when we close the last tab.)
+		if (Workspaces.Count(w => w.CanCloseTab) == 1)
+		{
+			_windowId = 0;
+		}
+
 		string name = string.Empty;
 		do
 		{
