@@ -14,16 +14,16 @@ name: .NET
 
 on:
   workflow_dispatch:
-    branches: [ master ]
+    branches: [master, yaml]
   push:
-    branches: [ master ]
+    branches: [master, yaml]
     paths-ignore:
       - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes'
       - 'CalculateX.png'
   pull_request:
-    branches: [ master ]
+    branches: [ master, yaml ]
     paths-ignore:
       - '**/*.md'
       - '**/*.gitignore'
@@ -124,6 +124,20 @@ jobs:
           DEFAULT_BUMP: none
           WITH_V: false
 
+      # BUG: `new_tag` has the 'v' even when WITH_V is false.
+      # So, we remove it.
+      - name: Substitute string
+        uses: bluwy/substitute-string-action@v2.0.1
+        id: TrimV
+        with:
+          _input-text: ${{ steps.StepTagNoV.outputs.new_tag }}
+          # This emits a warning which can be ignored.
+          v: ''
+
+      - name: Output trimmed version
+        run: echo Version=${{ steps.TrimV.outputs.result }}
+        # steps.TrimV.outputs.result replaces steps.StepTagNoV.outputs.new_tag
+
       # https://github.com/marketplace/actions/github-tag-bump
       - name: Bump version and push tag
         id: StepBump
@@ -145,14 +159,12 @@ jobs:
       # (This could be a separate action triggered by pushing a tag.)
       # https://github.com/marketplace/actions/create-release
       - name: Create release with artifact
-        if: success() && steps.StepTagNoV.outputs.new_tag && steps.StepBump.outputs.new_tag
+        if: success() && steps.TrimV.outputs.result && steps.StepBump.outputs.new_tag
         uses: ncipollo/release-action@v1.12.0
         with:
           tag: ${{ steps.StepBump.outputs.new_tag }}
-          name: ${{ steps.StepTagNoV.outputs.new_tag }}
-          body: |
-            The build in this ZIP file saves history and variables to temporary files.
-            CalculateX in the Microsoft Store saves this information to permanent storage.
+          name: ${{ steps.TrimV.outputs.result }}
+          #body: ???
           # Note: Using "./release/*" uploads the individual files.
           artifacts: CalculateX.zip
           token: ${{ secrets.GITHUB_TOKEN }}
