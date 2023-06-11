@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
+using System.Linq;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -11,76 +13,76 @@ namespace Shared;
 /// </summary>
 public static class MyStorage
 {
-	///// <summary>
-	///// These two methods write and read a collection of strings.
-	///// </summary>
-	//public static void WriteStrings(string tag, IEnumerable<string> strings)
-	//{
-	//	try
-	//	{
-	//		using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-	//		using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
-	//		using StreamWriter stmWriter = new(stm);
+	/// <summary>
+	/// These two methods write and read a collection of strings.
+	/// </summary>
+	public static void WriteStrings(string tag, IEnumerable<string> strings)
+	{
+		try
+		{
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Create, isf);
+			using StreamWriter stmWriter = new(stm);
 
-	//		strings.ToList().ForEach(s => stmWriter.WriteLine(s));
+			strings.ToList().ForEach(s => stmWriter.WriteLine(s));
 
-	//		//This calls Dispose, so we don't need to. stmWriter.Close();
-	//		//This calls Dispose, so we don't need to. stm.Close();
-	//	}
-	//	catch (NotSupportedException)
-	//	{
-	//	}
-	//}
+			//This calls Dispose, so we don't need to. stmWriter.Close();
+			//This calls Dispose, so we don't need to. stm.Close();
+		}
+		catch (NotSupportedException)
+		{
+		}
+	}
 
-	//public static List<string> ReadStrings(string tag)
-	//{
-	//	try
-	//	{
-	//		using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-	//		if (!isf.FileExists(tag))
-	//		{
-	//			return Enumerable.Empty<string>().ToList();
-	//		}
+	public static List<string> ReadStrings(string tag)
+	{
+		try
+		{
+			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
+			if (!isf.FileExists(tag))
+			{
+				return Enumerable.Empty<string>().ToList();
+			}
 
-	//		using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
-	//		if (stm is null)
-	//		{
-	//			return Enumerable.Empty<string>().ToList();
-	//		}
+			using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
+			if (stm is null)
+			{
+				return Enumerable.Empty<string>().ToList();
+			}
 
-	//		using StreamReader stmReader = new(stm);
+			using StreamReader stmReader = new(stm);
 
-	//		List<string> strings = new();
+			List<string> strings = new();
 
-	//		// If this hasn't been created yet, EOS true.
-	//		while (!stmReader.EndOfStream)
-	//		{
-	//			try
-	//			{
-	//				string? s = stmReader.ReadLine();
-	//				if (s is not null)
-	//				{
-	//					strings.Add(s);
-	//				}
-	//			}
-	//			catch (XmlException)
-	//			{
-	//				stm.SetLength(0);
-	//				break;
-	//			}
-	//		}
+			// If this hasn't been created yet, EOS true.
+			while (!stmReader.EndOfStream)
+			{
+				try
+				{
+					string? s = stmReader.ReadLine();
+					if (s is not null)
+					{
+						strings.Add(s);
+					}
+				}
+				catch (XmlException)
+				{
+					stm.SetLength(0);
+					break;
+				}
+			}
 
-	//		return strings;
+			return strings;
 
-	//		//This calls Dispose, so we don't need to. stmReader.Close();
-	//		//This calls Dispose, so we don't need to. stm.Close();
-	//		// http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
-	//	}
-	//	catch (NotSupportedException)
-	//	{
-	//		return Enumerable.Empty<string>().ToList();
-	//	}
-	//}
+			//This calls Dispose, so we don't need to. stmReader.Close();
+			//This calls Dispose, so we don't need to. stm.Close();
+			// http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
+		}
+		catch (NotSupportedException)
+		{
+			return Enumerable.Empty<string>().ToList();
+		}
+	}
 
 
 	private static string BuildTemporaryFilename(string tag) => Path.Combine(Path.GetTempPath(), $"CalculateX-{tag}.xml");
@@ -88,6 +90,9 @@ public static class MyStorage
 	/// <summary>
 	/// These two methods write and read an XML element.
 	/// </summary>
+	/// <remarks>
+	/// If isolated storage is not supported, it uses a temporary file.
+	/// </remarks>
 	/// <example>
 	/// XDocument xdoc = new(...);
 	/// WriteXDocument(xdoc);
@@ -121,7 +126,17 @@ public static class MyStorage
 			}
 		}
 	}
+	/// <remarks>
 	/// Cannot constrain template to XDocument or XElement, so we have to duplicate it.
+	/// </remarks>
+	/// <example>
+	/// XDocument xdoc = new(...);
+	/// WriteElement(xdoc.Root);
+	/// xdoc = new XDocument(MyStorage.ReadElement("fish"));
+	///
+	/// MyStorage.WriteElement("fish", new XElement("parent", "some value"));
+	/// XElement position = MyStorage.ReadElement("fish");
+	/// </example>
 	public static void WriteXElement(string tag, XElement xml)
 	{
 		try

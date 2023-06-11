@@ -491,12 +491,6 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 				))
 			);
 		xdoc.Save(GetWorkspacesFilePath());
-
-		//Shared.MyStorage.WriteXDocument(NAME_ELEMENT_ROOT,
-		//	new XDocument(
-		//		//...
-		//		)
-		//	);
 	}
 
 	/// <summary>
@@ -505,117 +499,45 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	/// <returns>Selected workspace (or null)</returns>
 	private Workspace? LoadWorkspaces()
 	{
-		Workspace? selectedWorkspace = null;
-		XDocument? xdoc = null;
 
 		/// Try to load workspaces from Documents folder
 		string filePath = GetWorkspacesFilePath();
-		if (File.Exists(filePath))
-		{
-			try
-			{
-				xdoc = XDocument.Load(filePath);
-			}
-			catch (Exception ex)
-			{
-				MessageBox.Show($"There was an error reading the workspaces file {filePath} : {ex.Message}");
-				return null;
-			}
-		}
-		else
-		{
-			/// TODO: We can remove this legacy load after everyone upgrades. [Oct 2022]
-			/// Try to load multiple workspaces from isolated storage
-			xdoc = Shared.MyStorage.ReadXDocument(NAME_ELEMENT_ROOT);
-		}
-
-		if (xdoc is not null)
-		{
-			foreach (XElement xWorkspace in xdoc.Element(NAME_ELEMENT_WORKSPACES)?.Elements(NAME_ELEMENT_WORKSPACE) ?? Enumerable.Empty<XElement>())
-			{
-				Workspace workspace = new(xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)?.Value ?? "New", canCloseTab: true);
-				bool selected = (bool?)xWorkspace.Attribute(NAME_ATTRIBUTE_SELECTED) ?? false;
-				if (selected)
-				{
-					selectedWorkspace = workspace;
-				}
-				workspace.InputRecord.AddRange(
-					xWorkspace
-					.Element(NAME_ELEMENT_INPUTS)!
-					.Elements(NAME_ELEMENT_KEY)
-					.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
-					.OrderBy(t => t.ordinal)
-					.Select(t => t.value));
-				Workspaces.Add(workspace);
-			}
-			Shared.MyStorage.Delete(NAME_ELEMENT_ROOT);	// if it exists, delete the legacy isolated storage
-			return selectedWorkspace;
-		}
-
-		/// TODO: We can remove the legacy load after everyone upgrades. [Apr 2022]
-		/// Try to load single workspace from isolated storage
-		XElement? root = ReadXElementLegacy("inputs");
-		if (root is not null)
-		{
-			Workspace workspace = new("Legacy", canCloseTab: true);
-			workspace.InputRecord.AddRange(
-				root.Elements()
-					.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
-					.OrderBy(t => t.ordinal)
-					.Select(t => t.value)
-			);
-			Workspaces.Add(workspace);
-
-			Shared.MyStorage.Delete("inputs");
-
-			selectedWorkspace = workspace;
-			return selectedWorkspace;
-		}
-
-		return selectedWorkspace;
-	}
-	private static XElement? ReadXElementLegacy(string tag)
-	{
-		try
-		{
-			using IsolatedStorageFile isf = IsolatedStorageFile.GetUserStoreForAssembly();
-			if (!isf.FileExists(tag))
-			{
-				return null;
-			}
-
-			using IsolatedStorageFileStream stm = new(tag, FileMode.Open, isf);
-			if (stm is null)
-			{
-				return null;
-			}
-
-			using StreamReader stmReader = new(stm);
-
-			// If this hasn't been created yet, EOS is true.
-			if (stmReader.EndOfStream)
-			{
-				return null;
-			}
-
-			try
-			{
-				return XElement.Load(stmReader);
-			}
-			catch (XmlException)
-			{
-				stm.SetLength(0);
-				return null;
-			}
-
-			//This calls Dispose, so we don't need to. stmReader.Close();
-			//This calls Dispose, so we don't need to. stm.Close();
-			// http://stackoverflow.com/questions/1065168/does-disposing-streamreader-close-the-stream
-		}
-		catch (NotSupportedException)
+		if (!File.Exists(filePath))
 		{
 			return null;
 		}
+
+		XDocument? xdoc = null;
+		try
+		{
+			xdoc = XDocument.Load(filePath);
+		}
+		catch (Exception ex)
+		{
+			MessageBox.Show($"There was an error reading the workspaces file {filePath} : {ex.Message}");
+			return null;
+		}
+
+		Workspace? selectedWorkspace = null;
+		foreach (XElement xWorkspace in xdoc.Element(NAME_ELEMENT_WORKSPACES)?.Elements(NAME_ELEMENT_WORKSPACE) ?? Enumerable.Empty<XElement>())
+		{
+			Workspace workspace = new(xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)?.Value ?? "New", canCloseTab: true);
+			bool selected = (bool?)xWorkspace.Attribute(NAME_ATTRIBUTE_SELECTED) ?? false;
+			if (selected)
+			{
+				selectedWorkspace = workspace;
+			}
+			workspace.InputRecord.AddRange(
+				xWorkspace
+				.Element(NAME_ELEMENT_INPUTS)!
+				.Elements(NAME_ELEMENT_KEY)
+				.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
+				.OrderBy(t => t.ordinal)
+				.Select(t => t.value));
+			Workspaces.Add(workspace);
+		}
+
+		return selectedWorkspace;
 	}
 
 	#region Implement IRaisePropertyChanged
