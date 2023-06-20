@@ -18,16 +18,18 @@ on:
   push:
     branches: [ master, yaml ]
     paths-ignore:
-      - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes'
+      - '**/*.md'
+      - 'LICENSE'
       - 'CalculateX.png'
   pull_request:
     branches: [ master, yaml ]
     paths-ignore:
-      - '**/*.md'
       - '**/*.gitignore'
       - '**/*.gitattributes'
+      - '**/*.md'
+      - 'LICENSE'
       - 'CalculateX.png'
 
 env:
@@ -40,8 +42,12 @@ env:
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
-  
+
   ARTIFACT_NAME: CalculateX
+
+concurrency:
+  group: calculatex-${{ github.ref }}-1
+  cancel-in-progress: true
 
 # Jobs are run in parallel unless `needs` is specified.
 # https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#creating-dependent-jobs
@@ -109,6 +115,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
 
       # https://github.com/marketplace/actions/github-tag-bump
       # We want to use the tag without the 'v' prefix for the release name.
@@ -147,6 +155,8 @@ jobs:
     steps:
       - name: Check out repository
         uses: actions/checkout@v3
+        with:
+          fetch-depth: '0'
 
       # Download publish artifact from previous job
       # https://github.com/marketplace/actions/download-a-build-artifact
