@@ -1,11 +1,11 @@
-﻿# Calculate X [![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
+﻿# Calculate X by [12noon.com](https://12noon.com)
+
+[![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
 
 A calculator that evaluates math expressions.
 
-[12noon.com](https://12noon.com)
-
-<a href='//www.microsoft.com/store/apps/9NWLKMVZPJD3?cid=storebadge&ocid=badge'>
-    <img src='https://developer.microsoft.com/store/badges/images/English_get-it-from-MS.png' alt='English badge' width="284" height="104" />
+<a href="https://apps.microsoft.com/store/detail/9NWLKMVZPJD3?launch=true&mode=full">
+	<img width="300" src="https://get.microsoft.com/images/en-US%20dark.svg"/>
 </a>
 
 ![Calculate X](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
