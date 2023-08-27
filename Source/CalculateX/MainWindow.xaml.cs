@@ -51,7 +51,6 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	public Workspace CurrentWorkspace { get; set; }
 	public ObservableCollection<Workspace> Workspaces { get; set; } = new();
 
-	private const string NAME_ELEMENT_ROOT = "calculatex";
 	private const string NAME_ELEMENT_WORKSPACES = "workspaces";
 	private const string NAME_ATTRIBUTE_SELECTED = "selected";
 	private const string NAME_ELEMENT_WORKSPACE = "workspace";
@@ -66,7 +65,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		Workspace? selectedWorkspace = LoadWorkspaces();
 		if (!Workspaces.Any())
 		{
-			Workspaces.Add(new(FormWindowName(Workspaces.Select(w => w.Name)), canCloseTab: true));
+			Workspaces.Add(new(FormWorkspaceName(Workspaces.Select(w => w.Name)), canCloseTab: true));
 		}
 		Workspaces.Add(new("+", canCloseTab: false));
 		CurrentWorkspace = selectedWorkspace ?? Workspaces.First();
@@ -108,7 +107,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		}
 
 		/// Change the non-closable tab to closable and name it.
-		CurrentWorkspace.Name = FormWindowName(Workspaces.Select(w => w.Name));
+		CurrentWorkspace.Name = FormWorkspaceName(Workspaces.Select(w => w.Name));
 		CurrentWorkspace.CanCloseTab = true;
 
 		// Create new non-closable tab.
@@ -179,7 +178,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		//var textBox = (TextBox)e.OriginalSource;
 		//var tabControl = (TabControl)e.Source;
 
-		Workspaces.Insert(Workspaces.IndexOf(CurrentWorkspace) + 1, new(FormWindowName(Workspaces.Select(w => w.Name)), canCloseTab: true));
+		Workspaces.Insert(Workspaces.IndexOf(CurrentWorkspace) + 1, new(FormWorkspaceName(Workspaces.Select(w => w.Name)), canCloseTab: true));
 		SelectNextWorkspace();
 
 		SaveWorkspaces();
@@ -216,7 +215,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 			if (!remainingWorkspaces.Any(w => w.CanCloseTab))
 			{
 				/// [closed][+]
-				Workspaces.Insert(0, new Workspace(FormWindowName(remainingWorkspaces.Select(w => w.Name)), canCloseTab: true));
+				Workspaces.Insert(0, new Workspace(FormWorkspaceName(remainingWorkspaces.Select(w => w.Name)), canCloseTab: true));
 				/// [new][closed][+]
 			}
 
@@ -239,7 +238,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	}
 
 
-	private string FormWindowName(IEnumerable<string> bannedNames)
+	private string FormWorkspaceName(IEnumerable<string> bannedNames)
 	{
 		/// If we are closing the last tab, reset the window ID.
 		/// (This prevents the ID from incrementing when we close the last tab.)
@@ -449,7 +448,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	/// <example>
 	///	<calculatex>
 	///		<workspaces>
-	///			<workspace name="...">
+	///			<workspace name="..." selected="true/false">
 	///				<inputs>
 	///					<key ordinal="1">cat</key>
 	///					<key ordinal="2">dog</key>
@@ -499,7 +498,6 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	/// <returns>Selected workspace (or null)</returns>
 	private Workspace? LoadWorkspaces()
 	{
-
 		/// Try to load workspaces from Documents folder
 		string filePath = GetWorkspacesFilePath();
 		if (!File.Exists(filePath))
@@ -525,6 +523,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 			bool selected = (bool?)xWorkspace.Attribute(NAME_ATTRIBUTE_SELECTED) ?? false;
 			if (selected)
 			{
+				Debug.Assert(selectedWorkspace is null);
 				selectedWorkspace = workspace;
 			}
 			workspace.InputRecord.AddRange(

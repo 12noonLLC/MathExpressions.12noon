@@ -46,7 +46,7 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto" />	<!-- Input Label -->
 						<ColumnDefinition Width="*" />		<!-- Input TextBox -->
-						<ColumnDefinition Width="Auto" />	<!-- Clear button -->
+						<ColumnDefinition Width="Auto" />	<!-- Clear & Evaluate buttons -->
 					</Grid.ColumnDefinitions>
 					<Grid.RowDefinitions>
 						<RowDefinition Height="Auto" />		<!-- Header -->

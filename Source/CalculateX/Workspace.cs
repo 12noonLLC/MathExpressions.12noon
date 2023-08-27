@@ -101,12 +101,12 @@ public class Workspace : Shared.EditableTabHeaderControl.IEditableTabHeaderContr
 
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <param name="input">The user's typed expression</param>
 	/// <param name="answer">The value of the expression. (Empty if variable was deleted.)</param>
 	/// <param name="fgBrush">Color to use if there's an answer.</param>
-	public void AppendHistoryEntry(string input, string answer, Color fgColor)
+	private void AppendHistoryEntry(string input, string answer, Color fgColor)
 	{
 		input = input.Trim();
 
