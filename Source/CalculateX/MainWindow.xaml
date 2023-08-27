@@ -36,13 +36,9 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 					<ColumnDefinition Width="*" />	<!-- Input and History -->
 					<ColumnDefinition Width="*" />	<!-- Variables -->
 				</Grid.ColumnDefinitions>
-				<Grid.RowDefinitions>
-					<RowDefinition Height="*" />		<!-- History -->
-					<RowDefinition Height="Auto" />	<!-- Input -->
-				</Grid.RowDefinitions>
 
 				<!-- Input & History -->
-				<Grid Grid.Column="0" Grid.Row="0">
+				<Grid Grid.Column="0">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="Auto" />	<!-- Input Label -->
 						<ColumnDefinition Width="*" />		<!-- Input TextBox -->
@@ -64,8 +60,7 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 						PreviewMouseLeftButtonUp="HistoryDisplay_MouseUp"
 					/>
 
-					<Label Grid.Column="0" Grid.Row="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Input" />
-					<TextBox x:Name="InputTextBox" Grid.Column="1" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
+					<TextBox x:Name="InputTextBox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
 						TextWrapping="Wrap"
 						Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
 						TextChanged="InputTextBox_TextChanged"
@@ -85,7 +80,7 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 				</Grid>
 
 				<!-- Variables -->
-				<Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2">
+				<Grid Grid.Column="1">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="*" />		<!-- Variables -->
 						<ColumnDefinition Width="Auto" />	<!-- Help button -->
@@ -210,7 +205,7 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 	</Window.CommandBindings>
 	<!-- https://stackoverflow.com/questions/4058003/wpf-tabcontrol-datatemplates -->
    <TabControl
-      Margin="0,2,0,0"
+      Margin="0" Padding="0"
 		IsSynchronizedWithCurrentItem="True"
 		ItemsSource="{Binding Workspaces}"
 		SelectionChanged="WorkspaceTabControl_SelectionChanged"
