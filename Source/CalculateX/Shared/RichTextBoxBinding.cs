@@ -18,8 +18,10 @@ namespace Shared;
 /// <seealso cref="https://docs.microsoft.com/en-us/dotnet/desktop/wpf/advanced/how-to-use-flow-content-elements"/>
 /// <example>
 /// Example of FlowDocument data.
-///	<RichTextBox shared:RichTextBoxBinding.DocumentFlow="{Binding ContentFlow}" />
-///	
+///	<RichTextBox shared:RichTextBoxBinding.DocumentFlow="{Binding ContentFlow}"
+///					shared:RichTextBoxBinding.ScrollToEnd="True"
+///	/>
+///
 ///	FlowDocument ContentFlow = new();
 ///	Paragraph para = new() { Margin = new Thickness(0), };
 ///	para.Inlines.Add(new Run("Lorem ipsum dolor."));

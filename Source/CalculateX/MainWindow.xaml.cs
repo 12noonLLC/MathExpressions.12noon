@@ -5,13 +5,12 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
-using System.IO.IsolatedStorage;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
-using System.Xml;
+using System.Windows.Media;
 using System.Xml.Linq;
 
 namespace CalculateX;
@@ -79,14 +78,36 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.HeaderChangedEvent, new RoutedEventHandler(OnWorkspaceNameChanged));
 	}
 
-	private void Window_Loaded(object sender, RoutedEventArgs e)
+	private void HistoryListBox_Loaded(object /*ListBox*/ sender, RoutedEventArgs e)
 	{
-		foreach (var workspace in Workspaces)
+		ListBox historyControl = (ListBox)sender;
+		ScrollHistoryToEnd(historyControl);
+
+		// Get the ScrollViewer object from the ListBox control
+		/// https://stackoverflow.com/questions/2337822/wpf-listbox-scroll-to-end-automatically
+		Border border = (Border)VisualTreeHelper.GetChild(historyControl, 0);
+		ScrollViewer SV = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
+
+		CurrentWorkspace.History.CollectionChanged += (object? sender /*ObservableCollection<HistoryEntry>*/, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) =>
 		{
-			// Re-evaluate historical inputs
-			workspace.InputRecord.ForEach(i => workspace.Evaluate(i));
-			CollectionViewSource.GetDefaultView(workspace.Variables).Refresh();
+			if (sender is not ObservableCollection<Workspace.HistoryEntry> historyEntries)
+			{
+				return;
+			}
+
+			SV.ScrollToBottom();
+		};
+	}
+
+	private static void ScrollHistoryToEnd(ListBox historyControl)
+	{
+		if (historyControl.Items.Count == 0)
+		{
+			return;
 		}
+
+		var lastItem = historyControl.Items.GetItemAt(historyControl.Items.Count - 1);
+		historyControl.ScrollIntoView(lastItem);
 	}
 
 	private void InputControlTextBox_Loaded(object /*TextBox*/ sender, RoutedEventArgs e)
@@ -311,7 +332,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 
 	private void ClearHistory_CanExecute(object sender, CanExecuteRoutedEventArgs e)
 	{
-		e.CanExecute = CurrentWorkspace.InputRecord.Any();
+		e.CanExecute = CurrentWorkspace.History.Any();
 	}
 	private void ClearHistory_Executed(object sender, ExecutedRoutedEventArgs e)
 	{
@@ -320,11 +341,7 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 			return;
 		}
 
-		CurrentWorkspace.InputRecord.Clear();
 		CurrentWorkspace.ClearHistory();
-		// Clear variables (because they will not exist when the app restarts).
-		CurrentWorkspace.Variables.Initialize();
-		CollectionViewSource.GetDefaultView(CurrentWorkspace.Variables).Refresh();
 
 		SaveWorkspaces();
 	}
@@ -407,37 +424,20 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		SaveWorkspaces();
 	}
 
-
-	/// <summary>
-	/// When the user selects text, copy it to the clipboard.
-	/// We no longer automatically paste it to the input field because
-	/// it can be an unwanted selection or unwanted action altogether.
-	/// We do, however, set focus to the input field so the user can quickly
-	/// paste it if desired.
-	/// </summary>
-	/// <remarks>
-	/// The MouseUp and MouseLeftButtonUp events are not called, so we use Preview.
-	/// The SelectionChanged event is called while the mouse moves, so it's not useful.
-	/// The MouseDoubleClick event works but is redundant because this is called for
-	/// a double-click, too.
-	/// </remarks>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	private void HistoryDisplay_MouseUp(object /*RichTextBox*/ sender, MouseButtonEventArgs e)
+	private void HistoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
 	{
-		RichTextBox historyDisplay = (RichTextBox)sender;
-		if (historyDisplay.Selection.IsEmpty)
+		ListBox historyControl = (ListBox)sender;
+		if (historyControl.Items.Count == 0)
 		{
 			return;
 		}
 
-		string selected = historyDisplay.Selection.Text;
-		Clipboard.SetText(selected);
+		string input = ((Workspace.HistoryEntry)historyControl.SelectedItem).Input;
+		CurrentWorkspace.Input = input;
 
 		/// https://stackoverflow.com/questions/5756448/in-wpf-how-can-i-get-the-next-control-in-the-tab-order
-		historyDisplay.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
+		historyControl.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 	}
-
 
 	private static string GetWorkspacesFilePath() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "CalculateX.xml");
 
@@ -465,12 +465,14 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 		XDocument xdoc = new(
 			new XElement(NAME_ELEMENT_WORKSPACES,
 				Workspaces
-				.Take(0..^1)   // Do not save last "+" tab.
+				.Where(w => w.CanCloseTab)	// Do not save last "+" tab.
 				.Select(w =>
 					new XElement(NAME_ELEMENT_WORKSPACE,
 						new XAttribute(NAME_ATTRIBUTE_NAME, w.Name),
 						new XAttribute(NAME_ATTRIBUTE_SELECTED, object.ReferenceEquals(CurrentWorkspace, w)),
-						w.InputRecord.Aggregate(
+						w.History
+						.Select(entry => entry.Input)
+						.Aggregate(
 							seed: (new XElement(NAME_ELEMENT_INPUTS), 0),
 							func:
 							((XElement root, int n) t, string input) =>
@@ -526,13 +528,21 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 				Debug.Assert(selectedWorkspace is null);
 				selectedWorkspace = workspace;
 			}
-			workspace.InputRecord.AddRange(
-				xWorkspace
-				.Element(NAME_ELEMENT_INPUTS)!
-				.Elements(NAME_ELEMENT_KEY)
-				.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
-				.OrderBy(t => t.ordinal)
-				.Select(t => t.value));
+			foreach (string input in
+											xWorkspace
+											.Element(NAME_ELEMENT_INPUTS)!
+											.Elements(NAME_ELEMENT_KEY)
+											.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
+											.OrderBy(t => t.ordinal)
+											.Select(t => t.value)
+			)
+			{
+				// Evaluate saved inputs and save in history
+				workspace.Evaluate(input);
+			}
+
+			CollectionViewSource.GetDefaultView(workspace.Variables).Refresh();
+
 			Workspaces.Add(workspace);
 		}
 

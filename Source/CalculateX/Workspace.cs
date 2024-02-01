@@ -1,11 +1,9 @@
 ﻿using MathExpressions;
 using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows;
 using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Media;
 
 namespace CalculateX;
@@ -19,15 +17,11 @@ public class Workspace : Shared.EditableTabHeaderControl.IEditableTabHeaderContr
 	private readonly Shared.NotifyProperty<bool> _canCloseTab;
 	public bool CanCloseTab { get => _canCloseTab.Value; set => _canCloseTab.Value = value; }
 
-	// record ordered history of inputs so we can save them and play them back on restart.
-	public readonly List<string> InputRecord = new();
-
 	// separate history because it is rearranged based on MRU entry.
 	public readonly CircularHistory EntryHistory = new();
 
 
 	// This is an instance variable to maintain the state of its variable dictionary.
-	// No need to dispose it because it's present for the entire lifetime.
 	public readonly MathEvaluator TheEvaluator = new();
 
 	public VariableDictionary Variables { get => TheEvaluator.Variables; private set { } }
@@ -38,8 +32,12 @@ public class Workspace : Shared.EditableTabHeaderControl.IEditableTabHeaderContr
 	public bool ShowHelp { get => _showHelp.Value; set => _showHelp.Value = value; }
 	private readonly Shared.NotifyProperty<bool> _showHelp;
 
-	public FlowDocument ContentFlow { get => _flowContent.Value; set => _flowContent.Value = value; }
-	private readonly Shared.NotifyProperty<FlowDocument> _flowContent;
+	public record class HistoryEntry(string Input, string? Result)
+	{
+		public string Input { get; set; } = Input;
+		public string? Result { get; set; } = Result;
+	}
+	public ObservableCollection<HistoryEntry> History { get; init; } = new();
 
 
 	public Workspace() : this("New", canCloseTab: true) { }	/// Empty ctor required for the Designer
@@ -49,7 +47,6 @@ public class Workspace : Shared.EditableTabHeaderControl.IEditableTabHeaderContr
 		_name = new Shared.NotifyProperty<string>(this, nameof(Name), initialValue: string.Empty);
 		_input = new Shared.NotifyProperty<string>(this, nameof(Input), initialValue: string.Empty);
 		_showHelp = new Shared.NotifyProperty<bool>(this, nameof(ShowHelp), initialValue: false);
-		_flowContent= new Shared.NotifyProperty<FlowDocument>(this, nameof(ContentFlow), initialValue: new());
 
 		Name = name;
 		CanCloseTab = canCloseTab;
@@ -58,16 +55,18 @@ public class Workspace : Shared.EditableTabHeaderControl.IEditableTabHeaderContr
 
 	public void ClearHistory()
 	{
-		ContentFlow.Blocks.Clear();
+		History.Clear();
+		EntryHistory.Reset();
+
+		// Clear variables (because they will not exist when the app restarts).
+		Variables.Initialize();
+		CollectionViewSource.GetDefaultView(Variables).Refresh();
 	}
 
 
 	public void EvaluateInputAndSave()
 	{
 		Debug.Assert(!string.IsNullOrWhiteSpace(Input));
-
-		// Save input in playback record.
-		InputRecord.Add(Input);
 
 		Evaluate(Input);
 		CollectionViewSource.GetDefaultView(Variables).Refresh();
@@ -109,21 +108,7 @@ public class Workspace : Shared.EditableTabHeaderControl.IEditableTabHeaderContr
 	private void AppendHistoryEntry(string input, string answer, Color fgColor)
 	{
 		input = input.Trim();
-
-		Paragraph para = new() { Margin = new Thickness(0) };
-		if (string.IsNullOrEmpty(answer))
-		{
-			// "input " in default color followed by "cleared" in gray.
-			para.Inlines.Add(new Run($"{input} "));
-			para.Inlines.Add(new Italic(new Run("cleared")) { Foreground = Brushes.Gray });
-		}
-		else
-		{
-			// "input = " in default color followed by answer string in the specified color.
-			para.Inlines.Add(new Run($"{input} = "));
-			para.Inlines.Add(new Run(answer) { Foreground = new SolidColorBrush(fgColor) });
-		}
-		ContentFlow.Blocks.Add(para);
+		History.Add(new HistoryEntry(input, string.IsNullOrEmpty(answer) ? null : answer));
 	}
 
 	#region Implement IRaisePropertyChanged

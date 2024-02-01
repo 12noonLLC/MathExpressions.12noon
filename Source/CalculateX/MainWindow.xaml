@@ -4,18 +4,22 @@
 	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
+	xmlns:clr="clr-namespace:System;assembly=mscorlib"
 	xmlns:local="clr-namespace:CalculateX"
 	xmlns:shared="clr-namespace:Shared"
 	xmlns:props="clr-namespace:CalculateX.Properties"
 	mc:Ignorable="d"
 	Title="Calculate X" Width="450" Height="350"
-	Loaded="Window_Loaded"
 >
 <!--
 Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/behaviors}Interaction.Behaviors'.'
 	xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors.dll"
 -->
 	<Window.Resources>
+		<clr:String x:Key="BindingValueClearedVariable">cleared</clr:String>
+		<Color x:Key="Blue100Accent">#3E8EED</Color>
+		<SolidColorBrush x:Key="Blue100Brush" Color="{StaticResource Blue100Accent}"/>
+
 		<BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
 		<shared:NumberToAddCommasConverter x:Key="NumberToAddCommasConverter" />
 		<Style x:Key="StyleLabel" TargetType="ContentControl">
@@ -53,12 +57,29 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 					<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="History" />
 					<Button Grid.Column="2" Grid.Row="0" Padding="10,0" Content="{Binding Command.Text, RelativeSource={RelativeSource Self}}" Command="{x:Static local:MainWindow.ClearHistory}" />
 
-					<RichTextBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" IsReadOnly="True"
-						FontSize="14" FontWeight="DemiBold" ScrollViewer.VerticalScrollBarVisibility="Auto"
-						shared:RichTextBoxBinding.DocumentFlow="{Binding ContentFlow}"
-						shared:RichTextBoxBinding.ScrollToEnd="True"
-						PreviewMouseLeftButtonUp="HistoryDisplay_MouseUp"
-					/>
+					<ListBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
+						ItemsSource="{Binding History}"
+						IsSynchronizedWithCurrentItem="True"
+						ScrollViewer.VerticalScrollBarVisibility="Auto"
+						Loaded="HistoryListBox_Loaded"
+						SelectionChanged="HistoryListBox_SelectionChanged"
+					>
+						<ListBox.Resources>
+							<Style x:Key="StyleExpression" TargetType="TextBlock">
+								<Setter Property="FontSize" Value="14" />
+								<Setter Property="FontWeight" Value="DemiBold" />
+							</Style>
+						</ListBox.Resources>
+						<ListBox.ItemTemplate>
+							<DataTemplate>
+								<StackPanel Orientation="Horizontal">
+									<TextBlock Text="{Binding Input}" Style="{StaticResource StyleExpression}" />
+									<TextBlock Text=" = " Style="{StaticResource StyleExpression}" />
+									<TextBlock Text="{Binding Result, TargetNullValue={StaticResource BindingValueClearedVariable}}" Foreground="{StaticResource Blue100Brush}" Style="{StaticResource StyleExpression}" />
+								</StackPanel>
+							</DataTemplate>
+						</ListBox.ItemTemplate>
+					</ListBox>
 
 					<TextBox x:Name="InputTextBox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
 						TextWrapping="Wrap"
