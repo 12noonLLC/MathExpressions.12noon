@@ -40,7 +40,7 @@ public class FocusFirstBehavior : Behavior<FrameworkElement>
 
 
 /// <summary>
-/// This behavior casuses a TabControl to set focus to the named control when tab selection changes.
+/// This behavior causes a TabControl to set focus to the named control when tab selection changes.
 /// </summary>
 /// <example>
 ///	<TabControl>
@@ -87,25 +87,37 @@ public class FocusTabControlSelectionChangedBehavior : Behavior<TabControl>
 		// Invoke this code to give the tab time to generate the tree.
 		Dispatcher.BeginInvoke(() =>
 		{
-			/// Get the ContentPresenter for the TabControl.
-			ContentPresenter? contentPresenter = MyExtensions.FindVisualChild<ContentPresenter>(tabControl);
-			ArgumentNullException.ThrowIfNull(contentPresenter);
-
-			/// Get the data template for this preseenter.
-			DataTemplate dataTemplate = contentPresenter.ContentTemplate;
-
-			/// Use this data template to search the presenter for an element with the specified name.
-			FrameworkElement focusElement = (FrameworkElement)dataTemplate.FindName(ElementName, contentPresenter);
+			FrameworkElement? focusElement = FindDataTemplateChild(tabControl, ElementName);
 
 			/// Set focus to this control.
-			focusElement.Focus();
+			focusElement?.Focus();
 		});
+	}
+
+	private static FrameworkElement? FindDataTemplateChild(DependencyObject parentControl, string elementName)
+	{
+		if (string.IsNullOrEmpty(elementName))
+		{
+			return null;
+		}
+
+		/// Get the ContentPresenter for the control.
+		ContentPresenter? contentPresenter = MyExtensions.FindVisualChild<ContentPresenter>(parentControl);
+		ArgumentNullException.ThrowIfNull(contentPresenter);
+
+		/// Get the data template for this presenter.
+		DataTemplate dataTemplate = contentPresenter.ContentTemplate;
+
+		/// Use this data template to search the presenter for an element with the specified name.
+		FrameworkElement foundElement = (FrameworkElement)dataTemplate.FindName(elementName, contentPresenter);
+
+		return foundElement;
 	}
 }
 
 
 /// <summary>
-/// This behavior sets focus to the associated objet when it's loaded.
+/// This behavior sets focus to the associated object when it's loaded.
 /// </summary>
 /// <example>
 /// 1. Install NuGet Microsoft.Xaml.Behaviors.

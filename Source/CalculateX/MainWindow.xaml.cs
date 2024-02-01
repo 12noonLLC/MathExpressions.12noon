@@ -1,113 +1,28 @@
-﻿using MathExpressions;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.IO;
+﻿using System;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Xml.Linq;
 
 namespace CalculateX;
 
 /// <summary>
 /// Interaction logic for MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window, Shared.IRaisePropertyChanged
+public partial class MainWindow : Window
 {
-	/// <summary>
-	/// Commands for this window.
-	/// </summary>
-	public static RoutedUICommand ClearInput { get; } = new("Clear Input", nameof(ClearInput), typeof(MainWindow),
-		new InputGestureCollection()
-		{
-			new KeyGesture(Key.Escape, ModifierKeys.None),
-		}
-	);
-	public static RoutedUICommand ClearHistory { get; } = new("Clear", nameof(ClearHistory), typeof(MainWindow),
-		new InputGestureCollection()
-		{
-			// Note: Ctrl+Del and Ctrl+Backspace do not work.
-			new KeyGesture(Key.D, ModifierKeys.Control),
-		}
-	);
-	public static RoutedCommand WorkspacePrevious { get; } = new(nameof(WorkspacePrevious), typeof(MainWindow));
-	public static RoutedCommand WorkspaceNext { get; } = new(nameof(WorkspaceNext), typeof(MainWindow));
-	public static RoutedCommand CmdNewWorkspace { get; } = new(nameof(CmdNewWorkspace), typeof(MainWindow));
-	public static RoutedCommand CmdCloseWorkspace { get; } = new(nameof(CmdCloseWorkspace), typeof(MainWindow));
-	public static RoutedCommand HistoryPrevious { get; } = new(nameof(HistoryPrevious), typeof(MainWindow));
-	public static RoutedCommand HistoryNext { get; } = new(nameof(HistoryNext), typeof(MainWindow));
-
 	// This class provides features through event handling.
 	private readonly Shared.WindowPosition _windowPosition;
-
-	private int _windowId = 0;
-	public Workspace CurrentWorkspace { get; set; }
-	public ObservableCollection<Workspace> Workspaces { get; set; } = new();
-
-	private const string NAME_ELEMENT_WORKSPACES = "workspaces";
-	private const string NAME_ATTRIBUTE_SELECTED = "selected";
-	private const string NAME_ELEMENT_WORKSPACE = "workspace";
-	private const string NAME_ATTRIBUTE_NAME = "name";
-	private const string NAME_ELEMENT_INPUTS = "inputs";
-	private const string NAME_ELEMENT_KEY = "key";
-	private const string NAME_ATTRIBUTE_ORDINAL = "ordinal";
 
 
 	public MainWindow()
 	{
-		Workspace? selectedWorkspace = LoadWorkspaces();
-		if (!Workspaces.Any())
-		{
-			Workspaces.Add(new(FormWorkspaceName(Workspaces.Select(w => w.Name)), canCloseTab: true));
-		}
-		Workspaces.Add(new("+", canCloseTab: false));
-		CurrentWorkspace = selectedWorkspace ?? Workspaces.First();
-
 		_windowPosition = new(this, "MainWindowPosition");
 
+		/// XAML constructs WorkspacesViewModel and sets DataContext to it.
 		InitializeComponent();
-		DataContext = this;
 
 		EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.CloseTabEvent, new RoutedEventHandler(OnCloseTab));
 		EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.HeaderChangedEvent, new RoutedEventHandler(OnWorkspaceNameChanged));
-	}
-
-	private void HistoryListBox_Loaded(object /*ListBox*/ sender, RoutedEventArgs e)
-	{
-		ListBox historyControl = (ListBox)sender;
-		ScrollHistoryToEnd(historyControl);
-
-		// Get the ScrollViewer object from the ListBox control
-		/// https://stackoverflow.com/questions/2337822/wpf-listbox-scroll-to-end-automatically
-		Border border = (Border)VisualTreeHelper.GetChild(historyControl, 0);
-		ScrollViewer SV = (ScrollViewer)VisualTreeHelper.GetChild(border, 0);
-
-		CurrentWorkspace.History.CollectionChanged += (object? sender /*ObservableCollection<HistoryEntry>*/, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) =>
-		{
-			if (sender is not ObservableCollection<Workspace.HistoryEntry> historyEntries)
-			{
-				return;
-			}
-
-			SV.ScrollToBottom();
-		};
-	}
-
-	private static void ScrollHistoryToEnd(ListBox historyControl)
-	{
-		if (historyControl.Items.Count == 0)
-		{
-			return;
-		}
-
-		var lastItem = historyControl.Items.GetItemAt(historyControl.Items.Count - 1);
-		historyControl.ScrollIntoView(lastItem);
 	}
 
 	private void InputControlTextBox_Loaded(object /*TextBox*/ sender, RoutedEventArgs e)
@@ -120,177 +35,50 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 
 	private void WorkspaceTabControl_SelectionChanged(object /*TabControl*/ sender, SelectionChangedEventArgs e)
 	{
-		/// If the user selected a closable tab, select it.
-		if (CurrentWorkspace.CanCloseTab)
+		/// The SelectionChanged event can bubble up from controls in TabControl,
+		/// such as ListBox. In this case, the ListBox is handling its
+		/// SelectionChanged event, so technically we do not need this check.
+		/// It is here as a good practice and also in case we copy this code elsewhere.
+		if (sender is not TabControl)
 		{
-			SaveWorkspaces();
 			return;
 		}
 
-		/// Change the non-closable tab to closable and name it.
-		CurrentWorkspace.Name = FormWorkspaceName(Workspaces.Select(w => w.Name));
-		CurrentWorkspace.CanCloseTab = true;
+		ViewModel.SelectWorkspace();
 
-		// Create new non-closable tab.
-		Workspaces.Add(new("+", canCloseTab: false));
-
-		SaveWorkspaces();
+		// We cannot set Handled because that prevents the behavior's event handler from being called.
+		//e.Handled = true;
 	}
 
-
-	// OriginalSource == TextBox or TabControl (depending on focus when user pressed key binding)
-	// Source == TabControl
-	private void WorkspacePrevious_CanExecute(object /*MainWindow*/ sender, CanExecuteRoutedEventArgs e)
-	{
-		e.CanExecute = (Workspaces.Count(w => w.CanCloseTab) > 1);	// Do not count the "+" tab
-	}
-	private void WorkspacePrevious_Executed(object /*Window*/ sender, ExecutedRoutedEventArgs e)
-	{
-		Debug.Assert(Workspaces.Count(w => w.CanCloseTab) > 1);
-
-		SelectPreviousWorkspace();
-
-		e.Handled = true;
-	}
-
-	// OriginalSource == TextBox or TabControl (depending on focus when user pressed key binding)
-	// Source == TabControl
-	private void WorkspaceNext_CanExecute(object /*MainWindow*/ sender, CanExecuteRoutedEventArgs e)
-	{
-		e.CanExecute = (Workspaces.Count(w => w.CanCloseTab) > 1);	// Do not count the "+" tab
-	}
-	private void WorkspaceNext_Executed(object /*MainWindow*/ sender, ExecutedRoutedEventArgs e)
-	{
-		Debug.Assert(Workspaces.Count(w => w.CanCloseTab) > 1);
-
-		SelectNextWorkspace();
-
-		e.Handled = true;
-	}
-
-	private void SelectPreviousWorkspace()
-	{
-		if (CurrentWorkspace == Workspaces.First())
-		{
-			var ixLastClosable = Workspaces.IndexOf(Workspaces.Last(w => w.CanCloseTab));
-			CollectionViewSource.GetDefaultView(Workspaces).MoveCurrentToPosition(ixLastClosable);
-		}
-		else
-		{
-			CollectionViewSource.GetDefaultView(Workspaces).MoveCurrentToPrevious();
-		}
-	}
-
-	private void SelectNextWorkspace()
-	{
-		if (CurrentWorkspace == Workspaces.Last(w => w.CanCloseTab))
-		{
-			CollectionViewSource.GetDefaultView(Workspaces).MoveCurrentToFirst();
-		}
-		else
-		{
-			CollectionViewSource.GetDefaultView(Workspaces).MoveCurrentToNext();
-		}
-	}
-
-
-	private void NewWorkspace_Executed(object /*MainWindow*/ sender, ExecutedRoutedEventArgs e)
-	{
-		//var textBox = (TextBox)e.OriginalSource;
-		//var tabControl = (TabControl)e.Source;
-
-		Workspaces.Insert(Workspaces.IndexOf(CurrentWorkspace) + 1, new(FormWorkspaceName(Workspaces.Select(w => w.Name)), canCloseTab: true));
-		SelectNextWorkspace();
-
-		SaveWorkspaces();
-
-		e.Handled = true;
-	}
-
+	/// <summary>
+	/// Called when the user clicks a tab's Close button.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
 	public void OnCloseTab(object /*TabItem*/ sender, RoutedEventArgs e)
 	{
 		var tabItem = (TabItem)sender;
-		var closedWorkspace = (Workspace)tabItem.DataContext;
+		var closedWorkspace = (ViewModels.WorkspaceViewModel)tabItem.DataContext;
 
-		CloseWorkspace(closedWorkspace);
-	}
-	// OriginalSource == TextBox, Button, or TabControl (depending on focus when user pressed key binding)
-	// Source == TabControl
-	private void CloseWorkspace_Executed(object /*MainWindow*/ sender, ExecutedRoutedEventArgs e)
-	{
-		// Determine which workspace was closed.
-		var currentControl = (Control)e.OriginalSource;
-		var closedWorkspace = (Workspace)currentControl.DataContext;
-
-		CloseWorkspace(closedWorkspace);
+		closedWorkspace.DeleteWorkspace();
 
 		e.Handled = true;
 	}
-	private void CloseWorkspace(Workspace closedWorkspace)
-	{
-		if (closedWorkspace == CurrentWorkspace)
-		{
-			var remainingWorkspaces = Workspaces.Except(new[] { closedWorkspace });
-
-			/// If closing last tab (except for "+" tab), create one.
-			if (!remainingWorkspaces.Any(w => w.CanCloseTab))
-			{
-				/// [closed][+]
-				Workspaces.Insert(0, new Workspace(FormWorkspaceName(remainingWorkspaces.Select(w => w.Name)), canCloseTab: true));
-				/// [new][closed][+]
-			}
-
-			/// Select next tab (unless it's the "+" tab, then select previous tab).
-			if (closedWorkspace == Workspaces[^2])
-			{
-				/// [a]...[z][closed][+]
-				SelectPreviousWorkspace();
-			}
-			else
-			{
-				/// [a]...[z][closed][a]...[z][+]
-				SelectNextWorkspace();
-			}
-		}
-
-		Workspaces.Remove(closedWorkspace);
-
-		SaveWorkspaces();
-	}
-
-
-	private string FormWorkspaceName(IEnumerable<string> bannedNames)
-	{
-		/// If we are closing the last tab, reset the window ID.
-		/// (This prevents the ID from incrementing when we close the last tab.)
-		if (Workspaces.Count(w => w.CanCloseTab) == 1)
-		{
-			_windowId = 0;
-		}
-
-		string name = string.Empty;
-		do
-		{
-			++_windowId;
-			name = $"{nameof(Workspace)}{_windowId}";
-		} while (bannedNames.Any(n => n == name));
-
-		return name;
-	}
-
 
 	private void OnWorkspaceNameChanged(object /*TabItem*/ sender, RoutedEventArgs e)
 	{
-		SaveWorkspaces();
+		ViewModel.SaveWorkspaces();
+
+		e.Handled = true;
 	}
 
 
 	private void SanitizeTextPastingHandler(object /*TextBox*/ sender, DataObjectPastingEventArgs e)
 	{
+		e.Handled = true;
+
 		// If any pasting is to be done, we will do it manually.
 		e.CancelCommand();
-
-		TextBox textBox = (TextBox)sender;
 
 		if (e.DataObject.GetData(typeof(string)) is not string pasteText)
 		{
@@ -299,96 +87,10 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 
 		pasteText = Shared.Numbers.RemoveCurrencySymbolAndGroupingSeparators(pasteText);
 
-		// Insert text at the cursor
-		int saveSelectionStart = textBox.SelectionStart;
+		TextBox textBox = (TextBox)sender;
 
-		var s = string.Concat(
-			textBox.Text.AsSpan(0, textBox.SelectionStart),
-			pasteText,
-			textBox.Text.AsSpan(textBox.SelectionStart + textBox.SelectionLength)
-		);
-		textBox.Text = s;
-
-		// Position cursor at the end of the new text
-		textBox.Select(saveSelectionStart + pasteText.Length, 0);
+		textBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(pasteText, textBox.CaretIndex);
 	}
-
-
-	private void HelpButton_Click(object sender, RoutedEventArgs e)
-	{
-		CurrentWorkspace.ShowHelp = !CurrentWorkspace.ShowHelp;
-	}
-
-
-	private void ClearInput_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-	{
-		e.CanExecute = !String.IsNullOrEmpty(CurrentWorkspace.Input);
-	}
-	private void ClearInput_Executed(object sender, ExecutedRoutedEventArgs e)
-	{
-		CurrentWorkspace.Input = String.Empty;
-	}
-
-
-	private void ClearHistory_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-	{
-		e.CanExecute = CurrentWorkspace.History.Any();
-	}
-	private void ClearHistory_Executed(object sender, ExecutedRoutedEventArgs e)
-	{
-		if (MessageBox.Show("This will clear the input history and all variables. Do you want to continue?", "Calculate X", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.No)
-		{
-			return;
-		}
-
-		CurrentWorkspace.ClearHistory();
-
-		SaveWorkspaces();
-	}
-
-
-	private void HistoryPrevious_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-	{
-		e.CanExecute = !CurrentWorkspace.EntryHistory.IsEmpty;
-	}
-	private void HistoryPrevious_Executed(object /*Window*/ sender, ExecutedRoutedEventArgs e)
-	{
-		Debug.Assert(!CurrentWorkspace.EntryHistory.IsEmpty);
-
-		// Source == TabControl
-		TextBox textBox = (TextBox)e.OriginalSource;
-
-		string entry = CurrentWorkspace.EntryHistory.PreviousEntry(CurrentWorkspace.Input);
-		SetInput(entry, textBox);
-
-		e.Handled = true;
-	}
-
-	private void HistoryNext_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-	{
-		e.CanExecute = !CurrentWorkspace.EntryHistory.IsEmpty;
-	}
-	private void HistoryNext_Executed(object /*Window*/ sender, ExecutedRoutedEventArgs e)
-	{
-		Debug.Assert(!CurrentWorkspace.EntryHistory.IsEmpty);
-
-		// Source == TabControl
-		TextBox textBox = (TextBox)e.OriginalSource;
-
-		string entry = CurrentWorkspace.EntryHistory.NextEntry(CurrentWorkspace.Input);
-		SetInput(entry, textBox);
-
-		e.Handled = true;
-	}
-
-	private void SetInput(string s, TextBox textBox)
-	{
-		CurrentWorkspace.Input = s;
-
-		// Position cursor at the end of the text
-		textBox.Select(textBox.Text.Length, 0);
-	}
-
 
 	/// <summary>
 	/// If the first character the user enters is an operator symbol,
@@ -398,165 +100,88 @@ public partial class MainWindow : Window, Shared.IRaisePropertyChanged
 	/// <param name="e"></param>
 	private void InputTextBox_TextChanged(object /*TextBox*/ sender, TextChangedEventArgs e)
 	{
-		if ((CurrentWorkspace.Input.Length == 1) && (e.Changes.First().AddedLength == 1) && (e.Changes.First().Offset == 0))
+		e.Handled = true;
+
+		if ((ViewModel.SelectedWorkspaceVM.Input.Length == 1) && (e.Changes.First().AddedLength == 1) && (e.Changes.First().Offset == 0))
 		{
 			TextBox textBox = (TextBox)e.Source;
-			char op = CurrentWorkspace.Input.First();
-			if (OperatorExpression.IsSymbol(op))
+			char op = ViewModel.SelectedWorkspaceVM.Input.First();
+			if (MathExpressions.OperatorExpression.IsSymbol(op))
 			{
-				CurrentWorkspace.Input = MathEvaluator.AnswerVariable + CurrentWorkspace.Input;
+				ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(MathExpressions.MathEvaluator.AnswerVariable, 0);
 
-				// Position cursor at the end of the text
-				textBox.Select(textBox.Text.Length, 0);
+				// Position cursor at the end of the text (instead of after 'answer')
+				textBox.CaretIndex = textBox.Text.Length;
 			}
 		}
 	}
 
-
-	private void EvaluateButton_Click(object sender, RoutedEventArgs e)
+	/// <summary>
+	/// When the user selects a history entry, copy it to the input control.
+	/// </summary>
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void HistoryListBox_SelectionChanged(object /*ListBox*/ sender, SelectionChangedEventArgs e)
 	{
-		if (string.IsNullOrWhiteSpace(CurrentWorkspace.Input))
-		{
-			return;
-		}
+		e.Handled = true;
 
-		CurrentWorkspace.EvaluateInputAndSave();
-		SaveWorkspaces();
-	}
-
-	private void HistoryListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-	{
 		ListBox historyControl = (ListBox)sender;
 		if (historyControl.Items.Count == 0)
 		{
 			return;
 		}
 
-		string input = ((Workspace.HistoryEntry)historyControl.SelectedItem).Input;
-		CurrentWorkspace.Input = input;
+		if (historyControl.SelectedItem is null)
+		{
+			return;
+		}
 
+		string input = (string)historyControl.SelectedValue;
+		TextBox ctlInputTextBox = (TextBox)historyControl.Tag;
+
+		ViewModel.SelectedWorkspaceVM.ClearInput();
+		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(input, ctlInputTextBox.CaretIndex);
+
+		// This scrolls back up a ways for some reason. Plus, focus is left in the input field anyway.
 		/// https://stackoverflow.com/questions/5756448/in-wpf-how-can-i-get-the-next-control-in-the-tab-order
-		historyControl.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
-	}
+		//historyControl.MoveFocus(new TraversalRequest(FocusNavigationDirection.Next));
 
-	private static string GetWorkspacesFilePath() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "CalculateX.xml");
+		// set focus to the input field
+		ctlInputTextBox.Focus();
 
-
-	/// <summary>
-	///
-	/// </summary>
-	/// <example>
-	///	<calculatex>
-	///		<workspaces>
-	///			<workspace name="..." selected="true/false">
-	///				<inputs>
-	///					<key ordinal="1">cat</key>
-	///					<key ordinal="2">dog</key>
-	///				</inputs>
-	///			</workspace>
-	///			<workspace>
-	///				...
-	///			</workspace>
-	///		</workspaces>
-	///	</calculatex>
-	/// </example>
-	public void SaveWorkspaces()
-	{
-		XDocument xdoc = new(
-			new XElement(NAME_ELEMENT_WORKSPACES,
-				Workspaces
-				.Where(w => w.CanCloseTab)	// Do not save last "+" tab.
-				.Select(w =>
-					new XElement(NAME_ELEMENT_WORKSPACE,
-						new XAttribute(NAME_ATTRIBUTE_NAME, w.Name),
-						new XAttribute(NAME_ATTRIBUTE_SELECTED, object.ReferenceEquals(CurrentWorkspace, w)),
-						w.History
-						.Select(entry => entry.Input)
-						.Aggregate(
-							seed: (new XElement(NAME_ELEMENT_INPUTS), 0),
-							func:
-							((XElement root, int n) t, string input) =>
-							{
-								++t.n;   // advance ordinal
-								t.root.Add(
-									new XElement(NAME_ELEMENT_KEY,
-										new XAttribute(NAME_ATTRIBUTE_ORDINAL, t.n),
-										input
-									)
-								);
-								return t;
-							}
-						)
-						.Item1
-					)
-				))
-			);
-		xdoc.Save(GetWorkspacesFilePath());
+		// clear the history selection
+		historyControl.SelectedItem = null;
 	}
 
 	/// <summary>
-	///
+	/// When the user selects a variable entry, copy it to the input control.
 	/// </summary>
-	/// <returns>Selected workspace (or null)</returns>
-	private Workspace? LoadWorkspaces()
+	/// <param name="sender"></param>
+	/// <param name="e"></param>
+	private void VariablesListView_SelectionChanged(object /*ListView*/ sender, SelectionChangedEventArgs e)
 	{
-		/// Try to load workspaces from Documents folder
-		string filePath = GetWorkspacesFilePath();
-		if (!File.Exists(filePath))
+		e.Handled = true;
+
+		ListView variablesControl = (ListView)sender;
+		if (variablesControl.Items.Count == 0)
 		{
-			return null;
+			return;
 		}
 
-		XDocument? xdoc = null;
-		try
+		if (variablesControl.SelectedItem is null)
 		{
-			xdoc = XDocument.Load(filePath);
-		}
-		catch (Exception ex)
-		{
-			MessageBox.Show($"There was an error reading the workspaces file {filePath} : {ex.Message}");
-			return null;
+			return;
 		}
 
-		Workspace? selectedWorkspace = null;
-		foreach (XElement xWorkspace in xdoc.Element(NAME_ELEMENT_WORKSPACES)?.Elements(NAME_ELEMENT_WORKSPACE) ?? Enumerable.Empty<XElement>())
-		{
-			Workspace workspace = new(xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)?.Value ?? "New", canCloseTab: true);
-			bool selected = (bool?)xWorkspace.Attribute(NAME_ATTRIBUTE_SELECTED) ?? false;
-			if (selected)
-			{
-				Debug.Assert(selectedWorkspace is null);
-				selectedWorkspace = workspace;
-			}
-			foreach (string input in
-											xWorkspace
-											.Element(NAME_ELEMENT_INPUTS)!
-											.Elements(NAME_ELEMENT_KEY)
-											.Select(e => (ordinal: (int)e.Attribute(NAME_ATTRIBUTE_ORDINAL)!, value: e.Value))
-											.OrderBy(t => t.ordinal)
-											.Select(t => t.value)
-			)
-			{
-				// Evaluate saved inputs and save in history
-				workspace.Evaluate(input);
-			}
+		string variableName = (string)variablesControl.SelectedValue;
+		TextBox ctlInputTextBox = (TextBox)variablesControl.Tag;
 
-			CollectionViewSource.GetDefaultView(workspace.Variables).Refresh();
+		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(variableName, ctlInputTextBox.CaretIndex);
 
-			Workspaces.Add(workspace);
-		}
+		// set focus to the input field
+		ctlInputTextBox.Focus();
 
-		return selectedWorkspace;
+		// clear the history selection
+		variablesControl.SelectedItem = null;
 	}
-
-	#region Implement IRaisePropertyChanged
-
-	public event PropertyChangedEventHandler? PropertyChanged;
-
-	public void RaisePropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
-
-	#endregion Implement IRaisePropertyChanged
 }

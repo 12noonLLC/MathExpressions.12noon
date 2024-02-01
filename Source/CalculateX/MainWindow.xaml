@@ -5,20 +5,32 @@
 	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 	xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
 	xmlns:clr="clr-namespace:System;assembly=mscorlib"
-	xmlns:local="clr-namespace:CalculateX"
+	xmlns:viewmodels="clr-namespace:CalculateX.ViewModels"
 	xmlns:shared="clr-namespace:Shared"
 	xmlns:props="clr-namespace:CalculateX.Properties"
 	mc:Ignorable="d"
-	Title="Calculate X" Width="450" Height="350"
+	Title="Calculate X by 12noon" Width="450" Height="350"
 >
-<!--
-Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/behaviors}Interaction.Behaviors'.'
-	xmlns:i="clr-namespace:Microsoft.Xaml.Behaviors;assembly=Microsoft.Xaml.Behaviors.dll"
--->
+	<Window.DataContext>
+		<viewmodels:WorkspacesViewModel x:Name="ViewModel" />
+	</Window.DataContext>
+	<Window.InputBindings>
+		<KeyBinding Command="{Binding NewWorkspaceCommand}" Key="T" Modifiers="Ctrl" />
+		<KeyBinding Command="{Binding SelectPreviousWorkspaceCommand}" Key="PageUp" Modifiers="Ctrl" />
+		<KeyBinding Command="{Binding SelectNextWorkspaceCommand}" Key="PageDown" Modifiers="Ctrl" />
+		<!-- Override the default keybindings for TabControl so they do not select the "+" tab. -->
+		<KeyBinding Command="{Binding SelectPreviousWorkspaceCommand}" Key="Tab" Modifiers="Ctrl+Shift" />
+		<KeyBinding Command="{Binding SelectNextWorkspaceCommand}" Key="Tab" Modifiers="Ctrl" />
+	</Window.InputBindings>
+	<i:Interaction.Behaviors>
+		<shared:AcceptKeyBindingBehavior />
+	</i:Interaction.Behaviors>
 	<Window.Resources>
 		<clr:String x:Key="BindingValueClearedVariable">cleared</clr:String>
 		<Color x:Key="Blue100Accent">#3E8EED</Color>
-		<SolidColorBrush x:Key="Blue100Brush" Color="{StaticResource Blue100Accent}"/>
+		<SolidColorBrush x:Key="BrushExpression" Color="{StaticResource Blue100Accent}"/>
+		<SolidColorBrush x:Key="BrushCleared" Color="LightGray"/>
+		<SolidColorBrush x:Key="BrushError" Color="Orange"/>
 
 		<BooleanToVisibilityConverter x:Key="BooleanToVisibility" />
 		<shared:NumberToAddCommasConverter x:Key="NumberToAddCommasConverter" />
@@ -55,49 +67,73 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 					</Grid.RowDefinitions>
 
 					<Label Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2" Padding="10,5" Style="{StaticResource StyleLabel}" Content="History" />
-					<Button Grid.Column="2" Grid.Row="0" Padding="10,0" Content="{Binding Command.Text, RelativeSource={RelativeSource Self}}" Command="{x:Static local:MainWindow.ClearHistory}" />
+					<Button Grid.Column="2" Grid.Row="0" Padding="10,0" Content="Clear"
+						Command="{Binding ClearHistoryCommand}"
+					/>
 
 					<ListBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
 						ItemsSource="{Binding History}"
-						IsSynchronizedWithCurrentItem="True"
+						IsSynchronizedWithCurrentItem="False"
 						ScrollViewer.VerticalScrollBarVisibility="Auto"
-						Loaded="HistoryListBox_Loaded"
+						SelectionMode="Single"
 						SelectionChanged="HistoryListBox_SelectionChanged"
+						SelectedValuePath="Input"
+						Tag="{Binding ElementName=CtlInputTextBox}"
 					>
 						<ListBox.Resources>
 							<Style x:Key="StyleExpression" TargetType="TextBlock">
 								<Setter Property="FontSize" Value="14" />
 								<Setter Property="FontWeight" Value="DemiBold" />
 							</Style>
+							<Style x:Key="StyleResult" TargetType="TextBlock" BasedOn="{StaticResource StyleExpression}">
+								<Setter Property="Foreground" Value="{StaticResource BrushExpression}" />
+								<Style.Triggers>
+									<DataTrigger Binding="{Binding IsCleared}" Value="True">
+										<Setter Property="Foreground" Value="{StaticResource BrushCleared}" />
+										<Setter Property="FontStyle" Value="Italic" />
+										<Setter Property="FontWeight" Value="Bold" />
+									</DataTrigger>
+									<DataTrigger Binding="{Binding IsError}" Value="True">
+										<Setter Property="Foreground" Value="{StaticResource BrushError}" />
+										<Setter Property="FontWeight" Value="Normal" />
+									</DataTrigger>
+								</Style.Triggers>
+							</Style>
 						</ListBox.Resources>
+						<i:Interaction.Behaviors>
+							<shared:ListBoxScrollToEndBehavior />
+						</i:Interaction.Behaviors>
 						<ListBox.ItemTemplate>
 							<DataTemplate>
 								<StackPanel Orientation="Horizontal">
 									<TextBlock Text="{Binding Input}" Style="{StaticResource StyleExpression}" />
 									<TextBlock Text=" = " Style="{StaticResource StyleExpression}" />
-									<TextBlock Text="{Binding Result, TargetNullValue={StaticResource BindingValueClearedVariable}}" Foreground="{StaticResource Blue100Brush}" Style="{StaticResource StyleExpression}" />
+									<TextBlock Text="{Binding Result, TargetNullValue={StaticResource BindingValueClearedVariable}}"
+										Style="{StaticResource StyleResult}"
+									/>
 								</StackPanel>
 							</DataTemplate>
 						</ListBox.ItemTemplate>
 					</ListBox>
 
-					<TextBox x:Name="InputTextBox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Padding="5,0" VerticalContentAlignment="Center" FontSize="14" FontWeight="Bold"
+					<TextBox x:Name="CtlInputTextBox" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2"
+						Padding="5,0" VerticalContentAlignment="Center"
+						FontSize="14" FontWeight="Bold"
 						TextWrapping="Wrap"
 						Text="{Binding Input, UpdateSourceTrigger=PropertyChanged}"
 						TextChanged="InputTextBox_TextChanged"
 						Loaded="InputControlTextBox_Loaded"
 					>
+						<i:Interaction.Behaviors>
+							<shared:FocusFirstBehavior />
+						</i:Interaction.Behaviors>
 						<TextBox.InputBindings>
-							<KeyBinding Command="{x:Static local:MainWindow.HistoryPrevious}" Key="Up" />
-							<KeyBinding Command="{x:Static local:MainWindow.HistoryNext}" Key="Down" />
-                     <KeyBinding Command="{x:Static local:MainWindow.WorkspacePrevious}" Key="PageUp" Modifiers="Ctrl" />
-                     <KeyBinding Command="{x:Static local:MainWindow.WorkspaceNext}" Key="PageDown" Modifiers="Ctrl" />
-                     <KeyBinding Command="{x:Static local:MainWindow.CmdNewWorkspace}" Key="T" Modifiers="Ctrl" />
-                     <KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="W" Modifiers="Ctrl" />
-                     <KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="F4" Modifiers="Ctrl" />
+							<KeyBinding Command="{Binding ClearInputCommand}" Key="Esc" />
+                     <KeyBinding Command="{Binding DeleteWorkspaceCommand}" Key="W" Modifiers="Ctrl" />
+                     <KeyBinding Command="{Binding DeleteWorkspaceCommand}" Key="F4" Modifiers="Ctrl" />
                   </TextBox.InputBindings>
 					</TextBox>
-					<Button Grid.Column="2" Grid.Row="2" Padding="0" FontSize="24" Content="=" IsDefault="True" Click="EvaluateButton_Click" />
+					<Button Grid.Column="2" Grid.Row="2" Padding="0" FontSize="24" Content="=" IsDefault="True" Command="{Binding EvaluateCommand}" />
 				</Grid>
 
 				<!-- Variables -->
@@ -113,8 +149,38 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 					</Grid.RowDefinitions>
 
 					<Label Grid.Column="0" Grid.Row="0" Padding="10,5" Style="{StaticResource StyleLabel}" Content="Variables" />
-					<Button Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleHelp}" Content="ℹ️" Click="HelpButton_Click" />
-					<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}">
+					<Button Grid.Column="1" Grid.Row="0" Style="{StaticResource StyleHelp}" Content="ℹ️" Command="{Binding ToggleHelpCommand}" />
+					<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
+						ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}"
+						SelectionMode="Single"
+						SelectedValuePath="Key"
+						SelectionChanged="VariablesListView_SelectionChanged"
+						Tag="{Binding ElementName=CtlInputTextBox}"
+					>
+						<!-- We can use this to use a command with a non-bindable event (e.g., SelectionChanged).
+								We can also pass the selected item (or value) to the command.
+								While we could  raise an event from the WorkspaceViewModel, how would the
+								MainWindow subscribe to it? And when the MainWindow handles the event, how could
+								the view-model pass the UI elements we need when it should not know about them?
+								We would have to bind TextBox.CaretIndex, and ListView.SelectedItem to the view-model.
+								Even then, how would we set focus back to the TextBox? Raise an event?
+									public ICommand SelectVariableCommand { get; }
+									SelectVariableCommand = new RelayCommand<string>(SelectVariable);
+									private void SelectVariable(string? variableName)
+									{
+										...need variable name...
+										...need ListView...
+										...need TextBox (from ListView.Tag)...
+									}
+						<i:Interaction.Triggers>
+							<i:EventTrigger EventName="SelectionChanged">
+								<i:InvokeCommandAction
+	                        Command="{Binding SelectVariableCommand}"
+		                     CommandParameter="{Binding SelectedValue, RelativeSource={RelativeSource AncestorType={x:Type ListView}}}"
+								/>
+							</i:EventTrigger>
+						</i:Interaction.Triggers>
+						-->
 						<i:Interaction.Behaviors>
 							<shared:ListViewPersistBehavior MySettings="{x:Static props:Settings.Default}" Setting_Widths="Variables_Widths" />
 						</i:Interaction.Behaviors>
@@ -214,23 +280,13 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 			</Grid>
       </DataTemplate>
 	</Window.Resources>
-	<Window.CommandBindings>
-		<CommandBinding Command="{x:Static local:MainWindow.ClearInput}" Executed="ClearInput_Executed" CanExecute="ClearInput_CanExecute" />
-		<CommandBinding Command="{x:Static local:MainWindow.ClearHistory}" Executed="ClearHistory_Executed" CanExecute="ClearHistory_CanExecute" />
-		<CommandBinding Command="{x:Static local:MainWindow.HistoryPrevious}" Executed="HistoryPrevious_Executed" CanExecute="HistoryPrevious_CanExecute" />
-		<CommandBinding Command="{x:Static local:MainWindow.HistoryNext}" Executed="HistoryNext_Executed" CanExecute="HistoryNext_CanExecute" />
-      <CommandBinding Command="{x:Static local:MainWindow.WorkspacePrevious}" Executed="WorkspacePrevious_Executed" CanExecute="WorkspacePrevious_CanExecute" />
-      <CommandBinding Command="{x:Static local:MainWindow.WorkspaceNext}" Executed="WorkspaceNext_Executed" CanExecute="WorkspaceNext_CanExecute" />
-      <CommandBinding Command="{x:Static local:MainWindow.CmdNewWorkspace}" Executed="NewWorkspace_Executed" />
-      <CommandBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Executed="CloseWorkspace_Executed" />
-	</Window.CommandBindings>
 	<!-- https://stackoverflow.com/questions/4058003/wpf-tabcontrol-datatemplates -->
    <TabControl
       Margin="0" Padding="0"
 		IsSynchronizedWithCurrentItem="True"
-		ItemsSource="{Binding Workspaces}"
+		ItemsSource="{Binding TheWorkspaceViewModels}"
 		SelectionChanged="WorkspaceTabControl_SelectionChanged"
-		SelectedItem="{Binding CurrentWorkspace}"
+		SelectedItem="{Binding SelectedWorkspaceVM}"
 		ContentTemplate="{StaticResource TemplateWorkspace}"
       d:SelectedIndex="0"
 	>
@@ -242,27 +298,19 @@ Error	XDG0062	'Cannot set unknown member '{http://schemas.microsoft.com/xaml/beh
 			</ResourceDictionary>
 		</TabControl.Resources>
       <i:Interaction.Behaviors>
-         <shared:FocusTabControlSelectionChangedBehavior ElementName="InputTextBox" />
-      </i:Interaction.Behaviors>
-      <TabControl.InputBindings>
-         <!-- These key bindings are for other controls on the tab, such as Clear History button. -->
-         <KeyBinding Command="{x:Static local:MainWindow.WorkspacePrevious}" Key="PageUp" Modifiers="Ctrl" />
-         <KeyBinding Command="{x:Static local:MainWindow.WorkspaceNext}" Key="PageDown" Modifiers="Ctrl" />
-			<KeyBinding Command="{x:Static local:MainWindow.CmdNewWorkspace}" Key="T" Modifiers="Ctrl" />
-			<KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="W" Modifiers="Ctrl" />
-			<KeyBinding Command="{x:Static local:MainWindow.CmdCloseWorkspace}" Key="F4" Modifiers="Ctrl" />
-      </TabControl.InputBindings>
+         <shared:FocusTabControlSelectionChangedBehavior ElementName="CtlInputTextBox" />
+		</i:Interaction.Behaviors>
       <TabControl.ItemTemplate>
          <DataTemplate>
 				<shared:EditableTabHeaderControl Content="{Binding Name, Mode=TwoWay}" />
          </DataTemplate>
       </TabControl.ItemTemplate>
       <d:TabControl.ItemsSource>
-         <x:Array Type="{x:Type local:Workspace}">
-            <local:Workspace Name="Mortgage" />
-            <local:Workspace Name="Sales" />
-            <local:Workspace Name="Temp" />
-            <local:Workspace Name="+" CanCloseTab="False" />
+         <x:Array Type="{x:Type viewmodels:WorkspaceViewModel}">
+				<viewmodels:WorkspaceViewModel Name="Mortgage" />
+				<viewmodels:WorkspaceViewModel Name="Sales" />
+				<viewmodels:WorkspaceViewModel Name="Temp" />
+				<viewmodels:WorkspaceViewModel Name="+" CanCloseTab="False" />
          </x:Array>
       </d:TabControl.ItemsSource>
 	</TabControl>

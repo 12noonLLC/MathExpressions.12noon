@@ -26,25 +26,25 @@ namespace Shared;
 /// 			</DataTemplate>
 /// 		</TabControl.ItemTemplate>
 /// 	</TabControl>
-/// 	
+///
 /// 	public MainWindow()
 /// 	{
 /// 		InitializeComponent();
 /// 		DataContext = this;
-/// 
+///
 /// 		EventManager.RegisterClassHandler(typeof(TabItem), RoutedEventHelper.CloseTabEvent, new RoutedEventHandler(OnCloseTab));
 /// 	}
 /// 	public void OnCloseTab(object /*TabItem*/ sender, RoutedEventArgs e)
 /// 	{
 /// 		// close the tab
 /// 	}
-/// 	
+///
 ///	The TabItem's DataContext class can implement
 ///	Shared.EditableTabHeaderControl.IEditableTabHeaderControl
 ///	in order to override the value of the CanCloseTab property.
 ///	This is optional, but without it, a WPF binding error will be thrown
 ///	for the undefined 'CanCloseTab.'
-///	
+///
 ///	public class Product : Shared.EditableTabHeaderControl.IEditableTabHeaderControl
 ///	{
 ///		public bool CanCloseTab { get; set; } = true;	// IEditableTabHeaderControl
@@ -188,7 +188,7 @@ public class EditableTabHeaderControl : ContentControl
 	//	public DelegateCommand AddItemCommand { get; set; }
 	//	public DelegateCommand RemoveItemCommand { get; set; }
 
-	//	#region INotifyPropertyChanged 
+	//	#region INotifyPropertyChanged
 	//	public event PropertyChangedEventHandler PropertyChanged;
 
 	//	private void OnPropertyChanged(string propertyName)
@@ -210,6 +210,9 @@ public class RoutedEventHelper
 	/// <summary>
 	/// Set up routed event raised when the user clicks the Close Tab button.
 	/// </summary>
+	/// <example>
+	/// EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.CloseTabEvent, new RoutedEventHandler(OnCloseTab));
+	/// </example>
 	public static readonly RoutedEvent CloseTabEvent = EventManager.RegisterRoutedEvent(
 		"CloseTab",
 		RoutingStrategy.Bubble,
@@ -247,9 +250,12 @@ public class RoutedEventHelper
 	}
 
 
-	/*
-	 * Set up routed event raised when the user changes the header text of a tab item.
-	 */
+	/// <summary>
+	/// Set up routed event raised when the user changes the header text of a tab item.
+	/// </summary>
+	/// <example>
+	/// EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.HeaderChangedEvent, new RoutedEventHandler(OnWorkspaceNameChanged));
+	/// </example>
 	public static readonly RoutedEvent HeaderChangedEvent = EventManager.RegisterRoutedEvent(
 		"HeaderChanged",
 		RoutingStrategy.Bubble,
