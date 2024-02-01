@@ -33,16 +33,11 @@ Those results are even saved and restored when you exit and restart the applicat
 
 ### Usage
 
-Type an expression in the input field and press **Enter**.
+Type an expression in the input field and press **Enter** or press the ` = ` button.
 
 Press **ESC** to clear the input field.
 
-Press the **up-arrow** and **down-arrow** to cycle through previous inputs.
-
-If you use the mouse to select text in the history, it is automatically copied to the clipboard.
-The focus is also set on the input field so that you can quickly paste the selected text if desired.
-When pasting a number, any currency symbol and grouping separators are removed
-since they are not allowed in expressions.
+Select a previous expression to copy it to the input field where you can edit it.
 
 ### Workspaces
 
@@ -65,6 +60,8 @@ Click the "+" tab to create a new workspace.
 | Ctrl+F4 | Close current workspace |
 | Ctrl+PageUp | Select previous workspace |
 | Ctrl+PageDown | Select next workspace |
+| Ctrl+Shift+Tab | Select previous workspace |
+| Ctrl+Tab | Select next workspace |
 
 ### Basic Mathematical Operators
 
@@ -94,7 +91,8 @@ You can also use algebraic (implied) multiplication in many cases:
 
 You can create variables and access them in your expressions.
 Variables can contain letters, digits, and underscores, but they must start with a letter.
-All variables and their current values are displayed in the list on the right.
+All variables and their current values are displayed in a list on the right.
+Select a variable in the list to copy its name into the input field.
 
 Examples:
 ````
@@ -232,7 +230,7 @@ Example: `80[kph->mph]`
 *Calculate X* saves the workspaces in your *Documents* folder in a file called `CalculateX.xml`.
 
 If you are familiar with XML, you can exit *Calculate X* and edit this file
-to add or remove calculations or workspaces.
+to modify, add, or remove calculations.
 
 If you use cloud storage, such as OneDrive or DropBox,
 you can synchronize this file between multiple computers.

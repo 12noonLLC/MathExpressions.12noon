@@ -19,7 +19,7 @@ namespace MathExpressions;
 /// decimal result = eval.Evaluate("(2 + 1) * (1 + 2)");
 /// //calling a function
 /// result = eval.Evaluate("sqrt(4)");
-/// //evaluate trigonometric 
+/// //evaluate trigonometric
 /// result = eval.Evaluate("cos(pi * 45 / 180.0)");
 /// //convert inches to feet
 /// result = eval.Evaluate("12 [in->ft]");
@@ -78,7 +78,7 @@ public class MathEvaluator
 	/// <exception cref="ParseException">When there is an error parsing the expression.</exception>
 	public double? Evaluate(string expression)
 	{
-		if (String.IsNullOrWhiteSpace(expression))
+		if (string.IsNullOrWhiteSpace(expression))
 		{
 			throw new ArgumentNullException(nameof(expression));
 		}
@@ -103,7 +103,7 @@ public class MathEvaluator
 
 				// If no expression follows the assignment operator, clear the variable.
 				// (Keep the last result as the answer value.)
-				if (String.IsNullOrEmpty(expression))
+				if (string.IsNullOrEmpty(expression))
 				{
 					Variables.Remove(variableName);
 					return null;
@@ -652,7 +652,7 @@ public class MathEvaluator
 
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <remarks>
 	/// Need to return Decimal and Double.PositiveInfinity and Double.NegativeInfinity and Double.NaN.
