@@ -1,6 +1,10 @@
 ﻿# Calculate X by [12noon.com](https://12noon.com)
 
-[![.NET](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
+[![build](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
+
+[![](https://img.shields.io/github/v/release/skst/CalculateX.svg?label=latest%20release&color=007edf)](https://github.com/skst/CalculateX/releases/latest)
+
+[![GitHub last commit](https://img.shields.io/github/last-commit/skst/CalculateX)](https://github.com/skst/CalculateX)
 
 A calculator that evaluates math expressions.
 

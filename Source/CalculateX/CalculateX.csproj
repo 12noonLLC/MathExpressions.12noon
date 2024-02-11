@@ -10,7 +10,7 @@
     <Company>12noon</Company>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
-    <Copyright>\u00A9 2020-2023 12noon, Stefan K.S. Tucker</Copyright>
+    <Copyright>\u00A9 2020-2024 12noon, Stefan K.S. Tucker</Copyright>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/skst/CalculateX</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
@@ -18,7 +18,7 @@
     <PackageIcon>CalculateX.png</PackageIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>3.9.7</Version>
+    <Version>3.9.11</Version>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
