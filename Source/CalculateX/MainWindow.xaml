@@ -27,8 +27,8 @@
 	</i:Interaction.Behaviors>
 	<Window.Resources>
 		<clr:String x:Key="BindingValueClearedVariable">cleared</clr:String>
-		<Color x:Key="Blue100Accent">#3E8EED</Color>
-		<SolidColorBrush x:Key="BrushExpression" Color="{StaticResource Blue100Accent}"/>
+		<SolidColorBrush x:Key="BrushExpression" Color="Black"/>
+		<SolidColorBrush x:Key="BrushResult" Color="#3E8EED"/>
 		<SolidColorBrush x:Key="BrushCleared" Color="LightGray"/>
 		<SolidColorBrush x:Key="BrushError" Color="Orange"/>
 
@@ -84,11 +84,17 @@
 							<Style x:Key="StyleExpression" TargetType="TextBlock">
 								<Setter Property="FontSize" Value="14" />
 								<Setter Property="FontWeight" Value="DemiBold" />
+								<Setter Property="Foreground" Value="{StaticResource BrushExpression}" />
+							</Style>
+							<Style x:Key="StyleEqualsSign" TargetType="TextBlock" BasedOn="{StaticResource StyleExpression}">
+								<Setter Property="Text" Value=" = " />
 							</Style>
 							<Style x:Key="StyleResult" TargetType="TextBlock" BasedOn="{StaticResource StyleExpression}">
-								<Setter Property="Foreground" Value="{StaticResource BrushExpression}" />
+								<Setter Property="Text" Value="{Binding Result}" />
+								<Setter Property="Foreground" Value="{StaticResource BrushResult}" />
 								<Style.Triggers>
 									<DataTrigger Binding="{Binding IsCleared}" Value="True">
+										<Setter Property="Text" Value="{StaticResource BindingValueClearedVariable}" />
 										<Setter Property="Foreground" Value="{StaticResource BrushCleared}" />
 										<Setter Property="FontStyle" Value="Italic" />
 										<Setter Property="FontWeight" Value="Bold" />
@@ -105,12 +111,10 @@
 						</i:Interaction.Behaviors>
 						<ListBox.ItemTemplate>
 							<DataTemplate>
-								<StackPanel Orientation="Horizontal">
+								<StackPanel Orientation="Horizontal" Margin="0,-2">
 									<TextBlock Text="{Binding Input}" Style="{StaticResource StyleExpression}" />
-									<TextBlock Text=" = " Style="{StaticResource StyleExpression}" />
-									<TextBlock Text="{Binding Result, TargetNullValue={StaticResource BindingValueClearedVariable}}"
-										Style="{StaticResource StyleResult}"
-									/>
+									<TextBlock Style="{StaticResource StyleEqualsSign}" />
+									<TextBlock Style="{StaticResource StyleResult}" />
 								</StackPanel>
 							</DataTemplate>
 						</ListBox.ItemTemplate>
