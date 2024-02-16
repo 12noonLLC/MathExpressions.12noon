@@ -71,13 +71,13 @@
 						Command="{Binding ClearHistoryCommand}"
 					/>
 
+					<!-- History -->
 					<ListBox Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3"
 						ItemsSource="{Binding History}"
 						IsSynchronizedWithCurrentItem="False"
 						ScrollViewer.VerticalScrollBarVisibility="Auto"
 						SelectionMode="Single"
 						SelectionChanged="HistoryListBox_SelectionChanged"
-						SelectedValuePath="Input"
 						Tag="{Binding ElementName=CtlInputTextBox}"
 					>
 						<ListBox.Resources>
@@ -157,7 +157,6 @@
 					<ListView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1"
 						ItemsSource="{Binding Variables, UpdateSourceTrigger=PropertyChanged}"
 						SelectionMode="Single"
-						SelectedValuePath="Key"
 						SelectionChanged="VariablesListView_SelectionChanged"
 						Tag="{Binding ElementName=CtlInputTextBox}"
 					>

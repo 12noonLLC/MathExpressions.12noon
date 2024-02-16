@@ -1,4 +1,4 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -136,11 +136,18 @@ public partial class MainWindow : Window
 			return;
 		}
 
-		string input = (string)historyControl.SelectedValue;
+		var entry = (Models.Workspace.HistoryEntry)historyControl.SelectedItem;
+		string input = entry.Input;
+		string? result = entry.Result;
 		TextBox ctlInputTextBox = (TextBox)historyControl.Tag;
 
 		ViewModel.SelectedWorkspaceVM.ClearInput();
 		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(input, ctlInputTextBox.CaretIndex);
+
+		if (result is not null)
+		{
+			Clipboard.SetText(result);
+		}
 
 		// This scrolls back up a ways for some reason. Plus, focus is left in the input field anyway.
 		/// https://stackoverflow.com/questions/5756448/in-wpf-how-can-i-get-the-next-control-in-the-tab-order
@@ -173,10 +180,14 @@ public partial class MainWindow : Window
 			return;
 		}
 
-		string variableName = (string)variablesControl.SelectedValue;
+		var entry = (KeyValuePair<string, double>)variablesControl.SelectedItem;
+		string variableName = entry.Key;
+		string variableValue = ((double)entry.Value).ToString();
 		TextBox ctlInputTextBox = (TextBox)variablesControl.Tag;
 
 		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(variableName, ctlInputTextBox.CaretIndex);
+
+		Clipboard.SetText(variableValue);
 
 		// set focus to the input field
 		ctlInputTextBox.Focus();
