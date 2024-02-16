@@ -18,21 +18,22 @@ A calculator that evaluates math expressions.
 
 ### Summary
 - Evaluates math expressions including grouping.
+- Create multiple workspaces with their own history and variables.
+- Set variables including recent answer.
 - Supports trigonometry and other functions.
 - Converts common units of:
-    - Length
+    - Distance
     - Speed
     - Temperature
     - Time
-    - Mass
     - Volume
-- Supports variables including last answer.
-- Supports multiple workspaces with their own history and variables.
+    - Mass
 
 Enter simple or complex mathematical expressions and immediately calculate the result.
-From adding your grocery bill to calculating cosine, *Calculate X* does it all.
-Results are automatically added to a history record, so you don't have to write them down
-to remember them.
+From adding your grocery bill to calculating volume to doing your taxes, *Calculate X* does it all.
+It also converts units of distance, speed, temperature, time, volume, and mass.
+Create multiple workspaces with their own history and variables that are automatically saved and restored.
+Results are added to history, so you don't have to write them down to remember them.
 Those results are even saved and restored when you exit and restart the application.
 
 ### Usage
@@ -42,6 +43,8 @@ Type an expression in the input field and press **Enter** or press the ` = ` but
 Press **ESC** to clear the input field.
 
 Select a previous expression to copy it to the input field where you can edit it.
+This will also copy the result of the expression to the clipboard,
+so that you can paste it into another application.
 
 ### Workspaces
 
@@ -97,6 +100,8 @@ You can create variables and access them in your expressions.
 Variables can contain letters, digits, and underscores, but they must start with a letter.
 All variables and their current values are displayed in a list on the right.
 Select a variable in the list to copy its name into the input field.
+This will also copy the value of the variable to the clipboard,
+so that you can paste it into another application.
 
 Examples:
 ````
