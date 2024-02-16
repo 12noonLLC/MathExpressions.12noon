@@ -14,11 +14,11 @@
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/skst/CalculateX</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>
-    <Description>Enter simple or complex mathematical expressions and immediately calculate the result. From adding your grocery bill to calculating cosine to doing your taxes, CalculateX does it all. Results are added to a history tape, so you don’t have to write them down to remember them. Use the special variable answer to refer to the most recent result. Use the up- and down-arrows to cycle through previous calculations. CalculateX also supports conversions for mass, volume, temperature, speed, time, and length.</Description>
+    <Description>Enter simple or complex mathematical expressions and immediately calculate the result. From adding your grocery bill to calculating area to doing your taxes, Calculate X does it all. Results are added to history, so you don’t have to write them down to remember them. Use the special variable answer to refer to the most recent result. Calculate X also supports conversions for distance, temperature, speed, time, mass, and volume.</Description>
     <PackageIcon>CalculateX.png</PackageIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>3.9.11</Version>
+    <Version>3.9.12</Version>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
