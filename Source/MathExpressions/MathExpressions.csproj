@@ -5,13 +5,13 @@
     <Nullable>enable</Nullable>
     <Company>12noon</Company>
     <Product>CalculateX</Product>
-    <Copyright>(c) 2020-2023 12noon, Stefan K.S. Tucker</Copyright>
+    <Copyright>(c) 2020-2024 12noon, Stefan K.S. Tucker</Copyright>
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
     <Authors>12noon, Stefan K.S. Tucker</Authors>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathExpressions.snk</AssemblyOriginatorKeyFile>
-    <Version>3.5.0</Version>
-    <AssemblyVersion>3.5.6.0</AssemblyVersion>
+    <Version>3.9.12</Version>
+    <AssemblyVersion>3.9.12.0</AssemblyVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
