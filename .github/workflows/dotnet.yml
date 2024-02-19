@@ -69,25 +69,25 @@ jobs:
 
       # Work around https://github.com/actions/setup-dotnet/issues/155
       - name: Clean solution
-        working-directory: ./Source
+        working-directory: ./Windows.Source
         run: dotnet clean --configuration ${{env.BUILD_CONFIGURATION}}
       - name: Clean NuGet
-        working-directory: ./Source
+        working-directory: ./Windows.Source
         run: dotnet nuget locals all --clear
 
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
-        working-directory: ./Source
+        working-directory: ./Windows.Source
         run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64
 
       - name: Test
-        working-directory: ./Source
+        working-directory: ./Windows.Source
         run: |
           dotnet test ${{env.LIBRARY_TESTS_FILE_PATH}}  --nologo --verbosity minimal --logger:"console;verbosity=normal" --configuration Debug --runtime win-x64
           dotnet test ${{env.SOLUTION_TESTS_FILE_PATH}} --nologo --verbosity minimal --logger:"console;verbosity=normal" --configuration Debug --runtime win-x64
 
       - name: Build single-file deployment
-        working-directory: ./Source
+        working-directory: ./Windows.Source
         # Publish to sibling `release` folder for github-tag-action step.
         run: dotnet publish ${{env.SOLUTION_FILE_PATH}} -p:PublishProfile=FolderProfile -o ../release/
 

@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.33927.210
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateX", "MAUI.Source\CalculateX\CalculateX.csproj", "{7C9F51C5-9CA5-4ACE-A3A8-C2A987B8EE7E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExpressions", "MAUI.Source\MathExpressions\MathExpressions.csproj", "{72233087-178E-4446-8222-62608F2EA6CB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C9F51C5-9CA5-4ACE-A3A8-C2A987B8EE7E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C9F51C5-9CA5-4ACE-A3A8-C2A987B8EE7E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C9F51C5-9CA5-4ACE-A3A8-C2A987B8EE7E}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{7C9F51C5-9CA5-4ACE-A3A8-C2A987B8EE7E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C9F51C5-9CA5-4ACE-A3A8-C2A987B8EE7E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C9F51C5-9CA5-4ACE-A3A8-C2A987B8EE7E}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{72233087-178E-4446-8222-62608F2EA6CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72233087-178E-4446-8222-62608F2EA6CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72233087-178E-4446-8222-62608F2EA6CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72233087-178E-4446-8222-62608F2EA6CB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CF3837D3-4ABE-4BA1-9BBE-7D1E508ADEF7}
+	EndGlobalSection
+EndGlobal

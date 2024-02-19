@@ -5,18 +5,19 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1FA45FEF-6448-4886-9E35-0E9A2D828AC6}"
 	ProjectSection(SolutionItems) = preProject
-		..\README.md = ..\README.md
+		License = License
+		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateX", "CalculateX\CalculateX.csproj", "{46271123-BEBD-4FF6-8B13-77D68A17C874}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateX", "Windows.Source\CalculateX\CalculateX.csproj", "{46271123-BEBD-4FF6-8B13-77D68A17C874}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExpressions.UnitTests", "MathExpressions.UnitTests\MathExpressions.UnitTests.csproj", "{28F172FF-144A-4016-AFE4-55B28FD1D902}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateX.UnitTests", "Windows.Source\CalculateX.UnitTests\CalculateX.UnitTests.csproj", "{4F65FDEA-9A4F-4674-90AA-53F427568954}"
 EndProject
-Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "CalculateX.Package", "..\CalculateX.Package\CalculateX.Package.wapproj", "{6A87FB45-DEA9-4601-9451-B5916F5BEF22}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExpressions.UnitTests", "Windows.Source\MathExpressions.UnitTests\MathExpressions.UnitTests.csproj", "{28F172FF-144A-4016-AFE4-55B28FD1D902}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExpressions", "MathExpressions\MathExpressions.csproj", "{9DE9392B-9BB3-4928-8D57-653FA40CEE85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExpressions", "Windows.Source\MathExpressions\MathExpressions.csproj", "{9DE9392B-9BB3-4928-8D57-653FA40CEE85}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateX.UnitTests", "CalculateX.UnitTests\CalculateX.UnitTests.csproj", "{4F65FDEA-9A4F-4674-90AA-53F427568954}"
+Project("{C7167F0D-BC9F-4E6E-AFE1-012C56B48DB5}") = "CalculateX.Package", "Windows.Package\CalculateX.Package.wapproj", "{6A87FB45-DEA9-4601-9451-B5916F5BEF22}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

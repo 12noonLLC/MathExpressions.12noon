@@ -19,7 +19,7 @@ namespace MathExpressions.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -57,15 +57,6 @@ namespace MathExpressions.Properties {
             }
             set {
                 resourceCulture = value;
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to The IExpression.Evaluate property can not be null..
-        /// </summary>
-        internal static string EvaluatePropertyCanNotBeNull {
-            get {
-                return ResourceManager.GetString("EvaluatePropertyCanNotBeNull", resourceCulture);
             }
         }
         
@@ -196,7 +187,7 @@ namespace MathExpressions.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The variable name can only contain letters..
+        ///   Looks up a localized string similar to The variable name can contain only letters,digits, and underscores and must start with a letter..
         /// </summary>
         internal static string VariableNameContainsLetters {
             get {
