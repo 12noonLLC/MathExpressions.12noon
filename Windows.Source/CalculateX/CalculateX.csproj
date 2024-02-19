@@ -1,0 +1,84 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <SignAssembly>True</SignAssembly>
+    <AssemblyOriginatorKeyFile>Calculator.snk</AssemblyOriginatorKeyFile>
+    <ApplicationIcon>CalculateX.ico</ApplicationIcon>
+    <Company>12noon</Company>
+    <Authors>12noon, Stefan K.S. Tucker</Authors>
+    <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
+    <Copyright>\u00A9 2020-2024 12noon, Stefan K.S. Tucker</Copyright>
+    <Nullable>enable</Nullable>
+    <RepositoryUrl>https://github.com/skst/CalculateX</RepositoryUrl>
+    <RepositoryType>Git</RepositoryType>
+    <Description>Enter simple or complex mathematical expressions and immediately calculate the result. From adding your grocery bill to calculating area to doing your taxes, Calculate X does it all. Results are added to history, so you don’t have to write them down to remember them. Use the special variable answer to refer to the most recent result. Calculate X also supports conversions for distance, temperature, speed, time, mass, and volume.</Description>
+    <PackageIcon>CalculateX.png</PackageIcon>
+    <Platforms>AnyCPU;x64;x86</Platforms>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Version>3.9.12</Version>
+    <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Calculator.snk" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.77" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MathExpressions\MathExpressions.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\Windows.Package\CalculateX.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,685 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+				 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+				 x:Class="CalculateX.Views.HelpPage"
+				 Title="Help">
+	<ContentPage.Resources>
+		<Style x:Key="Heading1" TargetType="Label">
+			<Setter Property="Margin" Value="10" />
+			<Setter Property="FontSize" Value="14" />
+			<Setter Property="FontAttributes" Value="Bold" />
+		</Style>
+		<Style x:Key="Heading2" TargetType="Label">
+			<Setter Property="Margin" Value="10" />
+			<Setter Property="FontSize" Value="12" />
+			<Setter Property="FontAttributes" Value="Bold" />
+		</Style>
+		<Style x:Key="Body" TargetType="Label">
+			<Setter Property="Margin" Value="10,5" />
+			<Setter Property="FontSize" Value="10" />
+			<Setter Property="LineBreakMode" Value="WordWrap" />
+		</Style>
+		<Style x:Key="CodeLine" TargetType="Label" BasedOn="{StaticResource Body}">
+			<Setter Property="Padding" Value="5" />
+			<Setter Property="BackgroundColor" Value="{StaticResource Gray100}" />
+			<Setter Property="FontSize" Value="10" />
+			<Setter Property="FontFamily" Value="monospace" />
+		</Style>
+		<Style x:Key="Code" TargetType="Span">
+			<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
+			<Setter Property="FontSize" Value="10" />
+			<Setter Property="FontFamily" Value="monospace" />
+		</Style>
+	</ContentPage.Resources>
+
+	<ScrollView>
+		<VerticalStackLayout>
+			<Label Style="{StaticResource Heading1}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Documentation"
+						TextColor="{AppThemeBinding Light={StaticResource Hyperlink}, Dark={StaticResource HyperlinkDark}}"
+						TextDecorations="Underline">
+							<Span.GestureRecognizers>
+								<TapGestureRecognizer Command="{Binding HyperlinkCommand}"
+								CommandParameter="https://github.com/skst/CalculateX" />
+							</Span.GestureRecognizers>
+						</Span>
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Body}" Text="Tap a previous entry to copy it to the input field." />
+
+			<Label Style="{StaticResource Body}" Text="Tap the π button to display a list of variables and their values. Tap one to copy it to the input field." />
+
+			<Label Style="{StaticResource Heading1}" Text="Basic Mathematical Operators" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="addition: " />
+						<Span Text=" + " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="subtraction: " />
+						<Span Text=" - " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="multiplication: " />
+						<Span Text=" * " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="division: " />
+						<Span Text=" / " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="modulo: " />
+						<Span Text=" % " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="exponent: " />
+						<Span Text=" ^ " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading1}" Text="Variables" />
+			<Label Style="{StaticResource Body}" Text="You can create variables and access them in your expressions. Variables can contain letters, digits, and underscores, but they must start with a letter." />
+
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="The " />
+						<Span Text="answer" FontAttributes="Italic" />
+						<Span Text=" variable always has the result of the most recent expression." />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}" Text="You can clear a variable (and remove it from the variable window) by setting it to nothing." />
+
+			<Label Style="{StaticResource Heading1}" Text="Basic Functions" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="sqrt(n) - square root of " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="cbrt(n) - cube root of " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="abs(n) - absolute value of " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="pow(n, x) - " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+						<Span Text=" to the power of " />
+						<Span Text=" x " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="min(a, b) - smallest of " />
+						<Span Text=" a " Style="{StaticResource Code}" />
+						<Span Text=" and " />
+						<Span Text=" b " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="max(a, b) - largest of " />
+						<Span Text=" a " Style="{StaticResource Code}" />
+						<Span Text=" and " />
+						<Span Text=" b " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="round(d, n) - " />
+						<Span Text=" d " Style="{StaticResource Code}" />
+						<Span Text=" rounded to " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+						<Span Text=" decimal places" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="truncate(d) - " />
+						<Span Text=" d " Style="{StaticResource Code}" />
+						<Span Text=" without decimal portion" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="floor(n) - largest integer smaller than " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="ceiling(n) - smallest integer larger than " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="random1() - random number " />
+						<Span Text=" r " Style="{StaticResource Code}" />
+						<Span Text=" less than 1 (0 &lt;= r &lt; 1)" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="randomN(n) - random number " />
+						<Span Text=" r " Style="{StaticResource Code}" />
+						<Span Text=" between 0 and " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+						<Span Text=" (0 &lt;= r &lt; n)" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading1}" Text="Trigonometric Functions" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="cos(t) - cosine of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="cosh(t) - hyperbolic cosine of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="acos(t) - arccosine of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="sin(t) - sine of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="sinh(t) - hyperbolic sine of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="asin(t) - arcsine of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="tan(t) - tangent of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="tanh(t) - hyperbolic tangent of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="atan(t) - arctangent of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="atanh(t) - hyperbolic arctangent of " />
+						<Span Text=" t " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="atan2(x,y) - arctangent of " />
+						<Span Text=" x/y " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading1}" Text="Logarithmic Functions" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="exp(n) - e to the power of " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="log(n) - log base " />
+						<Span Text=" e " Style="{StaticResource Code}" />
+						<Span Text=" of " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="log10(n) - log base 10 of " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="log2(n) - log base 2 of " />
+						<Span Text=" n " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading1}" Text="Conversion Functions" />
+
+			<Label Style="{StaticResource Body}" Text="To convert between two units, use this format:" />
+			<Label Style="{StaticResource CodeLine}" Text="n[from->to]" />
+
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Example: " />
+						<Span Text=" 80[kph->mph] " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading2}" Text="length" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Kilometer " />
+						<Span Text=" km " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Meter " />
+						<Span Text=" m " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Centimeter " />
+						<Span Text=" cm " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Millimeter " />
+						<Span Text=" mm " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Mile " />
+						<Span Text=" mile " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Yard " />
+						<Span Text=" yd " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Feet " />
+						<Span Text=" ft " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Inch " />
+						<Span Text=" in " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading2}" Text="speed" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Kilometers/hour " />
+						<Span Text=" kph " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Meters/second " />
+						<Span Text=" m/s " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Miles/hour " />
+						<Span Text=" mph " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Feet/second " />
+						<Span Text=" ft/s " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Knot " />
+						<Span Text=" knot " Style="{StaticResource Code}" />
+						<Span Text=" (nautical-miles/hour)" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Mach " />
+						<Span Text=" mach " Style="{StaticResource Code}" />
+						<Span Text=" (speed of sound)" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading2}" Text="temperature" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Fahrenheit " />
+						<Span Text=" f " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Celsius " />
+						<Span Text=" c " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Kelvin " />
+						<Span Text=" k " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading2}" Text="time" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Week " />
+						<Span Text=" wk " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Day " />
+						<Span Text=" d " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Hour " />
+						<Span Text=" hr " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Minute " />
+						<Span Text=" min " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Second " />
+						<Span Text=" sec " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Millisecond " />
+						<Span Text=" ms " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading2}" Text="mass" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Kilogram " />
+						<Span Text=" kg " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Gram " />
+						<Span Text=" g " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Milligram " />
+						<Span Text=" mg " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Ton " />
+						<Span Text=" ton " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Pound " />
+						<Span Text=" lb " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Ounce " />
+						<Span Text=" oz " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<Label Style="{StaticResource Heading2}" Text="volume" />
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Kiloliter " />
+						<Span Text=" kl " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Liter " />
+						<Span Text=" l " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Milliliter " />
+						<Span Text=" ml " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Gallon " />
+						<Span Text=" gal " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Quart " />
+						<Span Text=" qt " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Pint " />
+						<Span Text=" pt " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Cup " />
+						<Span Text=" cup " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Style="{StaticResource Body}">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Ounce " />
+						<Span Text=" oz " Style="{StaticResource Code}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+
+			<!--<Span Text="Red Bold, " TextColor="Red" FontAttributes="Bold" />-->
+		</VerticalStackLayout>
+	</ScrollView>
+</ContentPage>

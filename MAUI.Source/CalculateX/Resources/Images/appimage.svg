@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="456" height="456" viewBox="0 0 456 456" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+	<rect x="0" y="0" width="100%" height="100%" fill="#FF6A00" />
+	<!-- Background (Uncomment this for a visible background, useful for editing.) -->
+	<!-- <rect width="100%" height="100%" fill="#FF6A00" /> -->
+
+	<!-- Calculator group centered -->
+	<!-- scale(0.5) -->
+	<!-- translate = (456 - (body.width * scale)) / 2 -->
+	<g transform="translate(75, 21) scale(1.8)">
+		<!-- Calculator body -->
+		<rect x="0" y="0" width="170" height="230" fill="white" />
+
+		<!-- Screen -->
+		<rect x="10" y="10" width="150" height="50" stroke="black" stroke-width="4" fill="darkgrey" />
+
+		<!-- Rows of buttons -->
+		<g fill="white" stroke="black" stroke-width="4">
+			<!-- First row -->
+			<rect x="10" y="70" width="30" height="30" />
+			<rect x="50" y="70" width="30" height="30" />
+			<rect x="90" y="70" width="30" height="30" />
+			<rect x="130" y="70" width="30" height="30" />
+			<!-- Second row -->
+			<rect x="10" y="110" width="30" height="30" />
+			<rect x="50" y="110" width="30" height="30" />
+			<rect x="90" y="110" width="30" height="30" />
+			<rect x="130" y="110" width="30" height="30" />
+			<!-- Third row -->
+			<rect x="10" y="150" width="30" height="30" />
+			<rect x="50" y="150" width="30" height="30" />
+			<rect x="90" y="150" width="30" height="30" />
+			<rect x="130" y="150" width="30" height="70" />
+			<!-- Fourth row -->
+			<rect x="10" y="190" width="30" height="30" />
+			<rect x="50" y="190" width="30" height="30" />
+			<rect x="90" y="190" width="30" height="30" />
+			<!-- Enter button fills this space. -->
+		</g>
+	</g>
+</svg>

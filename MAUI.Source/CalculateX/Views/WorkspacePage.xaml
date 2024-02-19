@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+				 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+				 xmlns:mct="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+				 xmlns:viewmodels="clr-namespace:CalculateX.ViewModels"
+				 xmlns:models="clr-namespace:CalculateX.Models"
+				 x:Class="CalculateX.Views.WorkspacePage"
+				 Title="{Binding Name}"
+				 Loaded="ContentPage_Loaded"
+				 LayoutChanged="ContentPage_LayoutChanged"
+				 x:DataType="viewmodels:WorkspaceViewModel"
+>
+	<ContentPage.BindingContext>
+		<viewmodels:WorkspaceViewModel x:Name="ViewModel" />
+	</ContentPage.BindingContext>
+
+	<ContentPage.Resources>
+		<x:String x:Key="BindingValueClearedVariable">cleared</x:String>
+		<!--
+		<x:OnPlatform x:Key="TestWidth">
+			<On Platform="Android" Value="24" />
+			<On Platform="WinUI" Value="48" />
+			<On Platform="Default" Value="48" />
+		</x:OnPlatform>
+		<x:OnPlatform x:Key="TestHeight">
+			<On Platform="Android" Value="24" />
+			<On Platform="WinUI" Value="48" />
+			<On Platform="Default" Value="48" />
+		</x:OnPlatform>
+		-->
+	</ContentPage.Resources>
+
+	<ContentPage.ToolbarItems>
+		<!--
+			IconImageSource="{FontImage Glyph='I', Color=White, Size=22}"
+			IconImageSource="{FontImage Glyph='X', Color=Red, Size=22}"
+		-->
+		<ToolbarItem Text="Variables"
+						 IconImageSource="pi_math.png"
+						 Command="{Binding VariablesWorkspaceCommand}"
+						 SemanticProperties.Hint="Display variables" />
+		<ToolbarItem Text="Help"
+						 IconImageSource="help.png"
+						 Command="{Binding HelpCommand}"
+						 SemanticProperties.Hint="Help" />
+		<ToolbarItem Text="Rename"
+						 Order="Secondary"
+						 IconImageSource="pencil.png"
+						 Command="{Binding RenameWorkspaceCommand}"
+						 SemanticProperties.Hint="Rename workspace" />
+		<ToolbarItem Text="Delete"
+						 Order="Secondary"
+						 IconImageSource="delete.png"
+						 Command="{Binding DeleteWorkspaceCommand}"
+						 SemanticProperties.Hint="Delete workspace" />
+	</ContentPage.ToolbarItems>
+
+	<Grid Margin="0" RowDefinitions="*,Auto" ColumnDefinitions="*,Auto">
+		<CollectionView Grid.Row="0" Grid.ColumnSpan="2"
+			x:Name="CtlHistoryEntries"
+			ItemsSource="{Binding History}"
+			ItemsUpdatingScrollMode="KeepLastItemInView"
+			SelectionMode="Single"
+			SelectionChanged="HistoryEntries_SelectionChanged"
+			SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+		>
+			<CollectionView.Resources>
+				<Style x:Key="StyleExpression" TargetType="Span" x:DataType="models:Workspace+HistoryEntry">
+					<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorExpressionLight}, Dark={StaticResource ColorExpressionDark}}" />
+					<Setter Property="FontSize" Value="14" />
+					<Setter Property="FontAttributes" Value="Bold" />
+				</Style>
+				<Style x:Key="StyleEqualsSign" TargetType="Span" BasedOn="{StaticResource StyleExpression}" x:DataType="models:Workspace+HistoryEntry">
+					<Setter Property="Text" Value=" = " />
+				</Style>
+				<Style x:Key="StyleResult" TargetType="Span" BasedOn="{StaticResource StyleExpression}" x:DataType="models:Workspace+HistoryEntry">
+					<Setter Property="Text" Value="{Binding Result}" />
+					<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorResultLight}, Dark={StaticResource ColorResultDark}}" />
+					<Style.Triggers>
+						<DataTrigger TargetType="{x:Type Span}" Binding="{Binding IsCleared}" Value="True">
+							<Setter Property="Text" Value="{StaticResource BindingValueClearedVariable}" />
+							<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorClearedLight}, Dark={StaticResource ColorClearedDark}}" />
+							<Setter Property="FontAttributes" Value="Bold,Italic" />
+						</DataTrigger>
+						<DataTrigger TargetType="{x:Type Span}" Binding="{Binding IsError}" Value="True">
+							<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorErrorLight}, Dark={StaticResource ColorErrorDark}}" />
+							<Setter Property="FontAttributes" Value="None" />
+						</DataTrigger>
+					</Style.Triggers>
+				</Style>
+			</CollectionView.Resources>
+			<CollectionView.ItemsLayout>
+				<LinearItemsLayout Orientation="Vertical" ItemSpacing="0" />
+			</CollectionView.ItemsLayout>
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="models:Workspace+HistoryEntry">
+					<Label Margin="5,0" HorizontalOptions="Start">
+						<Label.FormattedText>
+							<FormattedString>
+								<Span Text="{Binding Input}" Style="{StaticResource StyleExpression}" />
+								<Span Style="{StaticResource StyleEqualsSign}" />
+								<Span Style="{StaticResource StyleResult}" />
+							</FormattedString>
+						</Label.FormattedText>
+					</Label>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<Entry x:Name="CtlEntry" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"
+			Placeholder="Enter expression to evaluate"
+			Text="{Binding Input, Mode=TwoWay}"
+			ClearButtonVisibility="WhileEditing"
+			Keyboard="Default"
+			IsSpellCheckEnabled="False"
+			IsTextPredictionEnabled="False"
+			TextChanged="EvaluateEntry_TextChanged"
+			ReturnCommand="{Binding EvaluateCommand}"
+			ReturnType="Done"
+			mct:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference CtlEntry}"
+		/>
+			<!-- https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/gestures/swipe
+			<Entry.GestureRecognizers>
+				<SwipeGestureRecognizer Direction="Up" Command="{Binding InputBackwardCommand}" />
+				<SwipeGestureRecognizer Direction="Down" Command="{Binding InputForwardCommand}" />
+			</Entry.GestureRecognizers>
+		</Entry>
+			-->
+		<!--
+			ReturnCommandParameter="{Binding ., Source={RelativeSource Self}}"
+		-->
+		<Button Grid.Row="1" Grid.Column="1"
+			MaximumHeightRequest="48"
+			Margin="2" Padding="0" CornerRadius="0" BorderWidth="3"
+			Text="="
+			FontSize="32" FontAttributes="Bold"
+			SemanticProperties.Hint="Evaluate the entered expression"
+			Command="{Binding EvaluateCommand}"
+		/>
+	</Grid>
+</ContentPage>

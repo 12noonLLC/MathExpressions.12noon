@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+				 xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+				 x:Class="CalculateX.Views.AboutPage"
+				 Title="About">
+	<Grid Margin="0,20">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="Auto" />
+		</Grid.ColumnDefinitions>
+
+		<Image Grid.Column="0" Source="appimage.png" Margin="10,0,0,10" VerticalOptions="Start" MaximumWidthRequest="128" MaximumHeightRequest="128" />
+		<VerticalStackLayout Grid.Column="1" Margin="10">
+			<Label
+				Text="Calculate X"
+				FontSize="22"
+				HorizontalOptions="Center"
+			/>
+			<Label Margin="10" HorizontalOptions="Center">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="Version " />
+						<Span Text="{Binding AppVersion}" />
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+			<Label Margin="10" HorizontalOptions="Center">
+				<Label.FormattedText>
+					<FormattedString>
+						<Span Text="12noon.com"
+						TextColor="{AppThemeBinding Light={StaticResource Hyperlink}, Dark={StaticResource HyperlinkDark}}"
+						TextDecorations="Underline">
+							<Span.GestureRecognizers>
+								<TapGestureRecognizer Command="{Binding HyperlinkCommand}"
+									CommandParameter="https://12noon.com" />
+							</Span.GestureRecognizers>
+						</Span>
+					</FormattedString>
+				</Label.FormattedText>
+			</Label>
+		</VerticalStackLayout>
+		<Image Grid.Column="2" Margin="0,15,10,15" Source="{AppThemeBinding Light=logo_12noon.png, Dark=logo_12noon_dark.png}" VerticalOptions="Start" />
+	</Grid>
+</ContentPage>
