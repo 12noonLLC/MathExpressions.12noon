@@ -176,10 +176,12 @@ public class VariablesTest
 	public void TestVariableDelete()
 	{
 		Assert.AreEqual(800d, eval.Evaluate("x = 800"));
-
 		Assert.IsNull(eval.Evaluate(" x  =  "));
-
 		Assert.ThrowsException<ParseException>(() => eval.Evaluate("  x "));
+
+		Assert.AreEqual(588, eval.Evaluate("morevar = 588"));
+		Assert.IsNull(eval.Evaluate("morevar="));
+		Assert.ThrowsException<ParseException>(() => eval.Evaluate("morevar"));
 	}
 
 	[TestMethod]
