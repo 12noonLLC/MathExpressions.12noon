@@ -48,7 +48,9 @@ internal class WorkspacesViewModel : ObservableObject
 
 		if (!TheWorkspaceViewModels.Any())
 		{
-			NewWorkspace();
+			WorkspaceViewModel newViewModel = CreateWorkspace();
+			TheWorkspaceViewModels.Insert(0, newViewModel);
+			SelectedWorkspaceVM = newViewModel;
 		}
 
 		// Add the "+" tab to the view-model but not to the model.
@@ -97,17 +99,29 @@ internal class WorkspacesViewModel : ObservableObject
 
 	private void NewWorkspace()
 	{
+		Debug.Assert(SelectedWorkspaceVM is not null);
+		Debug.Assert(TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 0);
+		Debug.Assert(SelectNextWorkspace_CanExecute());
+
+		WorkspaceViewModel newViewModel = CreateWorkspace();
+
+		TheWorkspaceViewModels.Insert(TheWorkspaceViewModels.IndexOf(SelectedWorkspaceVM) + 1, newViewModel);
+
+		SelectNextWorkspace();
+	}
+
+	private WorkspaceViewModel CreateWorkspace()
+	{
 		Workspace newWorkspace = new(FormWorkspaceName(TheWorkspaceViewModels.Select(w => w.Name)));
 		_workspaces.AddWorkspace(newWorkspace);
 
 		WorkspaceViewModel viewModel = new(newWorkspace);
 		SubscribeViewModelEvents(viewModel);
 
-		TheWorkspaceViewModels.Insert(TheWorkspaceViewModels.IndexOf(SelectedWorkspaceVM) + 1, viewModel);
-		SelectNextWorkspace();
+		return viewModel;
 	}
 
-	private void OnRequestDelete(object? sender, EventArgs e)
+	private void OnRequestDelete(object? /*WorkspaceViewModel*/ sender, EventArgs e)
 	{
 		ArgumentNullException.ThrowIfNull(sender);
 
@@ -121,10 +135,8 @@ internal class WorkspacesViewModel : ObservableObject
 			if (!remainingWorkspaces.Any(w => w.CanCloseTab))
 			{
 				/// [deleted][+]
-				Workspace newWorkspace = new(FormWorkspaceName(remainingWorkspaces.Select(w => w.Name)));
-				WorkspaceViewModel viewModel = new(newWorkspace);
-				SubscribeViewModelEvents(viewModel);
-				TheWorkspaceViewModels.Insert(0, viewModel);
+				WorkspaceViewModel newViewModel = CreateWorkspace();
+				TheWorkspaceViewModels.Insert(0, newViewModel);
 				/// [new][deleted][+]
 			}
 
@@ -159,6 +171,7 @@ internal class WorkspacesViewModel : ObservableObject
 	}
 	private void SelectPreviousWorkspace()
 	{
+		Debug.Assert(SelectedWorkspaceVM is not null);
 		Debug.Assert(TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 1);
 
 		if (SelectedWorkspaceVM == TheWorkspaceViewModels.First(w => w.CanCloseTab))
@@ -177,6 +190,7 @@ internal class WorkspacesViewModel : ObservableObject
 	}
 	private void SelectNextWorkspace()
 	{
+		Debug.Assert(SelectedWorkspaceVM is not null);
 		Debug.Assert(TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 1);
 
 		if (SelectedWorkspaceVM == TheWorkspaceViewModels.Last(w => w.CanCloseTab))
