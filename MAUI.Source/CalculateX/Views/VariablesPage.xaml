@@ -21,8 +21,15 @@
 							<ColumnDefinition Width="*" />
 							<ColumnDefinition Width="2*" />
 						</Grid.ColumnDefinitions>
-						<Label Grid.Column="0" Text="{Binding Name}" FontSize="16" />
-						<Label Grid.Column="1" Text="{Binding Value}" FontSize="16" />
+						<Grid.Resources>
+							<Style x:Key="StyleVariable" TargetType="Label">
+								<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorExpressionLight}, Dark={StaticResource ColorExpressionDark}}" />
+								<Setter Property="FontSize" Value="20" />
+								<Setter Property="FontAttributes" Value="Bold" />
+							</Style>
+						</Grid.Resources>
+						<Label Grid.Column="0" Text="{Binding Name}" Style="{StaticResource StyleVariable}" />
+						<Label Grid.Column="1" Text="{Binding Value}" Style="{StaticResource StyleVariable}" />
 					</Grid>
 				</DataTemplate>
 			</CollectionView.ItemTemplate>

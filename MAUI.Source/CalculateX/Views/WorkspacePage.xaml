@@ -67,7 +67,7 @@
 			<CollectionView.Resources>
 				<Style x:Key="StyleExpression" TargetType="Span" x:DataType="models:Workspace+HistoryEntry">
 					<Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorExpressionLight}, Dark={StaticResource ColorExpressionDark}}" />
-					<Setter Property="FontSize" Value="14" />
+					<Setter Property="FontSize" Value="20" />
 					<Setter Property="FontAttributes" Value="Bold" />
 				</Style>
 				<Style x:Key="StyleEqualsSign" TargetType="Span" BasedOn="{StaticResource StyleExpression}" x:DataType="models:Workspace+HistoryEntry">
