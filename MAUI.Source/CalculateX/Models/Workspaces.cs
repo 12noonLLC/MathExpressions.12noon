@@ -6,11 +6,10 @@ namespace CalculateX.Models;
 
 internal class Workspaces
 {
-	public string? CurrentWorkspaceID { get; set; }
+	public string? SelectedWorkspaceID { get; set; }
 	public ObservableCollection<Workspace> TheWorkspaces { get; private set; } = new();
 
-	private const string CalculateX_FileName = "CalculateX.xml";
-	private static string GetWorkspacesFilePath() => Path.Combine(FileSystem.AppDataDirectory, CalculateX_FileName);
+	private readonly string _pathStorageFile;
 
 	private const string NAME_ELEMENT_WORKSPACES = "workspaces";
 	private const string NAME_ATTRIBUTE_SELECTED = "selected";
@@ -22,9 +21,24 @@ internal class Workspaces
 	private const string NAME_ATTRIBUTE_ORDINAL = "ordinal";
 
 
-	public Workspaces()
+	public Workspaces(string pathFile)
 	{
+		_pathStorageFile = pathFile;
 		LoadWorkspaces();
+	}
+
+	public void AddWorkspace(Workspace addWorkspace)
+	{
+#if DEBUG
+		Workspace? foundWorkspace = TheWorkspaces.FirstOrDefault(w => w.ID == addWorkspace.ID);
+		Debug.Assert(foundWorkspace is null);
+		if (foundWorkspace is not null)
+		{
+			return;
+		}
+#endif
+
+		TheWorkspaces.Add(addWorkspace);
 	}
 
 	public void DeleteWorkspace(string workspaceID)
@@ -39,6 +53,9 @@ internal class Workspaces
 		TheWorkspaces.Remove(deleteWorkspace);
 	}
 
+	/// <summary>
+	///
+	/// </summary>
 	/// <example>
 	///	<calculatex>
 	///		<workspaces>
@@ -54,7 +71,8 @@ internal class Workspaces
 	///		</workspaces>
 	///	</calculatex>
 	/// </example>
-	public void SaveWorkspaces()
+	/// <param name="selectedWorkspaceID">ID of the selected workspace</param>
+	public void SaveWorkspaces(string? selectedWorkspaceID)
 	{
 		XDocument xdoc = new(
 			new XElement(NAME_ELEMENT_WORKSPACES,
@@ -63,7 +81,7 @@ internal class Workspaces
 					new XElement(NAME_ELEMENT_WORKSPACE,
 						new XAttribute(NAME_ATTRIBUTE_ID, w.ID),
 						new XAttribute(NAME_ATTRIBUTE_NAME, w.Name),
-						new XAttribute(NAME_ATTRIBUTE_SELECTED, (w.ID == CurrentWorkspaceID)),
+						new XAttribute(NAME_ATTRIBUTE_SELECTED, (w.ID == selectedWorkspaceID)),
 						w.History
 						.Aggregate(
 							seed: (new XElement(NAME_ELEMENT_INPUTS), 0),
@@ -85,27 +103,29 @@ internal class Workspaces
 					)
 				))
 			);
-		xdoc.Save(GetWorkspacesFilePath());
+		xdoc.Save(_pathStorageFile);
 	}
 
+	/// <summary>
+	///
+	/// </summary>
 	public void LoadWorkspaces()
 	{
+		SelectedWorkspaceID = null;
+
 		// Try to load workspaces
-		string filePath = GetWorkspacesFilePath();
-		if (!File.Exists(filePath))
+		if (!File.Exists(_pathStorageFile))
 		{
-			CurrentWorkspaceID = null;
 			return;
 		}
 
 		XDocument? xdoc = null;
 		try
 		{
-			xdoc = XDocument.Load(filePath);
+			xdoc = XDocument.Load(_pathStorageFile);
 		}
 		catch (Exception)
 		{
-			CurrentWorkspaceID = null;
 			return;
 		}
 
@@ -137,6 +157,6 @@ internal class Workspaces
 			TheWorkspaces.Add(workspace);
 		}
 
-		CurrentWorkspaceID = selectedWorkspaceID;
+		SelectedWorkspaceID = selectedWorkspaceID;
 	}
 }

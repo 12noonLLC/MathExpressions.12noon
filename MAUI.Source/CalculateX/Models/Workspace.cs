@@ -45,17 +45,9 @@ internal class Workspace
 		{
 		}
 	}
-	public ObservableCollection<HistoryEntry> History { get; init; } = new();
+	public ObservableCollection<HistoryEntry> History { get; private init; } = new();
 
 
-	/// <summary>
-	/// Called when navigating to a workspace.
-	/// </summary>
-	public Workspace() : this("New") { }  /// Empty ctor required for the Designer
-	/// <summary>
-	/// Called when adding a workspace.
-	/// </summary>
-	public Workspace(string name) : this(Guid.NewGuid().ToString(), name) { }
 	/// <summary>
 	/// Called when loading workspaces.
 	/// </summary>
@@ -66,10 +58,18 @@ internal class Workspace
 		ID = id;
 		Name = name;
 	}
+	/// <summary>
+	/// Called when navigating to or adding a workspace.
+	/// </summary>
+	/// <param name="name"></param>
+	public Workspace(string name) : this(Guid.NewGuid().ToString(), name) { }
 
 	public void ClearHistory()
 	{
 		History.Clear();
+
+		// Clear variables (because they will not exist when the app restarts).
+		Variables.Initialize();
 	}
 
 	//public void Reevaluate()

@@ -74,8 +74,8 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 		HelpCommand = new AsyncRelayCommand(Help);
 
 		// We always go on to ApplyQueryAttributes() to select a workspace.
-		// We don't need this, but we want to use nullable.
-		_workspace = new();
+		// We don't need this workspace, but we do not want to allow null.
+		_workspace = new("temporary");
 	}
 
 	/// <summary>

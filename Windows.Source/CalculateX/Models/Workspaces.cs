@@ -13,11 +13,10 @@ internal class Workspaces
 	/// This is only valid after the workspaces are loaded from storage.
 	/// It is not updated by the view-model.
 	/// </summary>
-	public string? SelectedWorkspaceID { get; private set; }
+	public string? LoadedSelectedWorkspaceID { get; private set; }
 	public ObservableCollection<Workspace> TheWorkspaces { get; private set; } = new();
 
-	private const string CalculateX_FileName = "CalculateX.xml";
-	private static string GetWorkspacesFilePath() => Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CalculateX_FileName);
+	private readonly string _pathStorageFile;
 
 	private const string NAME_ELEMENT_WORKSPACES = "workspaces";
 	private const string NAME_ATTRIBUTE_SELECTED = "selected";
@@ -29,19 +28,22 @@ internal class Workspaces
 	private const string NAME_ATTRIBUTE_ORDINAL = "ordinal";
 
 
-	public Workspaces()
+	public Workspaces(string pathFile)
 	{
+		_pathStorageFile = pathFile;
 		LoadWorkspaces();
 	}
 
 	public void AddWorkspace(Workspace addWorkspace)
 	{
+#if DEBUG
 		Workspace? foundWorkspace = TheWorkspaces.FirstOrDefault(w => w.ID == addWorkspace.ID);
 		Debug.Assert(foundWorkspace is null);
 		if (foundWorkspace is not null)
 		{
 			return;
 		}
+#endif
 
 		TheWorkspaces.Add(addWorkspace);
 	}
@@ -59,7 +61,7 @@ internal class Workspaces
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	/// <example>
 	///	<calculatex>
@@ -76,6 +78,7 @@ internal class Workspaces
 	///		</workspaces>
 	///	</calculatex>
 	/// </example>
+	/// <param name="selectedWorkspaceID">ID of the selected workspace</param>
 	public void SaveWorkspaces(string selectedWorkspaceID)
 	{
 		XDocument xdoc = new(
@@ -107,29 +110,29 @@ internal class Workspaces
 					)
 				))
 			);
-		xdoc.Save(GetWorkspacesFilePath());
+		xdoc.Save(_pathStorageFile);
 	}
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public void LoadWorkspaces()
 	{
-		string filePath = GetWorkspacesFilePath();
-		if (!File.Exists(filePath))
+		LoadedSelectedWorkspaceID = null;
+
+		// Try to load workspaces
+		if (!File.Exists(_pathStorageFile))
 		{
-			SelectedWorkspaceID = null;
 			return;
 		}
 
 		XDocument? xdoc = null;
 		try
 		{
-			xdoc = XDocument.Load(filePath);
+			xdoc = XDocument.Load(_pathStorageFile);
 		}
 		catch (Exception)
 		{
-			SelectedWorkspaceID = null;
 			return;
 		}
 
@@ -141,7 +144,7 @@ internal class Workspaces
 			// DELME: when all customer files are updated. [Feb 2024]
 			id ??= Guid.NewGuid().ToString();
 
-			string name = xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)?.Value!;
+			string name = xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)!.Value!;
 			Workspace workspace = new(id, name);
 			bool selected = (bool?)xWorkspace.Attribute(NAME_ATTRIBUTE_SELECTED) ?? false;
 			if (selected)
@@ -165,6 +168,6 @@ internal class Workspaces
 			TheWorkspaces.Add(workspace);
 		}
 
-		SelectedWorkspaceID = selectedWorkspaceID;
+		LoadedSelectedWorkspaceID = selectedWorkspaceID;
 	}
 }

@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace CalculateX.Models;
 
 [DebuggerDisplay("{Name} ({History.Count})")]
-public class Workspace
+internal class Workspace
 {
 	public string ID { get; private init; }
 
@@ -16,8 +16,9 @@ public class Workspace
 	// This is an instance variable to maintain the state of its variable dictionary.
 	public readonly MathEvaluator TheEvaluator = new();
 
-	public VariableDictionary Variables { get => TheEvaluator.Variables; private set { } }
+	public VariableDictionary Variables => TheEvaluator.Variables;
 
+	[DebuggerDisplay("{Input} = {Result} Cleared = {IsCleared}, Error = {IsError}")]
 	public record class HistoryEntry(string Input, string? Result, bool IsCleared, bool IsError)
 	{
 		public string Input { get; set; } = Input;
@@ -44,7 +45,7 @@ public class Workspace
 		{
 		}
 	}
-	public ObservableCollection<HistoryEntry> History { get; init; } = new();
+	public ObservableCollection<HistoryEntry> History { get; private init; } = new();
 
 
 	/// <summary>
@@ -58,10 +59,10 @@ public class Workspace
 		Name = name;
 	}
 	/// <summary>
-	/// Called when adding a workspace.
+	/// Called when navigating to or adding a workspace.
 	/// </summary>
+	/// <param name="name"></param>
 	public Workspace(string name) : this(Guid.NewGuid().ToString(), name) { }
-
 
 	public void ClearHistory()
 	{
@@ -71,8 +72,26 @@ public class Workspace
 		Variables.Initialize();
 	}
 
+	//public void Reevaluate()
+	//{
+	//	foreach (var entry in History)
+	//	{
+	//		double? d = TheEvaluator.Evaluate(entry.Input);
+	//		if (d is null)
+	//		{
+	//			entry.Result = null;
+	//		}
+	//		else
+	//		{
+	//			entry.Result = Shared.Numbers.FormatNumberWithGroupingSeparators(d.Value);
+	//		}
+	//	}
+	//}
+
 	public void Evaluate(string input)
 	{
+		Debug.Assert(!string.IsNullOrWhiteSpace(input));
+
 		try
 		{
 			double? d = TheEvaluator.Evaluate(input);

@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
@@ -12,7 +13,10 @@ namespace CalculateX.ViewModels;
 
 internal class WorkspacesViewModel : ObservableObject
 {
-	private readonly Workspaces _workspaces = new();
+	private const string CalculateX_FileName = "CalculateX.xml";
+	private static readonly string _pathWorkspacesFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CalculateX_FileName);
+	private readonly Workspaces _workspaces = new(_pathWorkspacesFile);
+
 	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private set; }
 	public WorkspaceViewModel SelectedWorkspaceVM
 	{
@@ -53,7 +57,7 @@ internal class WorkspacesViewModel : ObservableObject
 		SelectPreviousWorkspaceCommand.NotifyCanExecuteChanged();
 		SelectNextWorkspaceCommand.NotifyCanExecuteChanged();
 
-		_selectedWorkspaceVM = TheWorkspaceViewModels.FirstOrDefault(vm => vm.ID == _workspaces.SelectedWorkspaceID) ?? TheWorkspaceViewModels.First();
+		_selectedWorkspaceVM = TheWorkspaceViewModels.FirstOrDefault(vm => vm.ID == _workspaces.LoadedSelectedWorkspaceID) ?? TheWorkspaceViewModels.First();
 	}
 
 	private void SubscribeViewModelEvents(WorkspaceViewModel viewModel)

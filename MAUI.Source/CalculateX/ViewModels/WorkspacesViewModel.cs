@@ -7,11 +7,14 @@ namespace CalculateX.ViewModels;
 
 internal class WorkspacesViewModel
 {
-	private readonly Workspaces _workspaces = new();
+	private const string CalculateX_FileName = "CalculateX.xml";
+	private static readonly string _pathWorkspacesFile = Path.Combine(FileSystem.AppDataDirectory, CalculateX_FileName);
+	private readonly Workspaces _workspaces = new(_pathWorkspacesFile);
 	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private set; }
 
+	private string? _selectedWorkspaceID;
+
 	private int _windowId = 0;
-	//TODO public WorkspaceViewModel CurrentWorkspaceView { get; set; }
 
 	public ICommand AddWorkspaceCommand { get; }
 	public ICommand AboutCommand { get; }
@@ -33,21 +36,20 @@ internal class WorkspacesViewModel
 		if (!TheWorkspaceViewModels.Any())
 		{
 			AddWorkspace();
+			SaveWorkspaces();
 		}
-
-		//TODO CurrentWorkspaceView = TheWorkspaceViewModels.First();
 	}
 
 	private void AddWorkspace()
 	{
 		Workspace newWorkspace = new(FormWorkspaceName(TheWorkspaceViewModels.Select(w => w.Name)));
-		_workspaces.TheWorkspaces.Add(newWorkspace);
+		_workspaces.AddWorkspace(newWorkspace);
 
 		WorkspaceViewModel viewModel = new(newWorkspace);
 		viewModel.WorkspaceChanged += OnWorkspaceChanged;
 		TheWorkspaceViewModels.Add(viewModel);
 
-		SaveWorkspaces();
+		_selectedWorkspaceID ??= newWorkspace.ID;
 	}
 
 	private async Task About()
@@ -55,7 +57,7 @@ internal class WorkspacesViewModel
 		await Shell.Current.GoToAsync(nameof(Views.AboutPage));
 	}
 
-	public void SaveWorkspaces() => _workspaces.SaveWorkspaces();
+	public void SaveWorkspaces() => _workspaces.SaveWorkspaces(_selectedWorkspaceID);
 
 	public WorkspaceViewModel? GetWorkspaceViewModel(string workspaceID) => TheWorkspaceViewModels.FirstOrDefault(w => w.ID == workspaceID);
 
@@ -85,14 +87,14 @@ internal class WorkspacesViewModel
 
 	private void OnWorkspaceChanged(object? sender, EventArgs e) => SaveWorkspaces();
 
-	public async Task SelectWorkspaceAsync(WorkspaceViewModel? workspace)
+	public async Task SelectWorkspaceAsync(WorkspaceViewModel? workspaceVM)
 	{
-		if (workspace is null)
+		if (workspaceVM is null)
 		{
 			return;
 		}
 
-		_workspaces.CurrentWorkspaceID = workspace.ID;
+		_selectedWorkspaceID = workspaceVM.ID;
 
 		// Should navigate to "NotePage?ItemId=path\on\device\XYZ.notes.txt"
 		//Shell.Current.GoToAsync($"{nameof(Views.WorkspacePage)}?select={workspace.ID}");
@@ -101,7 +103,7 @@ internal class WorkspacesViewModel
 			{
 				{
 					WorkspaceViewModel.QUERY_DATA_WORKSPACE,
-					TheWorkspaceViewModels.First(workspaceView => workspaceView.ID == workspace.ID)
+					TheWorkspaceViewModels.First(workspaceView => workspaceView.ID == workspaceVM.ID)
 				}
 			});
 	}
