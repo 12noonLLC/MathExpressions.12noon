@@ -52,8 +52,6 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	public void RaiseInputChanged() => InputChanged?.Invoke(this, EventArgs.Empty);
 
 	public RelayCommand EvaluateCommand { get; }
-	//public ICommand InputBackwardCommand { get; }
-	//public ICommand InputForwardCommand { get; }
 	public ICommand DeleteWorkspaceCommand { get; }
 	public ICommand RenameWorkspaceCommand { get; }
 	public ICommand VariablesWorkspaceCommand { get; }
@@ -66,8 +64,6 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	public WorkspaceViewModel()
 	{
 		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
-		//InputBackwardCommand = new RelayCommand(InputBackward);
-		//InputForwardCommand = new RelayCommand(InputForward);
 		DeleteWorkspaceCommand = new AsyncRelayCommand(DeleteWorkspaceAsync);
 		RenameWorkspaceCommand = new AsyncRelayCommand(RenameWorkspaceAsync);
 		VariablesWorkspaceCommand = new AsyncRelayCommand(VariablesWorkspaceAsync);
@@ -85,8 +81,6 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	public WorkspaceViewModel(Models.Workspace workspace)
 	{
 		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
-		//InputBackwardCommand = new RelayCommand(InputBackward);
-		//InputForwardCommand = new RelayCommand(InputForward);
 		DeleteWorkspaceCommand = new AsyncRelayCommand(DeleteWorkspaceAsync);
 		RenameWorkspaceCommand = new AsyncRelayCommand(RenameWorkspaceAsync);
 		VariablesWorkspaceCommand = new AsyncRelayCommand(VariablesWorkspaceAsync);
@@ -106,18 +100,6 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 
 		RaiseInputChanged();
 	}
-
-	//private void InputBackward()
-	//{
-	//	string entry = _workspace.InputBackward(Input);
-	//	SetInput(entry);
-	//}
-
-	//private void InputForward()
-	//{
-	//	string entry = _workspace.InputForward(Input);
-	//	SetInput(entry);
-	//}
 
 	public bool Evaluate_CanExecute() => !string.IsNullOrWhiteSpace(Input);
 	private void Evaluate()

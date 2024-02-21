@@ -120,11 +120,10 @@
 			mct:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference CtlEntry}"
 		/>
 			<!-- https://learn.microsoft.com/en-us/dotnet/maui/fundamentals/gestures/swipe
-			<Entry.GestureRecognizers>
-				<SwipeGestureRecognizer Direction="Up" Command="{Binding InputBackwardCommand}" />
-				<SwipeGestureRecognizer Direction="Down" Command="{Binding InputForwardCommand}" />
-			</Entry.GestureRecognizers>
-		</Entry>
+				<Entry.GestureRecognizers>
+					<SwipeGestureRecognizer Direction="Up" Command="{Binding InputBackwardCommand}" />
+					<SwipeGestureRecognizer Direction="Down" Command="{Binding InputForwardCommand}" />
+				</Entry.GestureRecognizers>
 			-->
 		<!--
 			ReturnCommandParameter="{Binding ., Source={RelativeSource Self}}"
