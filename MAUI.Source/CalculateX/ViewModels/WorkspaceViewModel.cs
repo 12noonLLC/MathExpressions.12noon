@@ -65,7 +65,7 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	/// </summary>
 	public WorkspaceViewModel()
 	{
-		EvaluateCommand = new RelayCommand(Evaluate, canExecute: () => Evaluate_CanExecute);
+		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 		//InputBackwardCommand = new RelayCommand(InputBackward);
 		//InputForwardCommand = new RelayCommand(InputForward);
 		DeleteWorkspaceCommand = new AsyncRelayCommand(DeleteWorkspaceAsync);
@@ -84,7 +84,7 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	/// <param name="workspace"></param>
 	public WorkspaceViewModel(Models.Workspace workspace)
 	{
-		EvaluateCommand = new RelayCommand(Evaluate, canExecute: () => Evaluate_CanExecute);
+		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 		//InputBackwardCommand = new RelayCommand(InputBackward);
 		//InputForwardCommand = new RelayCommand(InputForward);
 		DeleteWorkspaceCommand = new AsyncRelayCommand(DeleteWorkspaceAsync);
@@ -119,7 +119,7 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	//	SetInput(entry);
 	//}
 
-	public bool Evaluate_CanExecute { get => !string.IsNullOrWhiteSpace(Input); private set { } }
+	public bool Evaluate_CanExecute() => !string.IsNullOrWhiteSpace(Input);
 	private void Evaluate()
 	{
 		if (string.IsNullOrWhiteSpace(Input))
