@@ -21,6 +21,7 @@ on:
       - '**/*.gitignore'
       - '**/*.gitattributes'
       - '**/*.md'
+      - '**/maui.yml'
       - 'LICENSE'
       - 'CalculateX.png'
   pull_request:
@@ -29,6 +30,7 @@ on:
       - '**/*.gitignore'
       - '**/*.gitattributes'
       - '**/*.md'
+      - '**/maui.yml'
       - 'LICENSE'
       - 'CalculateX.png'
 
@@ -47,7 +49,7 @@ env:
   ARTIFACT_PACKAGE: package-calculatex
 
 concurrency:
-  group: calculatex-${{ github.ref }}-1
+  group: calculatex-${{ github.ref }}-1-dotnet
   cancel-in-progress: true
 
 # Jobs are run in parallel unless `needs` is specified.
@@ -69,10 +71,8 @@ jobs:
 
       # Work around https://github.com/actions/setup-dotnet/issues/155
       - name: Clean solution
-        working-directory: ./Windows.Source
-        run: dotnet clean --configuration ${{env.BUILD_CONFIGURATION}}
+        run: dotnet clean CalculateX.Windows.sln --configuration ${{env.BUILD_CONFIGURATION}}
       - name: Clean NuGet
-        working-directory: ./Windows.Source
         run: dotnet nuget locals all --clear
 
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
