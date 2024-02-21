@@ -1,0 +1,160 @@
+name: MAUI
+
+#
+# Skip the workflow with one of the following:
+#   [skip ci]
+#   [ci skip]
+#   ***NO_CI***
+#
+# Note that a commit MUST include one of the following to create a release:
+#   #patch
+#   #minor
+#   #major
+#
+
+on:
+  workflow_dispatch:
+    branches: [ master, yaml ]
+  push:
+    branches: [ master, yaml ]
+    paths-ignore:
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+      - '**/*.md'
+      - '**/dotnet.yml'
+      - 'LICENSE'
+      - 'CalculateX.png'
+  pull_request:
+    branches: [ master, yaml ]
+    paths-ignore:
+      - '**/*.gitignore'
+      - '**/*.gitattributes'
+      - '**/*.md'
+      - '**/dotnet.yml'
+      - 'LICENSE'
+      - 'CalculateX.png'
+
+env:
+  # Path to the solution file relative to the root of the project.
+  SOLUTION_FILE_PATH: CalculateX/CalculateX.csproj
+  PUBLISH_FILES_PATH: .\MAUI.Source\CalculateX\bin\Release\net8.0-android
+
+  # Configuration type to build.
+  # You can convert this to a build matrix if you need coverage of multiple configuration types.
+  # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+  BUILD_CONFIGURATION: Release
+
+  ARTIFACT_NAME: CalculateX
+  ARTIFACT_PACKAGE: package-calculatex
+
+concurrency:
+  group: calculatex-${{ github.ref }}-1-maui
+  cancel-in-progress: true
+
+# Jobs are run in parallel unless `needs` is specified.
+# https://docs.github.com/en/actions/learn-github-actions/managing-complex-workflows#creating-dependent-jobs
+jobs:
+  build:
+    if: (github.event_name == 'workflow_dispatch') || (!contains(toJson(github.event.commits.*.message), '***NO_CI***') && !contains(toJson(github.event.commits.*.message), '[ci skip]') && !contains(toJson(github.event.commits.*.message), '[skip ci]'))
+
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install MAUI workload
+        run: dotnet workload install maui
+        #--ignore-failed-sources
+
+      # Work around https://github.com/actions/setup-dotnet/issues/155
+      # - name: Clean solution
+        # run: dotnet clean CalculateX.MAUI.sln --configuration ${{env.BUILD_CONFIGURATION}}
+      - name: Clean NuGet
+        run: dotnet nuget locals all --clear
+
+      # https://docs.microsoft.com/en-us/dotnet/core/tools/
+      - name: Build
+        working-directory: ./MAUI.Source
+        #run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64
+        run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --configuration ${{env.BUILD_CONFIGURATION}} --framework net8.0-android
+
+      - name: List folder
+        run: |
+          Get-ChildItem
+          Get-ChildItem ${{env.PUBLISH_FILES_PATH}}\
+
+      # com.x12noon.calculatex-Signed.aab
+      # com.x12noon.calculatex-Signed.apk
+      - name: Copy Files to Publish
+        run: |
+          New-Item -Path .\release -Type Directory
+          Copy-Item -Path ${{env.PUBLISH_FILES_PATH}}\*-Signed.a?? -Destination .\release\
+
+      # Upload release artifact to share with next job
+      # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
+      # https://github.com/marketplace/actions/upload-a-build-artifact
+      - name: Upload deployment folder as a build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{env.ARTIFACT_PACKAGE}}
+          path: ./release/
+          retention-days: 1
+        # Use always() to always run this step even when there are failures
+        #if: ${{ always() }}
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Download publish artifact from previous job
+      # https://github.com/marketplace/actions/download-a-build-artifact
+      - name: Download deployment folder as a build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ${{env.ARTIFACT_PACKAGE}}
+          path: ./release/
+
+      # Delete publish artifact so it does not count against storage
+      # https://github.com/marketplace/actions/delete-artifact
+      - name: Delete build artifact
+        uses: GeekyEggo/delete-artifact@v4.1.0
+        with:
+          name: ${{env.ARTIFACT_PACKAGE}}
+          failOnError: false
+
+      - name: List folder
+        run: |
+          ls -la
+          ls -la ./release/
+
+      - name: Zip Release folder
+        if: success()
+        working-directory: ./release
+        run: |
+          zip ../${{env.ARTIFACT_NAME}}.zip *
+          cd ..
+          ls -la
+          zipinfo ${{env.ARTIFACT_NAME}}.zip
+
+      # TODO: This action requires a tag to create a release.
+      #       We could upload an artifact instead.
+
+      # # (This could be a separate action triggered by pushing a tag.)
+      # # https://github.com/marketplace/actions/create-release
+      # - name: Create release with artifact
+        # if: success()
+        # uses: ncipollo/release-action@v1.14.0
+        # with:
+          # name: Android
+          # tag: TODO
+          # #body: ???
+          # # Note: Using "./release/*" uploads the individual files.
+          # artifacts: ${{env.ARTIFACT_NAME}}.zip
+          # token: ${{ secrets.GITHUB_TOKEN }}
