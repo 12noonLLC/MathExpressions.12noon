@@ -65,10 +65,7 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 			return;
 		}
 
-		if (ViewModel.EvaluateCommand is RelayCommand evaluateCommand)
-		{
-			evaluateCommand.NotifyCanExecuteChanged();
-		}
+		ViewModel.EvaluateCommand.NotifyCanExecuteChanged();
 	}
 
 	private async void HistoryEntries_SelectionChanged(object sender, SelectionChangedEventArgs e)

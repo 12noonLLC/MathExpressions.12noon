@@ -51,7 +51,7 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	public event EventHandler? InputChanged;
 	public void RaiseInputChanged() => InputChanged?.Invoke(this, EventArgs.Empty);
 
-	public ICommand EvaluateCommand { get; }
+	public RelayCommand EvaluateCommand { get; }
 	//public ICommand InputBackwardCommand { get; }
 	//public ICommand InputForwardCommand { get; }
 	public ICommand DeleteWorkspaceCommand { get; }
