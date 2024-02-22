@@ -10,19 +10,6 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 	public WorkspacePage()
 	{
 		InitializeComponent();
-
-		// MAUI BUG?
-		// We need to set Entry.Text because it does not
-		// update when we change Input in the view-model.
-		ViewModel.InputChanged += (sender, e) =>
-		{
-			CtlEntry.Text = ViewModel.Input;
-
-			// Position cursor at the end of the text
-			CtlEntry.CursorPosition = CtlEntry.Text.Length;
-
-			_ = CtlEntry.Focus();
-		};
 	}
 
 	private async void ContentPage_Loaded(object sender, EventArgs e)
@@ -106,7 +93,7 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 		Models.Workspace.HistoryEntry entry = ((Models.Workspace.HistoryEntry)e.CurrentSelection[0]);
 		string? result = entry.Result;
 
-		ViewModel.SetInput(entry.Input);
+		ViewModel.Input = entry.Input;
 
 		// The user can press the UP-ARROW to navigate to the history list and press
 		// SPACE to select an entry, so we need to restore focus to the entry field.

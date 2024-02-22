@@ -44,14 +44,6 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	public event EventHandler? WorkspaceChanged;
 	public void RaiseWorkspaceChanged() => WorkspaceChanged?.Invoke(this, EventArgs.Empty);
 
-	/*
-	 * MAUI BUG
-	 * Unable to set Input and have it change Entry.Text.
-	 * So, we raise an event to update the Entry control's text.
-	 */
-	public event EventHandler? InputChanged;
-	public void RaiseInputChanged() => InputChanged?.Invoke(this, EventArgs.Empty);
-
 	public RelayCommand EvaluateCommand { get; }
 	public ICommand DeleteWorkspaceCommand { get; }
 	public ICommand RenameWorkspaceCommand { get; }
@@ -90,18 +82,6 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 		_workspace = workspace;
 	}
 
-	public void SetInput(string s)
-	{
-		Input = s;
-
-		/*
-		 * BUG This does not work. MAUI bug.
-		 */
-		OnPropertyChanged(nameof(Input));
-
-		RaiseInputChanged();
-	}
-
 	public bool Evaluate_CanExecute() => !string.IsNullOrWhiteSpace(Input);
 	private void Evaluate()
 	{
@@ -112,7 +92,7 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 		SemanticScreenReader.Announce(_workspace.Variables[MathExpressions.MathEvaluator.AnswerVariable].ToString());
 
 		// Clear input when we're done.
-		SetInput(string.Empty);
+		Input = string.Empty;
 
 		RaiseWorkspaceChanged();
 	}
@@ -128,10 +108,9 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	public int InsertTextAtCursor(string insertText, int cursorPosition, int selectionLength)
 	{
 		// Delete selected text and insert new text into the string
-		SetInput(Input
+		Input = Input
 					.Remove(cursorPosition, selectionLength)
-					.Insert(cursorPosition, insertText)
-		);
+					.Insert(cursorPosition, insertText);
 
 		// return cursor position after the inserted variable name
 		return cursorPosition + insertText.Length;
