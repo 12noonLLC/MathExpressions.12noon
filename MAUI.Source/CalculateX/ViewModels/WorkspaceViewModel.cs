@@ -6,6 +6,7 @@ using System.Windows.Input;
 
 namespace CalculateX.ViewModels;
 
+[DebuggerDisplay("{Name} ({History.Count})")]
 internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 {
 	public const string QUERY_DATA_WORKSPACE = "workspace";
