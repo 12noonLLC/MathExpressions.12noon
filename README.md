@@ -40,7 +40,15 @@ Those results are even saved and restored when you exit and restart the applicat
 
 Type an expression in the input field and press **Enter** or press the ` = ` button.
 
-Press **ESC** to clear the input field.
+If the first character you enter in the input field is an operator (*e.g.,* + or /),
+Calculate X will automatically prefix it with the "answer" variable.
+
+````
+answer+
+````
+
+**Windows:** Press **ESC** to clear the input field.
+**Android:** Tap the **"x"** in the input field to clear it.
 
 Select a previous expression to copy it to the input field where you can edit it.
 This will also copy the result of the expression to the clipboard,
@@ -53,6 +61,8 @@ Use one for working on your taxes, another for adding your utility bills,
 and another for measuring the wood to build those bookcases.
 
 Each workspace has its own input history and variables.
+
+#### Windows
 
 Double-click a tab to edit its name.
 
@@ -69,6 +79,12 @@ Click the "+" tab to create a new workspace.
 | Ctrl+PageDown | Select next workspace |
 | Ctrl+Shift+Tab | Select previous workspace |
 | Ctrl+Tab | Select next workspace |
+
+#### Android
+
+Use the **Rename** command in the overflow menu to edit a workspace's name.
+
+Use the **Delete** command in the overflow menu to delete a workspace.
 
 ### Basic Mathematical Operators
 
