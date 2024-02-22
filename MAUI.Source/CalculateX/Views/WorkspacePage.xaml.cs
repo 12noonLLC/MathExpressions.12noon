@@ -108,6 +108,10 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 
 		ViewModel.SetInput(entry.Input);
 
+		// The user can press the UP-ARROW to navigate to the history list and press
+		// SPACE to select an entry, so we need to restore focus to the entry field.
+		CtlEntry.Focus();
+
 		if (result is not null)
 		{
 			await Clipboard.Default.SetTextAsync(result);
