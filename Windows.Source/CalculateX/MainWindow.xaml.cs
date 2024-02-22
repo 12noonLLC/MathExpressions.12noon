@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -89,7 +90,7 @@ public partial class MainWindow : Window
 
 		TextBox textBox = (TextBox)sender;
 
-		textBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(pasteText, textBox.CaretIndex);
+		textBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(pasteText, textBox.CaretIndex, textBox.SelectionLength);
 	}
 
 	/// <summary>
@@ -107,7 +108,7 @@ public partial class MainWindow : Window
 			char op = ViewModel.SelectedWorkspaceVM.Input.First();
 			if (MathExpressions.OperatorExpression.IsSymbol(op))
 			{
-				ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(MathExpressions.MathEvaluator.AnswerVariable, 0);
+				ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(MathExpressions.MathEvaluator.AnswerVariable, cursorPosition: 0, selectionLength: 0);
 
 				// Position cursor at the end of the text (instead of after 'answer')
 				TextBox textBox = (TextBox)e.Source;
@@ -142,7 +143,8 @@ public partial class MainWindow : Window
 		TextBox ctlInputTextBox = (TextBox)historyControl.Tag;
 
 		ViewModel.SelectedWorkspaceVM.ClearInput();
-		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(input, ctlInputTextBox.CaretIndex);
+		Debug.Assert(ctlInputTextBox.CaretIndex == 0);
+		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(input, ctlInputTextBox.CaretIndex, ctlInputTextBox.SelectionLength);
 
 		if (result is not null)
 		{
@@ -185,7 +187,7 @@ public partial class MainWindow : Window
 		string variableValue = ((double)entry.Value).ToString();
 		TextBox ctlInputTextBox = (TextBox)variablesControl.Tag;
 
-		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(variableName, ctlInputTextBox.CaretIndex);
+		ctlInputTextBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(variableName, ctlInputTextBox.CaretIndex, ctlInputTextBox.SelectionLength);
 
 		Clipboard.SetText(variableValue);
 

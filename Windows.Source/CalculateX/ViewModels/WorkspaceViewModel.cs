@@ -160,15 +160,19 @@ internal class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCo
 	}
 
 	/// <summary>
-	/// Insert the passed text at the cursor and return the new cursor position.
+	/// Delete the selection at the cursor, insert the passed
+	/// text at the cursor and return the new cursor position.
 	/// </summary>
 	/// <param name="insertText">Text to insert</param>
-	/// <param name="cursorPosition">Current cursor position</param>
+	/// <param name="cursorPosition">Where to insert text</param>
+	/// <param name="selectionLength">How many characters to replace</param>
 	/// <returns>New cursor position</returns>
-	public int InsertTextAtCursor(string insertText, int cursorPosition)
+	public int InsertTextAtCursor(string insertText, int cursorPosition, int selectionLength)
 	{
-		// Insert variable name into input field
-		Input = Input.Insert(cursorPosition, insertText);
+		// Delete selected text and insert new text into the string
+		Input = Input
+					.Remove(cursorPosition, selectionLength)
+					.Insert(cursorPosition, insertText);
 
 		// return cursor position after the inserted variable name
 		return cursorPosition + insertText.Length;

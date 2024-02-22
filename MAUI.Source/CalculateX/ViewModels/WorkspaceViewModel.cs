@@ -119,6 +119,26 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 		RaiseWorkspaceChanged();
 	}
 
+	/// <summary>
+	/// Delete the selection at the cursor, insert the passed
+	/// text at the cursor and return the new cursor position.
+	/// </summary>
+	/// <param name="insertText">Text to insert</param>
+	/// <param name="cursorPosition">Current cursor position</param>
+	/// <param name="selectionLength">How many characters to replace</param>
+	/// <returns>New cursor position</returns>
+	public int InsertTextAtCursor(string insertText, int cursorPosition, int selectionLength)
+	{
+		// Delete selected text and insert new text into the string
+		SetInput(Input
+					.Remove(cursorPosition, selectionLength)
+					.Insert(cursorPosition, insertText)
+		);
+
+		// return cursor position after the inserted variable name
+		return cursorPosition + insertText.Length;
+	}
+
 	/*
 		When a page, or the binding context of a page, implements this interface,
 		the query string parameters used in navigation are passed to the

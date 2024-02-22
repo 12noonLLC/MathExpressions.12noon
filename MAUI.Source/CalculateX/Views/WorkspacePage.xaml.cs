@@ -1,5 +1,4 @@
 using CommunityToolkit.Maui.Core.Platform;
-using CommunityToolkit.Mvvm.Input;
 using System.Diagnostics;
 //using Microsoft.Maui.Controls.Platform;
 //using Microsoft.Maui.Controls.PlatformConfiguration.AndroidSpecific;
@@ -93,7 +92,8 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 
 	public async void ApplyQueryAttributes(IDictionary<string, object> query)
 	{
-		// Note: We cannot this to the view-model because we have to access
+		// User selected a variable.
+		// Note: We cannot move this to the view-model because we have to access
 		// the text control directly in order to modify the cursor position.
 		if (query.TryGetValue(ViewModels.WorkspaceViewModel.QUERY_DATA_VARIABLE_NAME, out object? valueName))
 		{
@@ -101,10 +101,8 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 			string variableName = (string)valueName;
 
 			// Insert variable name into input field
-			int curPos = CtlEntry.CursorPosition;
-			string s = CtlEntry.Text.Insert(CtlEntry.CursorPosition, variableName);
-			ViewModel.Input = s;
-			CtlEntry.CursorPosition = curPos + variableName.Length;
+			CtlEntry.CursorPosition = ViewModel.InsertTextAtCursor(variableName, CtlEntry.CursorPosition, CtlEntry.SelectionLength);
+
 			CtlEntry.Focus();
 
 			if (query.TryGetValue(ViewModels.WorkspaceViewModel.QUERY_DATA_VARIABLE_VALUE, out object? valueValue))
