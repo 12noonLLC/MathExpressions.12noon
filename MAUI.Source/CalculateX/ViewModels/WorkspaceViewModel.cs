@@ -97,7 +97,7 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 		/*
 		 * BUG This does not work. MAUI bug.
 		 */
-		//OnPropertyChanged(nameof(Input));
+		OnPropertyChanged(nameof(Input));
 
 		RaiseInputChanged();
 	}

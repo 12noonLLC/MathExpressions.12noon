@@ -57,12 +57,40 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 		CtlHistoryEntries.ScrollTo(index: ViewModel.History.Count - 1, position: ScrollToPosition.End, animate: false);
 	}
 
-	private void Entry_TextChanged(object sender, TextChangedEventArgs e)
+	/// <summary>
+	/// If the first character the user enters is an operator symbol,
+	/// prepend it with the name of the "answer" variable.
+	/// </summary>
+	/// <param name="sender">TextBox for input</param>
+	/// <param name="e"></param>
+	private void Entry_TextChanged(object /*Entry*/ sender, TextChangedEventArgs e)
 	{
 		// This is true at startup.
 		if (ViewModel is null)
 		{
 			return;
+		}
+
+		if ((ViewModel.Input.Length == 1) && (e.NewTextValue.Length == 1))
+		{
+			char op = ViewModel.Input.First();
+			if (MathExpressions.OperatorExpression.IsSymbol(op))
+			{
+				ViewModel.InsertTextAtCursor(MathExpressions.MathEvaluator.AnswerVariable, cursorPosition: 0, selectionLength: 0);
+
+				// Position cursor at the end of the text (instead of after 'answer')
+				// We cannot just set the cursor position here. It stays after first character.
+				// So, we delay moving the cursor position until Text is set.
+				Task.Factory.StartNew(() => {
+					Thread.Sleep(50);
+					MainThread.BeginInvokeOnMainThread(() =>
+					{
+						// Code to run on the main thread
+						Entry textBox = (Entry)sender;
+						textBox.CursorPosition = ViewModel.Input.Length;
+					});
+				});
+			}
 		}
 
 		ViewModel.EvaluateCommand.NotifyCanExecuteChanged();
