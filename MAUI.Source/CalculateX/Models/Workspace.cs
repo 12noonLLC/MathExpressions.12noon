@@ -1,5 +1,4 @@
 ﻿using MathExpressions;
-using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 

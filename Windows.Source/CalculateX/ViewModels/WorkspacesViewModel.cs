@@ -27,6 +27,7 @@ internal class WorkspacesViewModel : ObservableObject
 
 	private int _windowId = 0;
 
+	//TODO: [RelayCommand] https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
 	/// <summary>
 	/// Commands for this view-model.
 	/// </summary>
@@ -40,6 +41,9 @@ internal class WorkspacesViewModel : ObservableObject
 		NewWorkspaceCommand = new RelayCommand(NewWorkspace);
 		SelectPreviousWorkspaceCommand = new RelayCommand(SelectPreviousWorkspace, SelectPreviousWorkspace_CanExecute);
 		SelectNextWorkspaceCommand = new RelayCommand(SelectNextWorkspace, SelectNextWorkspace_CanExecute);
+
+//TODO: Handle CollectionChanged and add the below handlers for NewItems and remove them for OldItems (see MSJ article)
+//Have to create empty collection first and THEN add vms to it. Use Lazy<>?
 		TheWorkspaceViewModels = new(_workspaces.TheWorkspaces.Select(model => new WorkspaceViewModel(model)));
 		foreach (var viewModel in TheWorkspaceViewModels)
 		{

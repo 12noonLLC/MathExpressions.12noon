@@ -114,7 +114,7 @@
 			Keyboard="Default"
 			IsSpellCheckEnabled="False"
 			IsTextPredictionEnabled="False"
-			TextChanged="EvaluateEntry_TextChanged"
+			TextChanged="Entry_TextChanged"
 			ReturnCommand="{Binding EvaluateCommand}"
 			ReturnType="Done"
 			mct:SetFocusOnEntryCompletedBehavior.NextElement="{x:Reference CtlEntry}"

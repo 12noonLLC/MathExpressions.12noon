@@ -58,8 +58,9 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 		CtlHistoryEntries.ScrollTo(index: ViewModel.History.Count - 1, position: ScrollToPosition.End, animate: false);
 	}
 
-	private void EvaluateEntry_TextChanged(object sender, TextChangedEventArgs e)
+	private void Entry_TextChanged(object sender, TextChangedEventArgs e)
 	{
+		// This is true at startup.
 		if (ViewModel is null)
 		{
 			return;

@@ -33,12 +33,12 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 
 	public ObservableCollection<Models.Workspace.HistoryEntry> History => _workspace.History;
 
-	private string _input = string.Empty;
 	public string Input
 	{
 		get => _input;
 		set => SetProperty(ref _input, value);
 	}
+	private string _input = string.Empty;
 
 	public event EventHandler? WorkspaceChanged;
 	public void RaiseWorkspaceChanged() => WorkspaceChanged?.Invoke(this, EventArgs.Empty);

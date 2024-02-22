@@ -68,21 +68,21 @@ internal class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCo
 	public void RaiseWorkspaceChanged() => WorkspaceChanged?.Invoke(this, EventArgs.Empty);
 
 
+	public RelayCommand EvaluateCommand { get; }
 	public ICommand DeleteWorkspaceCommand { get; }
 	public ICommand ClearInputCommand { get; }
 	public RelayCommand ClearHistoryCommand { get; }
 	public ICommand ToggleHelpCommand { get; }
-	public RelayCommand EvaluateCommand { get; }
 
 
 	/// Empty ctor required for the Designer
 	public WorkspaceViewModel()
 	{
+		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 		DeleteWorkspaceCommand = new RelayCommand(DeleteWorkspace);
 		ClearInputCommand = new RelayCommand(ClearInput);
 		ClearHistoryCommand = new RelayCommand(ClearHistory, ClearHistory_CanExecute);
 		ToggleHelpCommand = new RelayCommand(ToggleHelp);
-		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 
 		_workspace = new("Designer");
 		CanCloseTab = true;
@@ -95,11 +95,11 @@ internal class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCo
 	{
 		Debug.Assert(!canCloseTab, "Only called when adding + workspace.");
 
+		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 		DeleteWorkspaceCommand = new RelayCommand(DeleteWorkspace);
 		ClearInputCommand = new RelayCommand(ClearInput);
 		ClearHistoryCommand = new RelayCommand(ClearHistory, ClearHistory_CanExecute);
 		ToggleHelpCommand = new RelayCommand(ToggleHelp);
-		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 
 		_workspace = new("+");
 		CanCloseTab = false;
@@ -111,11 +111,11 @@ internal class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCo
 	/// <param name="workspace"></param>
 	public WorkspaceViewModel(Models.Workspace workspace)
 	{
+		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 		DeleteWorkspaceCommand = new RelayCommand(DeleteWorkspace);
 		ClearInputCommand = new RelayCommand(ClearInput);
 		ClearHistoryCommand = new RelayCommand(ClearHistory, ClearHistory_CanExecute);
 		ToggleHelpCommand = new RelayCommand(ToggleHelp);
-		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 
 		_workspace = workspace;
 		CanCloseTab = true;

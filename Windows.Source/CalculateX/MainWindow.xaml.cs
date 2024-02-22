@@ -104,13 +104,13 @@ public partial class MainWindow : Window
 
 		if ((ViewModel.SelectedWorkspaceVM.Input.Length == 1) && (e.Changes.First().AddedLength == 1) && (e.Changes.First().Offset == 0))
 		{
-			TextBox textBox = (TextBox)e.Source;
 			char op = ViewModel.SelectedWorkspaceVM.Input.First();
 			if (MathExpressions.OperatorExpression.IsSymbol(op))
 			{
 				ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(MathExpressions.MathEvaluator.AnswerVariable, 0);
 
 				// Position cursor at the end of the text (instead of after 'answer')
+				TextBox textBox = (TextBox)e.Source;
 				textBox.CaretIndex = textBox.Text.Length;
 			}
 		}
