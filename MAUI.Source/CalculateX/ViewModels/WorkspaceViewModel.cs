@@ -104,10 +104,7 @@ internal class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	public bool Evaluate_CanExecute() => !string.IsNullOrWhiteSpace(Input);
 	private void Evaluate()
 	{
-		if (string.IsNullOrWhiteSpace(Input))
-		{
-			return;
-		}
+		Debug.Assert(!string.IsNullOrWhiteSpace(Input));
 
 		_workspace.Evaluate(Input);
 
