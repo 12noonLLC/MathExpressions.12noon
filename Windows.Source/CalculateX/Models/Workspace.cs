@@ -6,7 +6,7 @@ using System.Diagnostics;
 namespace CalculateX.Models;
 
 [DebuggerDisplay("{Name} ({History.Count})")]
-internal class Workspace
+public class Workspace
 {
 	public string ID { get; private init; }
 
@@ -21,10 +21,11 @@ internal class Workspace
 	[DebuggerDisplay("{Input} = {Result} Cleared = {IsCleared}, Error = {IsError}")]
 	public record class HistoryEntry(string Input, string? Result, bool IsCleared, bool IsError)
 	{
-		public string Input { get; set; } = Input;
-		public string? Result { get; set; } = Result;
-		public bool IsCleared { get; set; } = IsCleared;
-		public bool IsError { get; set; } = IsError;
+		// Raw expression without equals sign (for XAML).
+		public string Input { get; private init; } = Input;
+		public string? Result { get; private init; } = Result;
+		public bool IsCleared { get; private init; } = IsCleared;
+		public bool IsError { get; private init; } = IsError;
 
 
 		// Normal expression
@@ -43,6 +44,12 @@ internal class Workspace
 		public HistoryEntry(string input, string errorMessage, bool _)
 			: this(input, Result: errorMessage, IsCleared: false, IsError: true)
 		{
+		}
+
+		// If the expression cleared a variable, we need to append the equals sign.
+		public string GetInput()
+		{
+			return IsCleared ? Input + '=' : Input;
 		}
 	}
 	public ObservableCollection<HistoryEntry> History { get; private init; } = new();

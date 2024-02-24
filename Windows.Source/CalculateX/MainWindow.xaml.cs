@@ -138,7 +138,7 @@ public partial class MainWindow : Window
 		}
 
 		var entry = (Models.Workspace.HistoryEntry)historyControl.SelectedItem;
-		string input = entry.Input;
+		string input = entry.GetInput();
 		string? result = entry.Result;
 		TextBox ctlInputTextBox = (TextBox)historyControl.Tag;
 

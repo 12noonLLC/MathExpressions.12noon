@@ -93,7 +93,7 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 		Models.Workspace.HistoryEntry entry = ((Models.Workspace.HistoryEntry)e.CurrentSelection[0]);
 		string? result = entry.Result;
 
-		ViewModel.Input = entry.Input;
+		ViewModel.Input = entry.GetInput();
 
 		// The user can press the UP-ARROW to navigate to the history list and press
 		// SPACE to select an entry, so we need to restore focus to the entry field.

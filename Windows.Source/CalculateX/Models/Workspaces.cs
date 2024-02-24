@@ -7,7 +7,7 @@ using System.Xml.Linq;
 
 namespace CalculateX.Models;
 
-internal class Workspaces
+public class Workspaces
 {
 	/// <summary>
 	/// This is only valid after the workspaces are loaded from storage.
@@ -99,8 +99,7 @@ internal class Workspaces
 								t.root.Add(
 									new XElement(NAME_ELEMENT_KEY,
 										new XAttribute(NAME_ATTRIBUTE_ORDINAL, t.n),
-										// If necessary, modify entry to clear variable when we evaluate it again.
-										entry.IsCleared ? entry.Input + '=' : entry.Input
+										entry.GetInput()
 									)
 								);
 								return t;
@@ -116,7 +115,7 @@ internal class Workspaces
 	/// <summary>
 	///
 	/// </summary>
-	public void LoadWorkspaces()
+	private void LoadWorkspaces()
 	{
 		LoadedSelectedWorkspaceID = null;
 
