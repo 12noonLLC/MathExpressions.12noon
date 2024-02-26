@@ -9,7 +9,7 @@ namespace CalculateX.UnitTests;
 [TestClass]
 public class TestWorkspaces
 {
-	private const string StorageNameFormat1 = "CalculateX-Test{0}.db";
+	private const string StorageNameFormat1 = "CalculateX-Test{0}.xml";
 
 	public static string StoragePath { get; private set; } = string.Empty;
 

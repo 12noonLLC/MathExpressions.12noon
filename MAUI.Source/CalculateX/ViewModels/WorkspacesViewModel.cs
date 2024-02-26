@@ -5,12 +5,10 @@ using System.Windows.Input;
 
 namespace CalculateX.ViewModels;
 
-internal class WorkspacesViewModel
+public class WorkspacesViewModel
 {
-	private const string CalculateX_FileName = "CalculateX.xml";
-	private static readonly string _pathWorkspacesFile = Path.Combine(FileSystem.AppDataDirectory, CalculateX_FileName);
-	private readonly Workspaces _workspaces = new(_pathWorkspacesFile);
-	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private set; }
+	private readonly Workspaces _workspaces;
+	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private init; }
 
 	private string? _selectedWorkspaceID;
 
@@ -21,8 +19,10 @@ internal class WorkspacesViewModel
 	public ICommand SelectWorkspaceCommand { get; }
 
 
-	public WorkspacesViewModel()
+	public WorkspacesViewModel(string pathWorkspacesFile)
 	{
+		_workspaces = new(pathWorkspacesFile);
+
 		AddWorkspaceCommand = new RelayCommand(AddWorkspace);
 		AboutCommand = new AsyncRelayCommand(About);
 		SelectWorkspaceCommand = new AsyncRelayCommand<WorkspaceViewModel>(SelectWorkspaceAsync);

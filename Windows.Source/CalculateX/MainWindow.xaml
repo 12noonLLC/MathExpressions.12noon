@@ -11,9 +11,11 @@
 	mc:Ignorable="d"
 	Title="Calculate X by 12noon" Width="450" Height="350"
 >
+	<!-- We cannot create the view-model in XAML because we need to pass it the storage path.
 	<Window.DataContext>
 		<viewmodels:WorkspacesViewModel x:Name="ViewModel" />
 	</Window.DataContext>
+	-->
 	<Window.InputBindings>
 		<KeyBinding Command="{Binding NewWorkspaceCommand}" Key="T" Modifiers="Ctrl" />
 		<KeyBinding Command="{Binding SelectPreviousWorkspaceCommand}" Key="PageUp" Modifiers="Ctrl" />

@@ -7,9 +7,11 @@
 				 NavigatedTo="WorkspacesPage_NavigatedTo"
 				 x:DataType="viewmodels:WorkspacesViewModel"
 >
+	<!-- We cannot create the view-model in XAML because we need to pass it the storage path.
 	<ContentPage.BindingContext>
 		<viewmodels:WorkspacesViewModel x:Name="ViewModel" />
 	</ContentPage.BindingContext>
+	-->
 
 	<ContentPage.ToolbarItems>
 		<ToolbarItem Text="Add"

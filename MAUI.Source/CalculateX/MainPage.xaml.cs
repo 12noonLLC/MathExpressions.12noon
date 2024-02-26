@@ -6,9 +6,18 @@ namespace CalculateX;
 
 public partial class MainPage : ContentPage, IQueryAttributable
 {
+	private const string CalculateX_FileName = "CalculateX.xml";
+	private static readonly string _pathWorkspacesFile = Path.Combine(FileSystem.AppDataDirectory, CalculateX_FileName);
+
+	// We cannot create the view-model in XAML because we need to pass it the path to storage.
+	public WorkspacesViewModel ViewModel { get; private init; } = new(_pathWorkspacesFile);
+
+
 	public MainPage()
 	{
 		InitializeComponent();
+
+		BindingContext = ViewModel;
 	}
 
 	private void WorkspacesPage_NavigatedTo(object sender, NavigatedToEventArgs e)

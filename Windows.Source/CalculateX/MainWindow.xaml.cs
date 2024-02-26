@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,16 +13,24 @@ namespace CalculateX;
 /// </summary>
 public partial class MainWindow : Window
 {
+	private const string CalculateX_FileName = "CalculateX.xml";
+	private static readonly string _pathWorkspacesFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CalculateX_FileName);
+
+	// We cannot create the view-model in XAML because we need to pass it the path to storage.
+	public ViewModels.WorkspacesViewModel ViewModel { get; private init; } = new(_pathWorkspacesFile);
+
 	// This class provides features through event handling.
 	private readonly Shared.WindowPosition _windowPosition;
 
 
-	public MainWindow()
+	 public MainWindow()
 	{
 		_windowPosition = new(this, "MainWindowPosition");
 
 		/// XAML constructs WorkspacesViewModel and sets DataContext to it.
 		InitializeComponent();
+
+		DataContext = ViewModel;
 
 		EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.CloseTabEvent, new RoutedEventHandler(OnCloseTab));
 		EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.HeaderChangedEvent, new RoutedEventHandler(OnWorkspaceNameChanged));

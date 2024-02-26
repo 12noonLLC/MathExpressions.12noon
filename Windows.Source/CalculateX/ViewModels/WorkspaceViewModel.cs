@@ -11,7 +11,7 @@ using System.Windows.Input;
 namespace CalculateX.ViewModels;
 
 [DebuggerDisplay("{Name} ({History.Count})")]
-internal class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderControl.IEditableTabHeaderControl
+public class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderControl.IEditableTabHeaderControl
 {
 	public const string QUERY_DATA_WORKSPACE = "workspace";
 	public const string QUERY_DATA_DELETE = "delete";
@@ -91,9 +91,13 @@ internal class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCo
 	/// <summary>
 	/// Called when adding "+" workspace.
 	/// </summary>
+	/// <param name="canCloseTab">Must be false.</param>
 	public WorkspaceViewModel(bool canCloseTab)
 	{
-		Debug.Assert(!canCloseTab, "Only called when adding + workspace.");
+		if (canCloseTab)
+		{
+			throw new ArgumentException("Only called when adding + workspace. Must be false.", nameof(canCloseTab));
+		}
 
 		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
 		DeleteWorkspaceCommand = new RelayCommand(DeleteWorkspace);

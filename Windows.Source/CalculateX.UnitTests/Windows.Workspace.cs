@@ -73,9 +73,13 @@ public class TestWorkspace
 
 		workspace.Evaluate("2+3");
 		Assert.AreEqual(1, workspace.History.Count);
+		Assert.AreEqual("2+3", workspace.History[workspace.History.Count - 1].Input);
+		Assert.AreEqual("5", workspace.History[workspace.History.Count - 1].Result);
 
 		workspace.Evaluate("45*77");
 		Assert.AreEqual(2, workspace.History.Count);
+		Assert.AreEqual("45*77", workspace.History[workspace.History.Count - 1].Input);
+		Assert.AreEqual("3,465", workspace.History[workspace.History.Count - 1].Result);
 
 		workspace.ClearHistory();
 		Assert.IsFalse(workspace.History.Any());

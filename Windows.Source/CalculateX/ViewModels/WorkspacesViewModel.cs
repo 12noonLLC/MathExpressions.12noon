@@ -5,19 +5,16 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
 namespace CalculateX.ViewModels;
 
-internal class WorkspacesViewModel : ObservableObject
+public class WorkspacesViewModel : ObservableObject
 {
-	private const string CalculateX_FileName = "CalculateX.xml";
-	private static readonly string _pathWorkspacesFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CalculateX_FileName);
-	private readonly Workspaces _workspaces = new(_pathWorkspacesFile);
+	private readonly Workspaces _workspaces;
+	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private init; }
 
-	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private set; }
 	public WorkspaceViewModel SelectedWorkspaceVM
 	{
 		get => _selectedWorkspaceVM;
@@ -25,7 +22,7 @@ internal class WorkspacesViewModel : ObservableObject
 	}
 	private WorkspaceViewModel _selectedWorkspaceVM;
 
-	private int _windowId = 0;
+	private int _windowNumber = 0;
 
 	//TODO: [RelayCommand] https://learn.microsoft.com/en-us/dotnet/communitytoolkit/mvvm/generators/relaycommand
 	/// <summary>
@@ -36,8 +33,10 @@ internal class WorkspacesViewModel : ObservableObject
 	public RelayCommand SelectNextWorkspaceCommand { get; }
 
 
-	public WorkspacesViewModel()
+	public WorkspacesViewModel(string pathWorkspacesFile)
 	{
+		_workspaces = new(pathWorkspacesFile);
+
 		NewWorkspaceCommand = new RelayCommand(NewWorkspace);
 		SelectPreviousWorkspaceCommand = new RelayCommand(SelectPreviousWorkspace, SelectPreviousWorkspace_CanExecute);
 		SelectNextWorkspaceCommand = new RelayCommand(SelectNextWorkspace, SelectNextWorkspace_CanExecute);
@@ -101,10 +100,13 @@ internal class WorkspacesViewModel : ObservableObject
 		SaveWorkspaces();
 	}
 
+	/// <summary>
+	/// This is called when the user presses a shortcut to create a new workspace.
+	/// </summary>
 	private void NewWorkspace()
 	{
 		Debug.Assert(SelectedWorkspaceVM is not null);
-		Debug.Assert(TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 0);
+		Debug.Assert(TheWorkspaceViewModels.Any(w => w.CanCloseTab));
 		Debug.Assert(SelectNextWorkspace_CanExecute());
 
 		WorkspaceViewModel newViewModel = CreateWorkspace();
@@ -171,12 +173,12 @@ internal class WorkspacesViewModel : ObservableObject
 
 	private bool SelectPreviousWorkspace_CanExecute()
 	{
-		return (TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 1);  // Do not count the "+" tab
+		return (TheWorkspaceViewModels.Any(w => w.CanCloseTab));	// Do not count the "+" tab
 	}
 	private void SelectPreviousWorkspace()
 	{
 		Debug.Assert(SelectedWorkspaceVM is not null);
-		Debug.Assert(TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 1);
+		Debug.Assert(TheWorkspaceViewModels.Any(w => w.CanCloseTab));
 
 		if (SelectedWorkspaceVM == TheWorkspaceViewModels.First(w => w.CanCloseTab))
 		{
@@ -190,12 +192,12 @@ internal class WorkspacesViewModel : ObservableObject
 
 	private bool SelectNextWorkspace_CanExecute()
 	{
-		return (TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 1);  // Do not count the "+" tab
+		return (TheWorkspaceViewModels.Any(w => w.CanCloseTab));	// Do not count the "+" tab
 	}
 	private void SelectNextWorkspace()
 	{
 		Debug.Assert(SelectedWorkspaceVM is not null);
-		Debug.Assert(TheWorkspaceViewModels.Count(w => w.CanCloseTab) > 1);
+		Debug.Assert(TheWorkspaceViewModels.Any(w => w.CanCloseTab));
 
 		if (SelectedWorkspaceVM == TheWorkspaceViewModels.Last(w => w.CanCloseTab))
 		{
@@ -214,14 +216,14 @@ internal class WorkspacesViewModel : ObservableObject
 		// N.B. WPF version was this: if (Workspaces.Count(w => w.CanCloseTab) == 1)
 		if (!TheWorkspaceViewModels.Any(w => w.CanCloseTab))
 		{
-			_windowId = 0;
+			_windowNumber = 0;
 		}
 
 		string name = string.Empty;
 		do
 		{
-			++_windowId;
-			name = $"{nameof(Workspace)}{_windowId}";
+			++_windowNumber;
+			name = $"{nameof(Workspace)}{_windowNumber}";
 		} while (bannedNames.Any(n => n == name));
 
 		return name;
