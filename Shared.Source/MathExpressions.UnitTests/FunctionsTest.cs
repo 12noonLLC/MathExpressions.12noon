@@ -230,6 +230,12 @@ public class FunctionsTest
 		Assert.IsTrue(r3 < max);
 
 		// Yes, random numbers can repeat, but it's highly unlikely.
+		// In case they do, we roll again.
+		if ((r1 == r2) || (r2 == r3))
+		{
+			r2 = eval.Evaluate($"RandomN({max})");
+			r3 = eval.Evaluate($"RandomN({max})");
+		}
 		Assert.AreNotEqual(r1, r2);
 		Assert.AreNotEqual(r1, r3);
 		Assert.AreNotEqual(r2, r3);
