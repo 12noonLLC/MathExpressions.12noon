@@ -114,7 +114,7 @@ public class WorkspacesViewModel : ObservableObject
 
 	private WorkspaceViewModel CreateWorkspace()
 	{
-		Workspace newWorkspace = new(FormWorkspaceName(TheWorkspaceViewModels.Select(w => w.Name)));
+		Workspace newWorkspace = new(FormWorkspaceName());
 		_workspaces.AddWorkspace(newWorkspace);
 
 		WorkspaceViewModel viewModel = new(newWorkspace);
@@ -129,35 +129,46 @@ public class WorkspacesViewModel : ObservableObject
 
 		WorkspaceViewModel deletedWorkspaceVM = (WorkspaceViewModel)sender;
 
+		// Delete workspace model
+		/// Note: We must remove the workspace model first so <see cref="FormWorkspaceName"/> knows to reset the workspaceNumber.
+		_workspaces.DeleteWorkspace(deletedWorkspaceVM.ID);
+
 		if (deletedWorkspaceVM.ID == SelectedWorkspaceVM.ID)
 		{
-			var remainingWorkspaces = TheWorkspaceViewModels.Except(new[] { deletedWorkspaceVM });
+			int indexSelectedWorkspace = TheWorkspaceViewModels.IndexOf(SelectedWorkspaceVM);
+			bool isRightmostTab = (deletedWorkspaceVM.ID == TheWorkspaceViewModels[^2].ID);
 
-			/// If closing last tab (except for "+" tab), create one.
-			if (!remainingWorkspaces.Any(w => w.CanCloseTab))
+			/// If closing last workspace, create one.
+			if (!_workspaces.TheWorkspaces.Any())
 			{
+				Debug.Assert(TheWorkspaceViewModels.Count == 2);
+
 				/// [deleted][+]
 				WorkspaceViewModel newViewModel = CreateWorkspace();
 				TheWorkspaceViewModels.Insert(0, newViewModel);
 				/// [new][deleted][+]
 			}
 
-			/// Select next tab (unless it's the "+" tab, then select previous tab).
-			if (deletedWorkspaceVM.ID == TheWorkspaceViewModels[^2].ID)
+			/// Select the workspace we want to be selected AFTER we delete the workspace.
+
+			/// Select tab that will be in the same position (unless it's the "+" tab, then select last tab).
+			if (isRightmostTab)
 			{
 				/// [a]...[z][deleted][+]
-				SelectPreviousWorkspace();
+				SelectedWorkspaceVM = TheWorkspaceViewModels[^3];
 			}
 			else
 			{
-				/// [a]...[z][deleted][a]...[z][+]
-				SelectNextWorkspace();
+				/// [a]...[m][deleted][n]...[z][+]
+				SelectedWorkspaceVM = TheWorkspaceViewModels[indexSelectedWorkspace + 1];
 			}
 		}
+		else
+		{
+			// Note: No need to change the selected workspace.
+		}
 
-		// Delete workspace model
-		_workspaces.DeleteWorkspace(deletedWorkspaceVM.ID);
-
+		// Note: We must remove the view-model last because the binding changes the selected tab.
 		// Delete workspace view-model
 		TheWorkspaceViewModels.Remove(deletedWorkspaceVM);
 
@@ -205,15 +216,16 @@ public class WorkspacesViewModel : ObservableObject
 		}
 	}
 
-	private string FormWorkspaceName(IEnumerable<string> bannedNames)
+	private string FormWorkspaceName()
 	{
 		// If we have closed the last tab, reset the window ID.
 		// (This prevents the ID from incrementing when we close the last tab.)
-		// N.B. WPF version was this: if (Workspaces.Count(w => w.CanCloseTab) == 1)
-		if (!TheWorkspaceViewModels.Any(w => w.CanCloseTab))
+		if (!_workspaces.TheWorkspaces.Any())
 		{
 			_windowNumber = 0;
 		}
+
+		IEnumerable<string> bannedNames = _workspaces.TheWorkspaces.Select(w => w.Name);
 
 		string name = string.Empty;
 		do

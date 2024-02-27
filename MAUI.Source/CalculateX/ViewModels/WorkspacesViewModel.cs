@@ -42,7 +42,7 @@ public class WorkspacesViewModel
 
 	private void AddWorkspace()
 	{
-		Workspace newWorkspace = new(FormWorkspaceName(TheWorkspaceViewModels.Select(w => w.Name)));
+		Workspace newWorkspace = new(FormWorkspaceName());
 		_workspaces.AddWorkspace(newWorkspace);
 
 		WorkspaceViewModel viewModel = new(newWorkspace);
@@ -106,14 +106,16 @@ public class WorkspacesViewModel
 			});
 	}
 
-	private string FormWorkspaceName(IEnumerable<string> bannedNames)
+	private string FormWorkspaceName()
 	{
 		// If we have closed the last tab, reset the window ID.
 		// (This prevents the ID from incrementing when we close the last tab.)
-		if (!TheWorkspaceViewModels.Any(w => w.CanCloseTab))
+		if (!_workspaces.TheWorkspaces.Any())
 		{
 			_windowId = 0;
 		}
+
+		IEnumerable<string> bannedNames = TheWorkspaceViewModels.Select(w => w.Name);
 
 		string name = string.Empty;
 		do
