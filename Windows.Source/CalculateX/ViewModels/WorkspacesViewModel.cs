@@ -85,14 +85,10 @@ public class WorkspacesViewModel : ObservableObject
 		}
 
 		/// The user selected the "+" tab...
-		/// Change the non-closable tab to closable and name it.
-		SelectedWorkspaceVM.Name = FormWorkspaceName(TheWorkspaceViewModels.Select(w => w.Name));
-		SelectedWorkspaceVM.CanCloseTab = true;
-		SubscribeViewModelEvents(SelectedWorkspaceVM);
-		_workspaces.AddWorkspace(SelectedWorkspaceVM._workspace);
-
-		// Create new non-closable "+" tab (but do not add the workspace to the model).
-		TheWorkspaceViewModels.Add(new(canCloseTab: false));
+		/// Make new closable tab and insert before "+" tab.
+		WorkspaceViewModel newViewModel = CreateWorkspace();
+		TheWorkspaceViewModels.Insert(TheWorkspaceViewModels.IndexOf(SelectedWorkspaceVM), newViewModel);
+		SelectedWorkspaceVM = newViewModel;
 
 		SelectPreviousWorkspaceCommand.NotifyCanExecuteChanged();
 		SelectNextWorkspaceCommand.NotifyCanExecuteChanged();

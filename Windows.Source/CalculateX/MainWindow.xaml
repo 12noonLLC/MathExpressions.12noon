@@ -315,7 +315,7 @@
 				<viewmodels:WorkspaceViewModel Name="Mortgage" />
 				<viewmodels:WorkspaceViewModel Name="Sales" />
 				<viewmodels:WorkspaceViewModel Name="Temp" />
-				<viewmodels:WorkspaceViewModel Name="+" CanCloseTab="False" />
+				<viewmodels:WorkspaceViewModel Name="+" />
          </x:Array>
       </d:TabControl.ItemsSource>
 	</TabControl>

@@ -51,20 +51,7 @@ public class TestWorkspaceViewModel
 	{
 		Models.Workspace workspace = new("Test");
 		ViewModels.WorkspaceViewModel vm = new(workspace);
-		Assert.IsTrue(vm.CanCloseTab);
 		Assert.AreEqual("Test", vm.Name);
-	}
-
-	[TestMethod]
-	public void TestCanCloseTab()
-	{
-		Models.Workspace workspace = new("Test");
-		ViewModels.WorkspaceViewModel vm = new(workspace);
-
-		Assert.IsTrue(vm.CanCloseTab);
-		vm.CanCloseTab = false;
-		Assert.IsFalse(vm.CanCloseTab);
-		vm.CanCloseTab = true;
 		Assert.IsTrue(vm.CanCloseTab);
 	}
 

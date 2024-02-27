@@ -31,12 +31,7 @@ public class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCont
 		get => _workspace.Name;
 		set => SetProperty(_workspace.Name, value, _workspace, (model, newValue) => model.Name = newValue);
 	}
-	public bool CanCloseTab
-	{
-		get => _canCloseTab;
-		set => SetProperty(ref _canCloseTab, value);
-	}
-	private bool _canCloseTab;
+	public bool CanCloseTab { get; }
 
 	public ObservableCollection<Models.Workspace.HistoryEntry> History => _workspace.History;
 	public VariableDictionary Variables => _workspace.Variables;

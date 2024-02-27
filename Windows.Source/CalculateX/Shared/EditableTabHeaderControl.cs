@@ -55,7 +55,7 @@ public class EditableTabHeaderControl : ContentControl
 {
 	public interface IEditableTabHeaderControl
 	{
-		public bool CanCloseTab { get; set; }
+		public bool CanCloseTab { get; }
 	}
 
 
