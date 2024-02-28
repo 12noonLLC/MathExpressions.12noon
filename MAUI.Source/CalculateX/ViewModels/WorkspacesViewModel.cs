@@ -59,8 +59,6 @@ public class WorkspacesViewModel
 
 	public void SaveWorkspaces() => _workspaces.SaveWorkspaces(_selectedWorkspaceID);
 
-	public WorkspaceViewModel? GetWorkspaceViewModel(string workspaceID) => TheWorkspaceViewModels.FirstOrDefault(w => w.ID == workspaceID);
-
 	public void DeleteWorkspace(WorkspaceViewModel workspaceVM)
 	{
 		// Delete workspace model
