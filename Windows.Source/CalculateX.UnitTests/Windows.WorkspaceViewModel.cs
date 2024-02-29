@@ -33,17 +33,27 @@ public class TestWorkspaceViewModel
 	{
 		ViewModels.WorkspaceViewModel vm = new();
 		Assert.IsTrue(vm.CanCloseTab);
+#if !MAUI_UNITTESTS
 		Assert.AreEqual("Designer", vm.Name);
+#else
+		Assert.AreEqual("temporary", vm.Name);
+#endif
 	}
 
 	[TestMethod]
 	public void TestConstructorCanCloseTab()
 	{
+#if !MAUI_UNITTESTS
 		Assert.ThrowsException<ArgumentException>(() => new ViewModels.WorkspaceViewModel(canCloseTab: true));
 
 		ViewModels.WorkspaceViewModel vm = new(canCloseTab: false);
 		Assert.IsFalse(vm.CanCloseTab);
 		Assert.AreEqual("+", vm.Name);
+#else
+		ViewModels.WorkspaceViewModel vm = new();
+		Assert.IsTrue(vm.CanCloseTab);
+		Assert.AreEqual("temporary", vm.Name);
+#endif
 	}
 
 	[TestMethod]
@@ -69,7 +79,11 @@ public class TestWorkspaceViewModel
 
 		vm.EvaluateCommand.Execute(null);
 
+#if !MAUI_UNITTESTS
 		vm.ClearInput();
+#else
+		vm.Input = string.Empty;
+#endif
 		Assert.AreEqual(string.Empty, vm.Input);
 	}
 
@@ -92,6 +106,7 @@ public class TestWorkspaceViewModel
 		Assert.AreEqual(10, vm.InsertTextAtCursor(insertText, vm.Input.Length - insertText.Length, insertText.Length));
 	}
 
+#if !MAUI_UNITTESTS
 	[TestMethod]
 	public void TestHelp()
 	{
@@ -124,4 +139,5 @@ public class TestWorkspaceViewModel
 		vm.ClearHistoryCommand.Execute(null);
 		Assert.IsFalse(vm.ClearHistoryCommand.CanExecute(null));
 	}
+#endif
 }

@@ -54,7 +54,9 @@ public class WorkspacesViewModel
 
 	private async Task About()
 	{
+#if !MAUI_UNITTESTS
 		await Shell.Current.GoToAsync(nameof(Views.AboutPage));
+#endif
 	}
 
 	public void SaveWorkspaces() => _workspaces.SaveWorkspaces(_selectedWorkspaceID);
@@ -94,6 +96,7 @@ public class WorkspacesViewModel
 
 		_selectedWorkspaceID = workspaceVM.ID;
 
+#if !MAUI_UNITTESTS
 		// Should navigate to "NotePage?ItemId=path\on\device\XYZ.notes.txt"
 		//Shell.Current.GoToAsync($"{nameof(Views.WorkspacePage)}?select={workspace.ID}");
 		await Shell.Current.GoToAsync(nameof(Views.WorkspacePage),
@@ -104,6 +107,7 @@ public class WorkspacesViewModel
 					TheWorkspaceViewModels.First(workspaceView => workspaceView.ID == workspaceVM.ID)
 				}
 			});
+#endif
 	}
 
 	private string FormWorkspaceName()

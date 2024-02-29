@@ -28,7 +28,7 @@ public class WorkspacesViewModel : ObservableObject
 	/// <summary>
 	/// Commands for this view-model.
 	/// </summary>
-	public ICommand NewWorkspaceCommand { get; }
+	public ICommand AddWorkspaceCommand { get; }
 	public RelayCommand SelectPreviousWorkspaceCommand { get; }
 	public RelayCommand SelectNextWorkspaceCommand { get; }
 
@@ -37,7 +37,7 @@ public class WorkspacesViewModel : ObservableObject
 	{
 		_workspaces = new(pathWorkspacesFile);
 
-		NewWorkspaceCommand = new RelayCommand(NewWorkspace);
+		AddWorkspaceCommand = new RelayCommand(AddWorkspace);
 		SelectPreviousWorkspaceCommand = new RelayCommand(SelectPreviousWorkspace, SelectPreviousWorkspace_CanExecute);
 		SelectNextWorkspaceCommand = new RelayCommand(SelectNextWorkspace, SelectNextWorkspace_CanExecute);
 
@@ -99,7 +99,7 @@ public class WorkspacesViewModel : ObservableObject
 	/// <summary>
 	/// This is called when the user presses a shortcut to create a new workspace.
 	/// </summary>
-	private void NewWorkspace()
+	private void AddWorkspace()
 	{
 		Debug.Assert(SelectedWorkspaceVM is not null);
 		Debug.Assert(TheWorkspaceViewModels.Any(w => w.CanCloseTab));

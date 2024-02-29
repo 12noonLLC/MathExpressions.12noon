@@ -17,7 +17,7 @@
 	</Window.DataContext>
 	-->
 	<Window.InputBindings>
-		<KeyBinding Command="{Binding NewWorkspaceCommand}" Key="T" Modifiers="Ctrl" />
+		<KeyBinding Command="{Binding AddWorkspaceCommand}" Key="T" Modifiers="Ctrl" />
 		<KeyBinding Command="{Binding SelectPreviousWorkspaceCommand}" Key="PageUp" Modifiers="Ctrl" />
 		<KeyBinding Command="{Binding SelectNextWorkspaceCommand}" Key="PageDown" Modifiers="Ctrl" />
 		<!-- Override the default keybindings for TabControl so they do not select the "+" tab. -->

@@ -124,7 +124,11 @@ public class TestWorkspaces
 
 		Assert.AreEqual(3, newWorkspaces.TheWorkspaces.Count);
 		Assert.AreEqual(3, workspace3.Variables.Count);
+#if !MAUI_UNITTESTS
 		Assert.AreEqual(workspace2.ID, newWorkspaces.LoadedSelectedWorkspaceID);
+#else
+		Assert.AreEqual(workspace2.ID, newWorkspaces.SelectedWorkspaceID);
+#endif
 
 		Assert.IsNotNull(newWorkspaces.TheWorkspaces.SingleOrDefault(w => w.ID == workspace1.ID));
 		Assert.IsNotNull(newWorkspaces.TheWorkspaces.SingleOrDefault(w => w.ID == workspace2.ID));

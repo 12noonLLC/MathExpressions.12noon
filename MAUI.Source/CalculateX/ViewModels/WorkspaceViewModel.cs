@@ -169,6 +169,7 @@ public class WorkspaceViewModel : ObservableObject, IQueryAttributable
 
 	private async Task VariablesWorkspaceAsync()
 	{
+#if !MAUI_UNITTESTS
 		// Navigate to page that displays the variables from this workspace
 		await Shell.Current.GoToAsync(nameof(Views.VariablesPage),
 			new Dictionary<string, object>()
@@ -178,10 +179,13 @@ public class WorkspaceViewModel : ObservableObject, IQueryAttributable
 					_workspace.Variables
 				}
 			});
+#endif
 	}
 
 	private async Task Help()
 	{
+#if !MAUI_UNITTESTS
 		await Shell.Current.GoToAsync(nameof(Views.HelpPage));
+#endif
 	}
 }

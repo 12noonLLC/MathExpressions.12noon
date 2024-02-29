@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExpressions", "MAUI.Sou
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MathExpressions.UnitTests", "MAUI.Source\MathExpressions.UnitTests\MathExpressions.UnitTests.csproj", "{51B7C763-6C9B-477E-9056-CC348172AF7A}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CalculateX.UnitTests", "MAUI.Source\CalculateX.UnitTests\CalculateX.UnitTests.csproj", "{1255F73B-4EED-445C-B5DF-E13BE9C37C68}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,9 @@ Global
 		{51B7C763-6C9B-477E-9056-CC348172AF7A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{51B7C763-6C9B-477E-9056-CC348172AF7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51B7C763-6C9B-477E-9056-CC348172AF7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1255F73B-4EED-445C-B5DF-E13BE9C37C68}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1255F73B-4EED-445C-B5DF-E13BE9C37C68}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1255F73B-4EED-445C-B5DF-E13BE9C37C68}.Release|Any CPU.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
