@@ -69,8 +69,8 @@ public class WorkspacesViewModel
 		// Delete workspace view-model
 		TheWorkspaceViewModels.Remove(workspaceVM);
 
-		// If closing last tab (except for "+" tab), create one.
-		if (!TheWorkspaceViewModels.Any(w => w.CanCloseTab))
+		// If closing last workspace, create one.
+		if (TheWorkspaceViewModels.Count == 0)
 		{
 			AddWorkspace();
 		}

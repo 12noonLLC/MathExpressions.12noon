@@ -32,8 +32,8 @@ public class TestWorkspaceViewModel
 	public void TestConstructorDefault()
 	{
 		ViewModels.WorkspaceViewModel vm = new();
-		Assert.IsTrue(vm.CanCloseTab);
 #if !MAUI_UNITTESTS
+		Assert.IsTrue(vm.CanCloseTab);
 		Assert.AreEqual("Designer", vm.Name);
 #else
 		Assert.AreEqual("temporary", vm.Name);
@@ -51,7 +51,6 @@ public class TestWorkspaceViewModel
 		Assert.AreEqual("+", vm.Name);
 #else
 		ViewModels.WorkspaceViewModel vm = new();
-		Assert.IsTrue(vm.CanCloseTab);
 		Assert.AreEqual("temporary", vm.Name);
 #endif
 	}
@@ -62,7 +61,9 @@ public class TestWorkspaceViewModel
 		Models.Workspace workspace = new("Test");
 		ViewModels.WorkspaceViewModel vm = new(workspace);
 		Assert.AreEqual("Test", vm.Name);
+#if !MAUI_UNITTESTS
 		Assert.IsTrue(vm.CanCloseTab);
+#endif
 	}
 
 	[TestMethod]

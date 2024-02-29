@@ -24,13 +24,6 @@ public class WorkspaceViewModel : ObservableObject, IQueryAttributable
 		get => _workspace.Name;
 		set => SetProperty(_workspace.Name, value, _workspace, (model, newValue) => model.Name = newValue);
 	}
-	//TODO: We do not need this.
-	public bool CanCloseTab
-	{
-		get => _canCloseTab;
-		private set => SetProperty(ref _canCloseTab, value);
-	}
-	private bool _canCloseTab = true;
 
 	public ObservableCollection<Models.Workspace.HistoryEntry> History => _workspace.History;
 
@@ -153,7 +146,6 @@ public class WorkspaceViewModel : ObservableObject, IQueryAttributable
 	private void RefreshProperties()
 	{
 		OnPropertyChanged(nameof(Name));
-		OnPropertyChanged(nameof(CanCloseTab));
 		OnPropertyChanged(nameof(History));
 	}
 
