@@ -9,6 +9,7 @@ public class WorkspacesViewModel
 {
 	private readonly Workspaces _workspaces;
 	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private init; }
+	private Func<WorkspaceViewModel, WorkspaceViewModel, bool> SortByName = (WorkspaceViewModel item1, WorkspaceViewModel item2) => (item1.Name.CompareTo(item2.Name) < 0);
 
 	private string? _selectedWorkspaceID;
 
@@ -27,7 +28,7 @@ public class WorkspacesViewModel
 		AboutCommand = new AsyncRelayCommand(About);
 		SelectWorkspaceCommand = new AsyncRelayCommand<WorkspaceViewModel>(SelectWorkspaceAsync);
 
-		TheWorkspaceViewModels = new(_workspaces.TheWorkspaces.Select(model => new WorkspaceViewModel(model)));
+		TheWorkspaceViewModels = new(_workspaces.TheWorkspaces.Select(model => new WorkspaceViewModel(model)).OrderBy(vm => vm.Name));
 		foreach (var workspace in TheWorkspaceViewModels)
 		{
 			workspace.WorkspaceChanged += OnWorkspaceChanged;
@@ -47,7 +48,7 @@ public class WorkspacesViewModel
 
 		WorkspaceViewModel viewModel = new(newWorkspace);
 		viewModel.WorkspaceChanged += OnWorkspaceChanged;
-		TheWorkspaceViewModels.Add(viewModel);
+		AddSorted(TheWorkspaceViewModels, viewModel, SortByName);
 
 		_selectedWorkspaceID ??= newWorkspace.ID;
 	}
@@ -82,7 +83,57 @@ public class WorkspacesViewModel
 	{
 		workspaceVM.Name = name;
 
+		// If the sorted location is different, move the workspace VM to the sorted location.
+		int ixSorted = FindSortedIndex(TheWorkspaceViewModels, workspaceVM, SortByName);
+		int ixCur = TheWorkspaceViewModels.IndexOf(workspaceVM);
+		if (ixSorted != ixCur)
+		{
+			/// The destination index is the position within the existing list,
+			/// so we have to pretend the item has been removed from the list.
+			if (ixSorted > ixCur)
+			{
+				--ixSorted;
+			}
+			TheWorkspaceViewModels.Move(ixCur, ixSorted);
+		}
+
 		SaveWorkspaces();
+	}
+
+	/// <summary>
+	/// Insert an item into a sorted position in an ObservableCollection class.
+	/// </summary>
+	/// <remarks>
+	/// This could be made much more efficient, but our collection will be small.
+	/// </remarks>
+	/// <param name="list">sorted collection</param>
+	/// <param name="item">item being added</param>
+	/// <param name="comparator">Lambda that returns true if the first item is less than the second</param>
+	private static void AddSorted<T>(ObservableCollection<T> list,
+												T item,
+												Func<T, T, bool> comparator)
+	{
+		int ixAdd = FindSortedIndex(list, item, comparator);
+		list.Insert(ixAdd, item);
+	}
+	private static int FindSortedIndex<T>(ObservableCollection<T> list,
+														T item,
+														Func<T, T, bool> comparator)
+	{
+		if (list.Count == 0)
+		{
+			return 0;
+		}
+
+		foreach (int ix in Enumerable.Range(0, list.Count))
+		{
+			if (comparator(item, list[ix]))
+			{
+				return ix;
+			}
+		}
+
+		return list.Count;
 	}
 
 	private void OnWorkspaceChanged(object? sender, EventArgs e) => SaveWorkspaces();
