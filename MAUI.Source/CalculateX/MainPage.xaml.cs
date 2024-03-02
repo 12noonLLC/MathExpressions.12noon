@@ -45,7 +45,7 @@ public partial class MainPage : ContentPage, IQueryAttributable
 											"Rename Workspace",
 											$"Please enter the new name for workspace {workspaceRenameVM.Name}:",
 											initialValue: workspaceRenameVM.Name);
-			if (name is null)
+			if (string.IsNullOrWhiteSpace(name))
 			{
 				return;
 			}
