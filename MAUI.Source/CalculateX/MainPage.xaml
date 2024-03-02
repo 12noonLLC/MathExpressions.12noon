@@ -14,37 +14,44 @@
 	-->
 
 	<ContentPage.ToolbarItems>
+		<!--
 		<ToolbarItem Text="Add"
 						 IconImageSource="add.png"
 						 Command="{Binding AddWorkspaceCommand}"
 						 SemanticProperties.Hint="Tap to add workspace" />
+		-->
 		<ToolbarItem Text="About"
 						 IconImageSource="information.png"
 						 Command="{Binding AboutCommand}"
 						 SemanticProperties.Hint="About" />
 	</ContentPage.ToolbarItems>
 
-	<!-- Display workspaces in a list -->
-	<CollectionView x:Name="workspacesCollection"
-		ItemsSource="{Binding TheWorkspaceViewModels}"
-		Margin="20"
-		SelectionMode="Single"
-		SelectionChangedCommand="{Binding SelectWorkspaceCommand}"
-		SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
-	>
-		<!-- Designate how the collection of items are laid out -->
-		<CollectionView.ItemsLayout>
-			<LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
-		</CollectionView.ItemsLayout>
+	<Grid>
+		<!-- Display workspaces in a list -->
+		<CollectionView x:Name="workspacesCollection"
+			ItemsSource="{Binding TheWorkspaceViewModels}"
+			Margin="20"
+			SelectionMode="Single"
+			SelectionChangedCommand="{Binding SelectWorkspaceCommand}"
+			SelectionChangedCommandParameter="{Binding SelectedItem, Source={RelativeSource Self}}"
+		>
+			<!-- Designate how the collection of items are laid out -->
+			<CollectionView.ItemsLayout>
+				<LinearItemsLayout Orientation="Vertical" ItemSpacing="10" />
+			</CollectionView.ItemsLayout>
 
-		<!-- Define the appearance of each item in the list -->
-		<CollectionView.ItemTemplate>
-			<DataTemplate x:DataType="viewmodels:WorkspaceViewModel">
-				<StackLayout>
-					<Label Text="{Binding Name}" FontSize="22" />
-					<!--<Label Text="{Binding Date}" FontSize="14" TextColor="Silver" />-->
-				</StackLayout>
-			</DataTemplate>
-		</CollectionView.ItemTemplate>
-	</CollectionView>
+			<!-- Define the appearance of each item in the list -->
+			<CollectionView.ItemTemplate>
+				<DataTemplate x:DataType="viewmodels:WorkspaceViewModel">
+					<StackLayout>
+						<Label Text="{Binding Name}" FontSize="22" />
+						<!--<Label Text="{Binding Date}" FontSize="14" TextColor="Silver" />-->
+					</StackLayout>
+				</DataTemplate>
+			</CollectionView.ItemTemplate>
+		</CollectionView>
+
+		<!-- Display "Material-style" Add button -->
+		<ImageButton Source="add.png" Margin="20" VerticalOptions="End" HorizontalOptions="End" Command="{Binding AddWorkspaceCommand}" />
+	</Grid>
 </ContentPage>
