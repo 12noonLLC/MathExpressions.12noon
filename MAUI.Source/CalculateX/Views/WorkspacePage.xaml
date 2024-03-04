@@ -107,6 +107,11 @@
 					</Label>
 				</DataTemplate>
 			</CollectionView.ItemTemplate>
+			<CollectionView.EmptyView>
+				<ContentView>
+					<Label Margin="40" HorizontalOptions="Center" TextColor="DarkGray" Text="Enter an expression below and tap = or press Enter." />
+				</ContentView>
+			</CollectionView.EmptyView>
 		</CollectionView>
 
 		<Entry x:Name="CtlEntry" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"
