@@ -52,6 +52,6 @@
 		</CollectionView>
 
 		<!-- Display "Material-style" Add button -->
-		<ImageButton Source="add.png" Margin="20" VerticalOptions="End" HorizontalOptions="End" Command="{Binding AddWorkspaceCommand}" />
+		<ImageButton Source="add.png" Margin="20" MaximumHeightRequest="32" MaximumWidthRequest="32" VerticalOptions="End" HorizontalOptions="End" Command="{Binding AddWorkspaceCommand}" />
 	</Grid>
 </ContentPage>

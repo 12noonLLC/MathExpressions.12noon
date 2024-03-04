@@ -94,7 +94,9 @@
 			</CollectionView.ItemsLayout>
 			<CollectionView.ItemTemplate>
 				<DataTemplate x:DataType="models:Workspace+HistoryEntry">
-					<Label Margin="5,0" HorizontalOptions="Start">
+					<!-- WidthRequest required to force HorizontalTextAlignment to work. -->
+					<!-- https://stackoverflow.com/questions/76086982/collectionview-not-centered-on-ios-in-maui -->
+					<Label Margin="5,0" HorizontalTextAlignment="Start" HorizontalOptions="Start" WidthRequest="2000">
 						<Label.FormattedText>
 							<FormattedString>
 								<Span Text="{Binding Input}" Style="{StaticResource StyleExpression}" />
@@ -110,7 +112,7 @@
 		<Entry x:Name="CtlEntry" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"
 			Placeholder="Enter expression to evaluate"
 			Text="{Binding Input, Mode=TwoWay}"
-			CharacterSpacing="0" FontFamily="monospace"
+			CharacterSpacing="0" FontFamily="{OnPlatform Android=monospace}"
 			ClearButtonVisibility="WhileEditing"
 			Keyboard="Default"
 			IsSpellCheckEnabled="False"

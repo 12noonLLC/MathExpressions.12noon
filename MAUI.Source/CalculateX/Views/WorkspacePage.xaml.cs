@@ -26,7 +26,9 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 		//	.SetWindowSoftInputModeAdjust(CtlEntry, WindowSoftInputModeAdjust.Resize);
 
 		CtlEntry.Focus();
+#if !WINDOWS
 		await CtlEntry.ShowKeyboardAsync(CancellationToken.None);
+#endif
 	}
 
 	/// <summary>
@@ -41,6 +43,11 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 	/// <param name="e"></param>
 	private void ContentPage_LayoutChanged(object sender, EventArgs e)
 	{
+		if (ViewModel.History.Count == 0)
+		{
+			return;
+		}
+
 		CtlHistoryEntries.ScrollTo(index: ViewModel.History.Count - 1, position: ScrollToPosition.End, animate: false);
 	}
 

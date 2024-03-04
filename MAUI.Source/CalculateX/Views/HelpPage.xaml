@@ -23,12 +23,12 @@
 			<Setter Property="Padding" Value="5" />
 			<Setter Property="BackgroundColor" Value="{StaticResource Gray100}" />
 			<Setter Property="FontSize" Value="10" />
-			<Setter Property="FontFamily" Value="monospace" />
+			<Setter Property="FontFamily" Value="{OnPlatform Android=monospace}" />
 		</Style>
 		<Style x:Key="Code" TargetType="Span">
 			<Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Gray100}, Dark={StaticResource Gray600}}" />
 			<Setter Property="FontSize" Value="10" />
-			<Setter Property="FontFamily" Value="monospace" />
+			<Setter Property="FontFamily" Value="{OnPlatform Android=monospace}" />
 		</Style>
 	</ContentPage.Resources>
 
