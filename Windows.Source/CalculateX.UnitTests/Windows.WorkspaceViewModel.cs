@@ -33,24 +33,8 @@ public class TestWorkspaceViewModel
 	{
 		ViewModels.WorkspaceViewModel vm = new();
 #if !MAUI_UNITTESTS
-		Assert.IsTrue(vm.CanCloseTab);
 		Assert.AreEqual("Designer", vm.Name);
 #else
-		Assert.AreEqual("temporary", vm.Name);
-#endif
-	}
-
-	[TestMethod]
-	public void TestConstructorCanCloseTab()
-	{
-#if !MAUI_UNITTESTS
-		Assert.ThrowsException<ArgumentException>(() => new ViewModels.WorkspaceViewModel(canCloseTab: true));
-
-		ViewModels.WorkspaceViewModel vm = new(canCloseTab: false);
-		Assert.IsFalse(vm.CanCloseTab);
-		Assert.AreEqual("+", vm.Name);
-#else
-		ViewModels.WorkspaceViewModel vm = new();
 		Assert.AreEqual("temporary", vm.Name);
 #endif
 	}
@@ -61,9 +45,6 @@ public class TestWorkspaceViewModel
 		Models.Workspace workspace = new("Test");
 		ViewModels.WorkspaceViewModel vm = new(workspace);
 		Assert.AreEqual("Test", vm.Name);
-#if !MAUI_UNITTESTS
-		Assert.IsTrue(vm.CanCloseTab);
-#endif
 	}
 
 	[TestMethod]

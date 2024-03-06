@@ -2,6 +2,7 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 
 namespace Shared;
@@ -45,7 +46,7 @@ public class FocusFirstBehavior : Behavior<FrameworkElement>
 /// <example>
 ///	<TabControl>
 ///		<i:Interaction.Behaviors>
-///			<shared:FocusTabControlSelectionChangedBehavior ElementName="SomeTextBox" />
+///			<shared:FocusSelectionChangedBehavior ElementName="SomeTextBox" />
 ///		</i:Interaction.Behaviors>
 ///		<TabControl.ContentTemplate>
 ///			<DataTemplate>
@@ -54,7 +55,7 @@ public class FocusFirstBehavior : Behavior<FrameworkElement>
 ///		</TabControl.ContentTemplate>
 ///	</TabControl>
 /// </example>
-public class FocusTabControlSelectionChangedBehavior : Behavior<TabControl>
+public class FocusSelectionChangedBehavior : Behavior<Selector>
 {
 	public string ElementName
 	{
@@ -62,7 +63,7 @@ public class FocusTabControlSelectionChangedBehavior : Behavior<TabControl>
 		set => SetValue(ElementNameProperty, value);
 	}
 	public static readonly DependencyProperty ElementNameProperty =
-		DependencyProperty.Register(nameof(ElementName), typeof(string), typeof(FocusTabControlSelectionChangedBehavior));
+		DependencyProperty.Register(nameof(ElementName), typeof(string), typeof(FocusSelectionChangedBehavior));
 
 
 	protected override void OnAttached()
@@ -75,19 +76,17 @@ public class FocusTabControlSelectionChangedBehavior : Behavior<TabControl>
 		AssociatedObject.SelectionChanged -= AssociatedObject_SelectionChanged;
 	}
 
-	private void AssociatedObject_SelectionChanged(object /*TabControl*/ sender, RoutedEventArgs e)
+	private void AssociatedObject_SelectionChanged(object /*Selector*/ sender, RoutedEventArgs e)
 	{
 		if (string.IsNullOrEmpty(ElementName))
 		{
 			return;
 		}
 
-		TabControl tabControl = (TabControl)sender;
-
-		// Invoke this code to give the tab time to generate the tree.
+		// Invoke this code to give the control time to generate the tree.
 		Dispatcher.BeginInvoke(() =>
 		{
-			FrameworkElement? focusElement = FindDataTemplateChild(tabControl, ElementName);
+			FrameworkElement? focusElement = FindDataTemplateChild(AssociatedObject, ElementName);
 
 			/// Set focus to this control.
 			focusElement?.Focus();

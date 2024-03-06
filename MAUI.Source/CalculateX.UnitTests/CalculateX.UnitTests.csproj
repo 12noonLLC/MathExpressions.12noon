@@ -29,6 +29,7 @@
     <Compile Include="..\..\Shared.Source\CalculateX.UnitTests\**" />
     <Compile Include="..\..\Windows.Source\CalculateX.UnitTests\*.cs" />
     <Compile Include="..\..\MAUI.Source\CalculateX\Shared\Numbers.cs" LinkBase="Shared" />
+    <Compile Include="..\..\MAUI.Source\CalculateX\Shared\MyExtensions.cs" LinkBase="Shared" />
     <Compile Include="..\..\MAUI.Source\CalculateX\Models\*.cs" LinkBase="Models" />
     <Compile Include="..\..\MAUI.Source\CalculateX\ViewModels\*.cs" Link="ViewModels\%(RecursiveDir)%(FileName)%(Extension)" />
     <!-- <Compile Include="..\..\MAUI.Source\CalculateX\Views\AboutPage.xaml.cs" LinkBase="Views" /> -->

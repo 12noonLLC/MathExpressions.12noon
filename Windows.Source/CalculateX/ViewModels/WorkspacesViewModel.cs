@@ -1,11 +1,14 @@
 ﻿using CalculateX.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Shared;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows;
+using System.Windows.Data;
 using System.Windows.Input;
 
 namespace CalculateX.ViewModels;
@@ -14,6 +17,7 @@ public class WorkspacesViewModel : ObservableObject
 {
 	private readonly Workspaces _workspaces;
 	public ObservableCollection<WorkspaceViewModel> TheWorkspaceViewModels { get; private init; }
+	private readonly Func<WorkspaceViewModel, WorkspaceViewModel, bool> SortByName = (WorkspaceViewModel item1, WorkspaceViewModel item2) => (item1.Name.CompareTo(item2.Name) < 0);
 
 	public WorkspaceViewModel SelectedWorkspaceVM
 	{
@@ -29,6 +33,7 @@ public class WorkspacesViewModel : ObservableObject
 	/// Commands for this view-model.
 	/// </summary>
 	public ICommand AddWorkspaceCommand { get; }
+	public ICommand DeleteWorkspaceCommand { get; }
 	public RelayCommand SelectPreviousWorkspaceCommand { get; }
 	public RelayCommand SelectNextWorkspaceCommand { get; }
 
@@ -38,12 +43,17 @@ public class WorkspacesViewModel : ObservableObject
 		_workspaces = new(pathWorkspacesFile);
 
 		AddWorkspaceCommand = new RelayCommand(AddWorkspace);
-		SelectPreviousWorkspaceCommand = new RelayCommand(SelectPreviousWorkspace, SelectPreviousWorkspace_CanExecute);
-		SelectNextWorkspaceCommand = new RelayCommand(SelectNextWorkspace, SelectNextWorkspace_CanExecute);
+		DeleteWorkspaceCommand = new RelayCommand(DeleteWorkspace);
+		SelectPreviousWorkspaceCommand = new RelayCommand(SelectPreviousWorkspace);
+		SelectNextWorkspaceCommand = new RelayCommand(SelectNextWorkspace);
 
 //TODO: Handle CollectionChanged and add the below handlers for NewItems and remove them for OldItems (see MSJ article)
 //Have to create empty collection first and THEN add vms to it. Use Lazy<>?
-		TheWorkspaceViewModels = new(_workspaces.TheWorkspaces.Select(model => new WorkspaceViewModel(model)));
+		TheWorkspaceViewModels = new(
+			_workspaces.TheWorkspaces
+			.Select(model => new WorkspaceViewModel(model))
+			.OrderBy(vm => vm.Name)
+		);
 		foreach (var viewModel in TheWorkspaceViewModels)
 		{
 			SubscribeViewModelEvents(viewModel);
@@ -51,13 +61,8 @@ public class WorkspacesViewModel : ObservableObject
 
 		if (!TheWorkspaceViewModels.Any())
 		{
-			WorkspaceViewModel newViewModel = CreateWorkspace();
-			TheWorkspaceViewModels.Insert(0, newViewModel);
-			SelectedWorkspaceVM = newViewModel;
+			AddWorkspace();
 		}
-
-		// Add the "+" tab to the view-model but not to the model.
-		TheWorkspaceViewModels.Add(new(canCloseTab: false));
 
 		SelectPreviousWorkspaceCommand.NotifyCanExecuteChanged();
 		SelectNextWorkspaceCommand.NotifyCanExecuteChanged();
@@ -75,41 +80,17 @@ public class WorkspacesViewModel : ObservableObject
 
 	private void OnWorkspaceChanged(object? sender, EventArgs e) => SaveWorkspaces();
 
-	public void SelectWorkspace()
-	{
-		/// If the user selected a closable tab, select it.
-		if (SelectedWorkspaceVM.CanCloseTab)
-		{
-			SaveWorkspaces();
-			return;
-		}
-
-		/// The user selected the "+" tab...
-		/// Make new closable tab and insert before "+" tab.
-		WorkspaceViewModel newViewModel = CreateWorkspace();
-		TheWorkspaceViewModels.Insert(TheWorkspaceViewModels.IndexOf(SelectedWorkspaceVM), newViewModel);
-		SelectedWorkspaceVM = newViewModel;
-
-		SelectPreviousWorkspaceCommand.NotifyCanExecuteChanged();
-		SelectNextWorkspaceCommand.NotifyCanExecuteChanged();
-
-		SaveWorkspaces();
-	}
 
 	/// <summary>
-	/// This is called when the user presses a shortcut to create a new workspace.
+	/// Called when the user presses a toolbar button or shortcut to create a new workspace.
 	/// </summary>
 	private void AddWorkspace()
 	{
-		Debug.Assert(SelectedWorkspaceVM is not null);
-		Debug.Assert(TheWorkspaceViewModels.Any(w => w.CanCloseTab));
-		Debug.Assert(SelectNextWorkspace_CanExecute());
-
 		WorkspaceViewModel newViewModel = CreateWorkspace();
+		TheWorkspaceViewModels.AddSorted(newViewModel, SortByName);
 
-		TheWorkspaceViewModels.Insert(TheWorkspaceViewModels.IndexOf(SelectedWorkspaceVM) + 1, newViewModel);
-
-		SelectNextWorkspace();
+		SelectedWorkspaceVM = newViewModel;
+		SaveWorkspaces();
 	}
 
 	private WorkspaceViewModel CreateWorkspace()
@@ -123,11 +104,52 @@ public class WorkspacesViewModel : ObservableObject
 		return viewModel;
 	}
 
+	public void RenameWorkspace(WorkspaceViewModel workspaceVM, string name)
+	{
+		workspaceVM.Name = name;
+
+		// If the sorted location is different, move the workspace VM to the sorted location.
+		int ixSorted = TheWorkspaceViewModels.FindSortedIndex(workspaceVM, SortByName);
+		int ixCur = TheWorkspaceViewModels.IndexOf(workspaceVM);
+		if (ixSorted != ixCur)
+		{
+			// The destination index is the position within the existing list,
+			// so we have to pretend the item has been removed from the list.
+			if (ixSorted > ixCur)
+			{
+				--ixSorted;
+			}
+
+			// If they're still different, move the view-model.
+			if (ixSorted != ixCur)
+			{
+				TheWorkspaceViewModels.Move(ixCur, ixSorted);
+			}
+		}
+
+		SaveWorkspaces();
+	}
+
 	private void OnRequestDelete(object? /*WorkspaceViewModel*/ sender, EventArgs e)
 	{
 		ArgumentNullException.ThrowIfNull(sender);
 
 		WorkspaceViewModel deletedWorkspaceVM = (WorkspaceViewModel)sender;
+
+		DeleteWorkspace(deletedWorkspaceVM);
+	}
+
+	private void DeleteWorkspace()
+	{
+		DeleteWorkspace(SelectedWorkspaceVM);
+	}
+
+	private void DeleteWorkspace(WorkspaceViewModel deletedWorkspaceVM)
+	{
+		if (MessageBox.Show($"Do you want to delete the \"{SelectedWorkspaceVM.Name}\" workspace?", "Delete Workspace", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+		{
+			return;
+		}
 
 		// Delete workspace model
 		/// Note: We must remove the workspace model first so <see cref="FormWorkspaceName"/> knows to reset the workspaceNumber.
@@ -136,30 +158,30 @@ public class WorkspacesViewModel : ObservableObject
 		if (deletedWorkspaceVM.ID == SelectedWorkspaceVM.ID)
 		{
 			int indexSelectedWorkspace = TheWorkspaceViewModels.IndexOf(SelectedWorkspaceVM);
-			bool isRightmostTab = (deletedWorkspaceVM.ID == TheWorkspaceViewModels[^2].ID);
+			bool isLastWorkspace = (deletedWorkspaceVM.ID == TheWorkspaceViewModels[^1].ID);
 
 			/// If closing last workspace, create one.
 			if (!_workspaces.TheWorkspaces.Any())
 			{
-				Debug.Assert(TheWorkspaceViewModels.Count == 2);
+				Debug.Assert(TheWorkspaceViewModels.Count == 1);
 
-				/// [deleted][+]
+				/// [deleted]
 				WorkspaceViewModel newViewModel = CreateWorkspace();
 				TheWorkspaceViewModels.Insert(0, newViewModel);
-				/// [new][deleted][+]
+				/// [new][deleted]
 			}
 
 			/// Select the workspace we want to be selected AFTER we delete the workspace.
 
-			/// Select tab that will be in the same position (unless it's the "+" tab, then select last tab).
-			if (isRightmostTab)
+			/// Select workspace that will be in the same position.
+			if (isLastWorkspace)
 			{
-				/// [a]...[z][deleted][+]
-				SelectedWorkspaceVM = TheWorkspaceViewModels[^3];
+				/// [a]...[z][deleted]
+				SelectedWorkspaceVM = TheWorkspaceViewModels[^2];
 			}
 			else
 			{
-				/// [a]...[m][deleted][n]...[z][+]
+				/// [a]...[m][deleted][n]...[z]
 				SelectedWorkspaceVM = TheWorkspaceViewModels[indexSelectedWorkspace + 1];
 			}
 		}
@@ -178,18 +200,14 @@ public class WorkspacesViewModel : ObservableObject
 		SaveWorkspaces();
 	}
 
-	private bool SelectPreviousWorkspace_CanExecute()
-	{
-		return (TheWorkspaceViewModels.Any(w => w.CanCloseTab));	// Do not count the "+" tab
-	}
 	private void SelectPreviousWorkspace()
 	{
 		Debug.Assert(SelectedWorkspaceVM is not null);
-		Debug.Assert(TheWorkspaceViewModels.Any(w => w.CanCloseTab));
+		Debug.Assert(TheWorkspaceViewModels.Count > 0);
 
-		if (SelectedWorkspaceVM == TheWorkspaceViewModels.First(w => w.CanCloseTab))
+		if (SelectedWorkspaceVM == TheWorkspaceViewModels.First())
 		{
-			SelectedWorkspaceVM = TheWorkspaceViewModels.Last(w => w.CanCloseTab);
+			SelectedWorkspaceVM = TheWorkspaceViewModels.Last();
 		}
 		else
 		{
@@ -197,18 +215,14 @@ public class WorkspacesViewModel : ObservableObject
 		}
 	}
 
-	private bool SelectNextWorkspace_CanExecute()
-	{
-		return (TheWorkspaceViewModels.Any(w => w.CanCloseTab));	// Do not count the "+" tab
-	}
 	private void SelectNextWorkspace()
 	{
 		Debug.Assert(SelectedWorkspaceVM is not null);
-		Debug.Assert(TheWorkspaceViewModels.Any(w => w.CanCloseTab));
+		Debug.Assert(TheWorkspaceViewModels.Count > 0);
 
-		if (SelectedWorkspaceVM == TheWorkspaceViewModels.Last(w => w.CanCloseTab))
+		if (SelectedWorkspaceVM == TheWorkspaceViewModels.Last())
 		{
-			SelectedWorkspaceVM = TheWorkspaceViewModels.First(w => w.CanCloseTab);
+			SelectedWorkspaceVM = TheWorkspaceViewModels.First();
 		}
 		else
 		{

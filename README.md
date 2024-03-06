@@ -56,19 +56,20 @@ so that you can paste it into another application.
 
 ### Workspaces
 
+You can create multiple workspaces in Calculate X.
+Each workspace has its own input history and variables.
+
 You can use workspaces to separate different calculation tasks.
 Use one for working on your taxes, another for adding your utility bills,
-and another for measuring the wood to build those bookcases.
-
-Each workspace has its own input history and variables.
+and another for measuring the wood to build bookcases.
 
 #### Windows
 
-Double-click a tab to edit its name.
+Press the plus button to add a new workspace.
 
-Click the "x" in a tab to close that workspace.
+Press the pencil button to rename the current workspace.
 
-Click the "+" tab to create a new workspace.
+Press the delete button to delete the current workspace.
 
 | Key | Action |
 |-----|--------|
@@ -82,9 +83,9 @@ Click the "+" tab to create a new workspace.
 
 #### Android
 
-Use the **Rename** command in the overflow menu to edit a workspace's name.
+Select the **Rename** command in the overflow menu to rename the current workspace.
 
-Use the **Delete** command in the overflow menu to delete a workspace.
+Select the **Delete** command in the overflow menu to delete the current workspace.
 
 ### Basic Mathematical Operators
 

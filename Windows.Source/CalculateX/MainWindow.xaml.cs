@@ -31,9 +31,6 @@ public partial class MainWindow : Window
 		InitializeComponent();
 
 		DataContext = ViewModel;
-
-		EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.CloseTabEvent, new RoutedEventHandler(OnCloseTab));
-		EventManager.RegisterClassHandler(typeof(TabItem), Shared.RoutedEventHelper.HeaderChangedEvent, new RoutedEventHandler(OnWorkspaceNameChanged));
 	}
 
 	private void InputControlTextBox_Loaded(object /*TextBox*/ sender, RoutedEventArgs e)
@@ -44,18 +41,11 @@ public partial class MainWindow : Window
 	}
 
 
-	private void WorkspaceTabControl_SelectionChanged(object /*TabControl*/ sender, SelectionChangedEventArgs e)
+	private void Workspaces_SelectionChanged(object /*ListBox*/ sender, SelectionChangedEventArgs e)
 	{
-		/// The SelectionChanged event can bubble up from controls in TabControl,
-		/// such as ListBox. In this case, the ListBox is handling its
-		/// SelectionChanged event, so technically we do not need this check.
-		/// It is here as a good practice and also in case we copy this code elsewhere.
-		if (sender is not TabControl)
-		{
-			return;
-		}
+		ViewModel.SaveWorkspaces();
 
-		ViewModel.SelectWorkspace();
+		CtlInputTextBox.Focus();
 
 		// We cannot set Handled because that prevents the behavior's event handler from being called.
 		//e.Handled = true;
@@ -66,22 +56,22 @@ public partial class MainWindow : Window
 	/// </summary>
 	/// <param name="sender"></param>
 	/// <param name="e"></param>
-	public void OnCloseTab(object /*TabItem*/ sender, RoutedEventArgs e)
-	{
-		var tabItem = (TabItem)sender;
-		var closedWorkspace = (ViewModels.WorkspaceViewModel)tabItem.DataContext;
+	//public void OnCloseTab(object /*TabItem*/ sender, RoutedEventArgs e)
+	//{
+	//	var tabItem = (TabItem)sender;
+	//	var closedWorkspace = (ViewModels.WorkspaceViewModel)tabItem.DataContext;
 
-		closedWorkspace.DeleteWorkspace();
+	//	closedWorkspace.DeleteWorkspace();
 
-		e.Handled = true;
-	}
+	//	e.Handled = true;
+	//}
 
-	private void OnWorkspaceNameChanged(object /*TabItem*/ sender, RoutedEventArgs e)
-	{
-		ViewModel.SaveWorkspaces();
+	//private void OnWorkspaceNameChanged(object /*TabItem*/ sender, RoutedEventArgs e)
+	//{
+	//	ViewModel.SaveWorkspaces();
 
-		e.Handled = true;
-	}
+	//	e.Handled = true;
+	//}
 
 
 	private void SanitizeTextPastingHandler(object /*TextBox*/ sender, DataObjectPastingEventArgs e)
@@ -101,6 +91,18 @@ public partial class MainWindow : Window
 		TextBox textBox = (TextBox)sender;
 
 		textBox.CaretIndex = ViewModel.SelectedWorkspaceVM.InsertTextAtCursor(pasteText, textBox.CaretIndex, textBox.SelectionLength);
+	}
+
+	private void RenameWorkspace_Clicked(object sender, RoutedEventArgs e)
+	{
+		string newName = new Shared.MessageInput(this, "Enter the new name for the workspace:", "Rename Workspace", ViewModel.SelectedWorkspaceVM.Name).ShowDialog() ?? ViewModel.SelectedWorkspaceVM.Name;
+		if ((newName == ViewModel.SelectedWorkspaceVM.Name) || string.IsNullOrWhiteSpace(newName))
+		{
+			// Name has not changed or is blank
+			return;
+		}
+
+		ViewModel.RenameWorkspace(ViewModel.SelectedWorkspaceVM, newName);
 	}
 
 	/// <summary>

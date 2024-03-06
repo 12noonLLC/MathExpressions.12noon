@@ -11,7 +11,7 @@ using System.Windows.Input;
 namespace CalculateX.ViewModels;
 
 [DebuggerDisplay("{Name} ({History.Count})")]
-public class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderControl.IEditableTabHeaderControl
+public class WorkspaceViewModel : ObservableObject
 {
 	public const string QUERY_DATA_WORKSPACE = "workspace";
 	public const string QUERY_DATA_DELETE = "delete";
@@ -31,7 +31,6 @@ public class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCont
 		get => _workspace.Name;
 		set => SetProperty(_workspace.Name, value, _workspace, (model, newValue) => model.Name = newValue);
 	}
-	public bool CanCloseTab { get; }
 
 	public ObservableCollection<Models.Workspace.HistoryEntry> History => _workspace.History;
 	public VariableDictionary Variables => _workspace.Variables;
@@ -80,28 +79,6 @@ public class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCont
 		ToggleHelpCommand = new RelayCommand(ToggleHelp);
 
 		_workspace = new("Designer");
-		CanCloseTab = true;
-	}
-
-	/// <summary>
-	/// Called when adding "+" workspace.
-	/// </summary>
-	/// <param name="canCloseTab">Must be false.</param>
-	public WorkspaceViewModel(bool canCloseTab)
-	{
-		if (canCloseTab)
-		{
-			throw new ArgumentException("Only called when adding + workspace. Must be false.", nameof(canCloseTab));
-		}
-
-		EvaluateCommand = new RelayCommand(Evaluate, Evaluate_CanExecute);
-		DeleteWorkspaceCommand = new RelayCommand(DeleteWorkspace);
-		ClearInputCommand = new RelayCommand(ClearInput);
-		ClearHistoryCommand = new RelayCommand(ClearHistory, ClearHistory_CanExecute);
-		ToggleHelpCommand = new RelayCommand(ToggleHelp);
-
-		_workspace = new("+");
-		CanCloseTab = false;
 	}
 
 	/// <summary>
@@ -117,7 +94,6 @@ public class WorkspaceViewModel : ObservableObject, Shared.EditableTabHeaderCont
 		ToggleHelpCommand = new RelayCommand(ToggleHelp);
 
 		_workspace = workspace;
-		CanCloseTab = true;
 	}
 
 	public void DeleteWorkspace()
