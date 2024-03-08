@@ -191,6 +191,14 @@
 				>
 					<i:Interaction.Behaviors>
 						<shared:FocusFirstBehavior />
+						<shared:WatermarkBehavior>
+							<shared:WatermarkBehavior.Watermark>
+								<TextBlock Text="Enter expression to evaluate"
+									Foreground="DimGray" FontStyle="Italic"
+									Margin="10,0,0,0" HorizontalAlignment="Left" VerticalAlignment="Center"
+								/>
+							</shared:WatermarkBehavior.Watermark>
+						</shared:WatermarkBehavior>
 					</i:Interaction.Behaviors>
 					<TextBox.InputBindings>
 						<KeyBinding Command="{Binding ClearInputCommand}" Key="Esc" />
