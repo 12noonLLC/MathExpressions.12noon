@@ -117,7 +117,7 @@
 		<Entry x:Name="CtlEntry" Grid.Row="1" Grid.Column="0" VerticalOptions="Center"
 			Placeholder="Enter expression to evaluate"
 			Text="{Binding Input, Mode=TwoWay}"
-			CharacterSpacing="0" FontFamily="{OnPlatform Android=monospace}"
+			CharacterSpacing="0" FontFamily="{OnPlatform Android=monospace}" FontSize="20"
 			ClearButtonVisibility="WhileEditing"
 			Keyboard="Default"
 			IsSpellCheckEnabled="False"
