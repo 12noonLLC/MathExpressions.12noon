@@ -10,6 +10,9 @@ public partial class App : Application
 	private const string _appGUID = "28CCE173-97C9-4B59-B483-2A5CEA4435B9";
 	private readonly Shared.SingleInstance _singleInstance = new(_appGUID);
 
+	// This is publicly modifiable so that tests can use a different service.
+	public static IAlertService MyAlertService { get; set; } = new AlertService();
+
 
 	protected override void OnStartup(StartupEventArgs e)
 	{

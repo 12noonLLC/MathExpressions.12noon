@@ -146,7 +146,7 @@ public class WorkspacesViewModel : ObservableObject
 
 	private void DeleteWorkspace(WorkspaceViewModel deletedWorkspaceVM)
 	{
-		if (MessageBox.Show($"Do you want to delete the \"{SelectedWorkspaceVM.Name}\" workspace?", "Delete Workspace", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.No)
+		if (!App.MyAlertService.PromptForConfirmation($"Do you want to delete the \"{SelectedWorkspaceVM.Name}\" workspace?", "Delete Workspace"))
 		{
 			return;
 		}

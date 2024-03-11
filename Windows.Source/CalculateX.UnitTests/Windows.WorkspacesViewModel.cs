@@ -25,6 +25,8 @@ public class TestWorkspacesViewModel
 
 		// Clean up after a previous failed test.
 		File.Delete(StoragePath);
+
+		App.MyAlertService = new AlertServiceUnitTests();
 	}
 
 	[ClassCleanup]
