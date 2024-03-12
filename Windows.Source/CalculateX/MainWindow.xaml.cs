@@ -90,7 +90,8 @@ public partial class MainWindow : Window
 	/// <param name="e"></param>
 	private void InputTextBox_TextChanged(object /*TextBox*/ sender, TextChangedEventArgs e)
 	{
-		e.Handled = true;
+		// We cannot set Handled because that prevents the behavior's event handler from being called.
+		//e.Handled = true;
 
 		if ((ViewModel.SelectedWorkspaceVM.Input.Length == 1) && (e.Changes.First().AddedLength == 1) && (e.Changes.First().Offset == 0))
 		{

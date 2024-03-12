@@ -42,6 +42,9 @@ namespace Shared;
 /// </TextBlock>
 /// </example>
 /// <remarks>
+/// The associated control must not set Handled to true if handling the
+/// TextBox.TextChanged or ComboBox.SelectionChanged event.
+///
 /// TextBlock must set its Text.Binding.NotifyOnTargetUpdated to true.
 /// </remarks>
 /// <see cref="http://stackoverflow.com/questions/833943/watermark-hint-text-placeholder-textbox-in-wpf"/>
