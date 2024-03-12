@@ -51,29 +51,6 @@ public partial class MainWindow : Window
 		//e.Handled = true;
 	}
 
-	/// <summary>
-	/// Called when the user clicks a tab's Close button.
-	/// </summary>
-	/// <param name="sender"></param>
-	/// <param name="e"></param>
-	//public void OnCloseTab(object /*TabItem*/ sender, RoutedEventArgs e)
-	//{
-	//	var tabItem = (TabItem)sender;
-	//	var closedWorkspace = (ViewModels.WorkspaceViewModel)tabItem.DataContext;
-
-	//	closedWorkspace.DeleteWorkspace();
-
-	//	e.Handled = true;
-	//}
-
-	//private void OnWorkspaceNameChanged(object /*TabItem*/ sender, RoutedEventArgs e)
-	//{
-	//	ViewModel.SaveWorkspaces();
-
-	//	e.Handled = true;
-	//}
-
-
 	private void SanitizeTextPastingHandler(object /*TextBox*/ sender, DataObjectPastingEventArgs e)
 	{
 		e.Handled = true;
