@@ -78,7 +78,7 @@ jobs:
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
         working-directory: ./Windows.Source
-        run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64
+        run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64 --property:DefineConstants=LICENSING
 
       - name: Test
         working-directory: ./Windows.Source
@@ -89,10 +89,12 @@ jobs:
       - name: Build single-file deployment
         working-directory: ./Windows.Source
         # Publish to sibling `release` folder for github-tag-action step.
-        run: dotnet publish ${{env.SOLUTION_FILE_PATH}} -p:PublishProfile=FolderProfile -o ../release/
+        run: dotnet publish ${{env.SOLUTION_FILE_PATH}} --property:PublishProfile=FolderProfile  --property:DefineConstants=LICENSING --output ../release/
 
       - name: Copy Files to Publish
-        run: Copy-Item -Path LICENSE -Destination ./release/
+        run: |
+          Copy-Item -Path LICENSE -Destination ./release/
+          Copy-Item -Path Windows.Source/CalculateX.lic -Destination ./release/
 
       # Upload release artifact to share with next job
       # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts

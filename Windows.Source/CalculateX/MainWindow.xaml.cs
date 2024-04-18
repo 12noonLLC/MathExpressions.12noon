@@ -23,12 +23,19 @@ public partial class MainWindow : Window
 	private readonly Shared.WindowPosition _windowPosition;
 
 
-	 public MainWindow()
+	public MainWindow()
 	{
 		_windowPosition = new(this, "MainWindowPosition");
 
 		/// XAML constructs WorkspacesViewModel and sets DataContext to it.
 		InitializeComponent();
+
+		// This is empty if in Debug or installed from the Microsoft Store.
+		string licenseName = Secrets.License_Name;
+		if (!string.IsNullOrEmpty(licenseName))
+		{
+			Title = $"{Title} - Licensed to {licenseName} <{Secrets.License_Email}> {Secrets.License_Company}";
+		}
 
 		DataContext = ViewModel;
 	}

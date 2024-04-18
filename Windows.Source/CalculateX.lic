@@ -1,0 +1,22 @@
+﻿<License>
+  <Id>35d1e376-93e8-4fc1-9075-2442bf59c4ba</Id>
+  <Type>Trial</Type>
+  <Expiration>Sat, 01 Jun 2024 16:11:40 GMT</Expiration>
+  <Quantity>1</Quantity>
+  <ProductFeatures>
+    <Feature name="Product">Calculate X</Feature>
+    <Feature name="Version">3.10.0</Feature>
+    <Feature name="Publish Date">04/28/2024</Feature>
+  </ProductFeatures>
+  <Customer>
+    <Name>GitHub Download</Name>
+    <Email>Sales.12noon@outlook.com</Email>
+    <Company>12noon</Company>
+  </Customer>
+  <LicenseAttributes>
+    <Attribute name="Product Identity">75772ba8b6c013b0a5d7d5585a145e092ac36fec07dc27a039faad11058484b4</Attribute>
+    <Attribute name="Assembly Identity"></Attribute>
+    <Attribute name="Expiration Days">34</Attribute>
+  </LicenseAttributes>
+  <Signature>MEQCICQE95FLjETk39kCWFj8hyfLYcpel+MP53eftQ6aMAiXAiA/sB03qm1ouN699eX5JdeX5bw8By/sZLhpepRq+Uor/A==</Signature>
+</License>
