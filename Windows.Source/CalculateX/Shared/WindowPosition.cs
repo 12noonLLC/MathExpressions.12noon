@@ -129,7 +129,7 @@ public class WindowPosition
 	/// </summary>
 	/// <param name="w">Window whose position is to be restored</param>
 	/// <param name="xml">XML node with position attributes (returned by SaveToXML())</param>
-	[System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Argument is in passed XML")]
+	[SuppressMessage("Usage", "CA2208:Instantiate argument exceptions correctly", Justification = "Argument is in passed XML")]
 	private void FromXML(XElement? xml)
 	{
 		if (xml is null)
@@ -137,38 +137,38 @@ public class WindowPosition
 			return;
 		}
 
-		XAttribute elt = xml.Attribute(KEY_ATTRIBUTE_LEFT) ?? throw new ArgumentNullException(KEY_ATTRIBUTE_LEFT);
-		if (elt != null)
+		XAttribute? elt = xml.Attribute(KEY_ATTRIBUTE_LEFT);
+		if (elt is not null)
 		{
 			_bounds.X = (double)elt;
 		}
 
-		elt = xml.Attribute(KEY_ATTRIBUTE_TOP) ?? throw new ArgumentNullException(KEY_ATTRIBUTE_TOP);
-		if (elt != null)
+		elt = xml.Attribute(KEY_ATTRIBUTE_TOP);
+		if (elt is not null)
 		{
 			_bounds.Y = (double)elt;
 		}
 
-		elt = xml.Attribute(KEY_ATTRIBUTE_WIDTH) ?? throw new ArgumentNullException(KEY_ATTRIBUTE_WIDTH);
-		if (elt != null)
+		elt = xml.Attribute(KEY_ATTRIBUTE_WIDTH);
+		if (elt is not null)
 		{
 			_bounds.Width = (double)elt;
 		}
 
-		elt = xml.Attribute(KEY_ATTRIBUTE_HEIGHT) ?? throw new ArgumentNullException(KEY_ATTRIBUTE_HEIGHT);
-		if (elt != null)
+		elt = xml.Attribute(KEY_ATTRIBUTE_HEIGHT);
+		if (elt is not null)
 		{
 			_bounds.Height = (double)elt;
 		}
 
-		elt = xml.Attribute(KEY_ATTRIBUTE_MINIMIZED) ?? throw new ArgumentNullException(KEY_ATTRIBUTE_MINIMIZED);
-		if (elt != null)
+		elt = xml.Attribute(KEY_ATTRIBUTE_MINIMIZED);
+		if (elt is not null)
 		{
 			_bMinimized = (bool)elt;
 		}
 
-		elt = xml.Attribute(KEY_ATTRIBUTE_MAXIMIZED) ?? throw new ArgumentNullException(KEY_ATTRIBUTE_MAXIMIZED);
-		if (elt != null)
+		elt = xml.Attribute(KEY_ATTRIBUTE_MAXIMIZED);
+		if (elt is not null)
 		{
 			_bMaximized = (bool)elt;
 		}
