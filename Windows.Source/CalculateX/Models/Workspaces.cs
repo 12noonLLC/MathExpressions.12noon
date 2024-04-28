@@ -138,11 +138,7 @@ public class Workspaces
 		string? selectedWorkspaceID = null;
 		foreach (XElement xWorkspace in xdoc.Element(NAME_ELEMENT_WORKSPACES)?.Elements(NAME_ELEMENT_WORKSPACE) ?? Enumerable.Empty<XElement>())
 		{
-			string? id = xWorkspace.Attribute(NAME_ATTRIBUTE_ID)?.Value;
-
-			// DELME: when all customer files are updated. [Feb 2024]
-			id ??= Guid.NewGuid().ToString();
-
+			string id = xWorkspace.Attribute(NAME_ATTRIBUTE_ID)!.Value;
 			string name = xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)!.Value!;
 			Workspace workspace = new(id, name);
 			bool selected = (bool?)xWorkspace.Attribute(NAME_ATTRIBUTE_SELECTED) ?? false;
