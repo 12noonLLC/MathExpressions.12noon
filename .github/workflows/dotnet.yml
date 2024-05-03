@@ -89,7 +89,7 @@ jobs:
       - name: Build single-file deployment
         working-directory: ./Windows.Source
         # Publish to sibling `release` folder for github-tag-action step.
-        run: dotnet publish ${{env.SOLUTION_FILE_PATH}} --property:PublishProfile=FolderProfile  --property:DefineConstants=LICENSING --output ../release/
+        run: dotnet publish ${{env.SOLUTION_FILE_PATH}} --property:PublishProfile=FolderProfile --property:DefineConstants=LICENSING --output ../release/
 
       - name: Copy Files to Publish
         run: |

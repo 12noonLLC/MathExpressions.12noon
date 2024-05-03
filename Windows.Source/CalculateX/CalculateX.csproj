@@ -18,7 +18,7 @@
     <PackageIcon>CalculateX.png</PackageIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>3.10.0</Version>
+    <Version>3.10.1</Version>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
