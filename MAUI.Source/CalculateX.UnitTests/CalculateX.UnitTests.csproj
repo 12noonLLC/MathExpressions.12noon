@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="MSTest.Sdk/3.3.1">
 
   <PropertyGroup>
 <!--
@@ -10,7 +10,6 @@
 
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -20,14 +19,12 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.2.0" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\Shared.Source\CalculateX.UnitTests\**" />
     <Compile Include="..\..\Windows.Source\CalculateX.UnitTests\*.cs" />
+    <Compile Include="..\..\Windows.Source\CalculateX\IAlertService.cs" />
     <Compile Include="..\..\MAUI.Source\CalculateX\Shared\Numbers.cs" LinkBase="Shared" />
     <Compile Include="..\..\MAUI.Source\CalculateX\Shared\MyExtensions.cs" LinkBase="Shared" />
     <Compile Include="..\..\MAUI.Source\CalculateX\Models\*.cs" LinkBase="Models" />

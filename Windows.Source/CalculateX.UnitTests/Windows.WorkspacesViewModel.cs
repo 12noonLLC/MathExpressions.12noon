@@ -26,7 +26,9 @@ public class TestWorkspacesViewModel
 		// Clean up after a previous failed test.
 		File.Delete(StoragePath);
 
+#if !MAUI_UNITTESTS
 		App.MyAlertService = new AlertServiceUnitTests();
+#endif
 	}
 
 	[ClassCleanup]
