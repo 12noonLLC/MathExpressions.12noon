@@ -1,4 +1,5 @@
 ﻿using MathExpressions;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 
@@ -10,6 +11,8 @@ public class Workspace
 	public string ID { get; private init; }
 
 	public string Name { get; set; }
+
+	public DateTimeOffset LastModified { get; set; }
 
 
 	// This is an instance variable to maintain the state of its variable dictionary.

@@ -23,6 +23,7 @@ public class Workspaces
 	private const string NAME_ELEMENT_WORKSPACE = "workspace";
 	private const string NAME_ATTRIBUTE_ID = "id";
 	private const string NAME_ATTRIBUTE_NAME = "name";
+	private const string NAME_ATTRIBUTE_LAST_MODIFIED = "last-modified";
 	private const string NAME_ELEMENT_INPUTS = "inputs";
 	private const string NAME_ELEMENT_KEY = "key";
 	private const string NAME_ATTRIBUTE_ORDINAL = "ordinal";
@@ -88,6 +89,7 @@ public class Workspaces
 					new XElement(NAME_ELEMENT_WORKSPACE,
 						new XAttribute(NAME_ATTRIBUTE_ID, w.ID),
 						new XAttribute(NAME_ATTRIBUTE_NAME, w.Name),
+						new XAttribute(NAME_ATTRIBUTE_LAST_MODIFIED, w.LastModified.ToString("o")),
 						new XAttribute(NAME_ATTRIBUTE_SELECTED, (w.ID == selectedWorkspaceID)),
 						w.History
 						.Aggregate(
@@ -141,6 +143,7 @@ public class Workspaces
 			string id = xWorkspace.Attribute(NAME_ATTRIBUTE_ID)!.Value;
 			string name = xWorkspace.Attribute(NAME_ATTRIBUTE_NAME)!.Value!;
 			Workspace workspace = new(id, name);
+			workspace.LastModified = DateTimeOffset.Parse(xWorkspace.Attribute(NAME_ATTRIBUTE_LAST_MODIFIED)?.Value ?? DateTimeOffset.UtcNow.ToString("o"));
 			bool selected = (bool?)xWorkspace.Attribute(NAME_ATTRIBUTE_SELECTED) ?? false;
 			if (selected)
 			{

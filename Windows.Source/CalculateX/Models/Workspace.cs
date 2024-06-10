@@ -12,6 +12,8 @@ public class Workspace
 
 	public string Name { get; set; }
 
+	public DateTimeOffset LastModified { get; set; }
+
 
 	// This is an instance variable to maintain the state of its variable dictionary.
 	public readonly MathEvaluator TheEvaluator = new();
