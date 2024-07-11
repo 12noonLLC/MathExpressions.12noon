@@ -73,6 +73,16 @@ namespace CalculateX.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Byte[].
         /// </summary>
+        internal static byte[] arrow_refresh {
+            get {
+                object obj = ResourceManager.GetObject("arrow_refresh", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
         internal static byte[] delete {
             get {
                 object obj = ResourceManager.GetObject("delete", resourceCulture);

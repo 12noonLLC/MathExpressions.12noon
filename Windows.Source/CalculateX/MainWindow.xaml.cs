@@ -17,7 +17,7 @@ public partial class MainWindow : Window
 	private static readonly string _pathWorkspacesFile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), CalculateX_FileName);
 
 	// We cannot create the view-model in XAML because we need to pass it the path to storage.
-	public ViewModels.WorkspacesViewModel ViewModel { get; private init; } = new(_pathWorkspacesFile);
+	public ViewModels.WorkspacesViewModel ViewModel { get; private init; } = ViewModels.WorkspacesViewModel.ConstructFromFile(_pathWorkspacesFile);
 
 	// This class provides features through event handling.
 	private readonly Shared.WindowPosition _windowPosition;
@@ -87,6 +87,11 @@ public partial class MainWindow : Window
 		}
 
 		ViewModel.RenameWorkspace(ViewModel.SelectedWorkspaceVM, newName);
+	}
+
+	private void SynchronizeWorkspaces_Clicked(object sender, RoutedEventArgs e)
+	{
+		ViewModel.SynchronizeWorkspaces(_pathWorkspacesFile);
 	}
 
 	/// <summary>

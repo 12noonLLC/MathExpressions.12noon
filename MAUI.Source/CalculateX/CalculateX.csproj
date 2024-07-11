@@ -63,12 +63,21 @@
 	</ItemGroup>
 
 	<ItemGroup>
+     <Compile Include="..\..\Shared.Source\CalculateX\*.cs" />
+     <Compile Include="..\..\Shared.Source\CalculateX\Models\*.cs" LinkBase="Models" />
+     <Compile Include="..\..\Shared.Source\CalculateX\ViewModels\*.cs" LinkBase="ViewModels" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="9.0.1" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+		<PackageReference Include="Microsoft.Graph" Version="5.56.0" />
+		<PackageReference Include="Microsoft.Graph.Core" Version="3.1.13" />
+		<PackageReference Include="Microsoft.Identity.Client" Version="4.61.3" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.40" />
 		<PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.40" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />

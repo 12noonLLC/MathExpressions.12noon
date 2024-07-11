@@ -19,16 +19,20 @@
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="7.0.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
+    <PackageReference Include="Microsoft.Graph" Version="5.56.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\..\Shared.Source\CalculateX.UnitTests\**" />
+    <Compile Include="..\..\Shared.Source\CalculateX\Models\*.cs" LinkBase="Models" />
+    <Compile Include="..\..\Shared.Source\CalculateX\ViewModels\*.cs" LinkBase="ViewModels" />
+    <Compile Include="..\..\Shared.Source\CalculateX\*.cs" />
     <Compile Include="..\..\Windows.Source\CalculateX.UnitTests\*.cs" />
     <Compile Include="..\..\Windows.Source\CalculateX\IAlertService.cs" />
     <Compile Include="..\..\MAUI.Source\CalculateX\Shared\Numbers.cs" LinkBase="Shared" />
     <Compile Include="..\..\MAUI.Source\CalculateX\Shared\MyExtensions.cs" LinkBase="Shared" />
-    <Compile Include="..\..\MAUI.Source\CalculateX\Models\*.cs" LinkBase="Models" />
-    <Compile Include="..\..\MAUI.Source\CalculateX\ViewModels\*.cs" Link="ViewModels\%(RecursiveDir)%(FileName)%(Extension)" />
+    <!-- <Compile Include="..\..\MAUI.Source\CalculateX\Models\*.cs" LinkBase="Models" /> -->
+    <!-- <Compile Include="..\..\MAUI.Source\CalculateX\ViewModels\*.cs" Link="ViewModels\%(RecursiveDir)%(FileName)%(Extension)" /> -->
     <!-- <Compile Include="..\..\MAUI.Source\CalculateX\Views\AboutPage.xaml.cs" LinkBase="Views" /> -->
     <!-- <Compile Include="..\..\MAUI.Source\CalculateX\Views\VariablesPage.xaml.cs" LinkBase="Views" /> -->
     <!-- <Compile Include="..\..\MAUI.Source\CalculateX\Views\WorkspacePage.xaml.cs" LinkBase="Views" /> -->

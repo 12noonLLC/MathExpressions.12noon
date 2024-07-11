@@ -1,15 +1,29 @@
 ﻿using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using Microsoft.Maui.LifecycleEvents;
 
 namespace CalculateX;
 public static class MauiProgram
 {
 	public static MauiApp CreateMauiApp()
 	{
-		var builder = MauiApp.CreateBuilder();
-		builder
+		var builder =
+			MauiApp
+			.CreateBuilder()
 			.UseMauiApp<App>()
 			.UseMauiCommunityToolkit()
+			.ConfigureLifecycleEvents(events =>
+			{
+#if ANDROID
+				events.AddAndroid(platform =>
+				{
+					platform.OnActivityResult((activity, rc, result, data) =>
+					{
+						Microsoft.Identity.Client.AuthenticationContinuationHelper.SetAuthenticationContinuationEventArgs(rc, result, data);
+					});
+				});
+#endif
+			})
 			.ConfigureFonts(fonts =>
 			{
 				fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");

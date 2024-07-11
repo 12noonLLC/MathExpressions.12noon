@@ -47,7 +47,7 @@ public class TestWorkspacesMAUI
 	[TestMethod]
 	public void TestSortAdd()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
@@ -92,7 +92,7 @@ public class TestWorkspacesMAUI
 	[TestMethod]
 	public void TestSortRename()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);

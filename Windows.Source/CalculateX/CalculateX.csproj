@@ -24,26 +24,32 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>$(DefineConstants);MY_WINDOWS_WPF</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
     <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>$(DefineConstants);MY_WINDOWS_WPF</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>$(DefineConstants);MY_WINDOWS_WPF</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>$(DefineConstants);MY_WINDOWS_WPF</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
     <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>$(DefineConstants);MY_WINDOWS_WPF</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Prefer32Bit>false</Prefer32Bit>
+    <DefineConstants>$(DefineConstants);MY_WINDOWS_WPF</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -101,6 +107,12 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\Shared.Source\CalculateX\*.cs" />
+    <Compile Include="..\..\Shared.Source\CalculateX\Models\*.cs" LinkBase="Models" />
+    <Compile Include="..\..\Shared.Source\CalculateX\ViewModels\*.cs" LinkBase="ViewModels" />
   </ItemGroup>
 
 </Project>

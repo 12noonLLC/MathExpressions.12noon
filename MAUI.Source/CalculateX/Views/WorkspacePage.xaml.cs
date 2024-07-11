@@ -28,6 +28,8 @@ public partial class WorkspacePage : ContentPage, IQueryAttributable
 		CtlEntry.Focus();
 #if !WINDOWS
 		await CtlEntry.ShowKeyboardAsync(CancellationToken.None);
+#else
+		await Task.Delay(0);
 #endif
 	}
 

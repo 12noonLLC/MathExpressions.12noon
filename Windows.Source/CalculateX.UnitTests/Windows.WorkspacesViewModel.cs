@@ -53,7 +53,7 @@ public class TestWorkspacesViewModel
 	[TestMethod]
 	public void TestConstructor()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 
 		Assert.AreEqual(1, vmWorkspaces.TheWorkspaceViewModels.Count);
 
@@ -64,7 +64,7 @@ public class TestWorkspacesViewModel
 	[TestMethod]
 	public void TestDeleteWorkspace()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 		/// +----+
 		/// |	0	|
 		/// +----+
@@ -130,7 +130,7 @@ public class TestWorkspacesViewModel
 	[TestMethod]
 	public void TestWorkspaceDefaultName()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 		/// +----+
 		/// |	1	|
 		/// +----+
@@ -218,7 +218,7 @@ public class TestWorkspacesViewModel
 	[TestMethod]
 	public void TestNextPreviousWorkspace()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 		Assert.AreEqual(1, vmWorkspaces.TheWorkspaceViewModels.Count);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		Assert.AreEqual(2, vmWorkspaces.TheWorkspaceViewModels.Count);
@@ -255,7 +255,7 @@ public class TestWorkspacesViewModel
 	[TestMethod]
 	public void TestSortAdd()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
@@ -300,7 +300,7 @@ public class TestWorkspacesViewModel
 	[TestMethod]
 	public void TestSortRename()
 	{
-		ViewModels.WorkspacesViewModel vmWorkspaces = new(StoragePath);
+		ViewModels.WorkspacesViewModel vmWorkspaces = ViewModels.WorkspacesViewModel.ConstructFromFile(StoragePath);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);
 		vmWorkspaces.AddWorkspaceCommand.Execute(null);

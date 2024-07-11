@@ -60,15 +60,18 @@
 		</Grid.RowDefinitions>
 
 		<Grid Grid.Row="0" Grid.Column="0">
-			<UniformGrid Columns="3">
+			<UniformGrid Columns="4">
 				<Button Margin="4" Padding="2" Background="WhiteSmoke" Command="{Binding AddWorkspaceCommand}">
 					<Image Margin="0" Source="/CalculateX;component/Resources/add.png" Stretch="None" />
 				</Button>
 				<Button Margin="2,4" Padding="2" Background="WhiteSmoke" Click="RenameWorkspace_Clicked">
 					<Image Margin="0" Source="/CalculateX;component/Resources/pencil.png" Stretch="None" />
 				</Button>
-				<Button Margin="4" Padding="2" Background="WhiteSmoke" Command="{Binding DeleteWorkspaceCommand}">
+				<Button Margin="4" Padding="2" Background="WhiteSmoke" Command="{Binding DeleteSelectedWorkspaceCommand}">
 					<Image Margin="0" Source="/CalculateX;component/Resources/delete.png" Stretch="None" />
+				</Button>
+				<Button Margin="4" Padding="2" Background="WhiteSmoke" Click="SynchronizeWorkspaces_Clicked">
+					<Image Margin="0" Source="/CalculateX;component/Resources/arrow_refresh.png" Stretch="None" />
 				</Button>
 			</UniformGrid>
 		</Grid>

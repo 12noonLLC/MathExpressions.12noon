@@ -48,6 +48,39 @@ public class TestWorkspaceViewModel
 	}
 
 	[TestMethod]
+	public void TestCompareWorkspaceViewModelEquals()
+	{
+		Models.Workspace workspaceRandom1 = new("Test1");
+		ViewModels.WorkspaceViewModel vmRandom1 = new(workspaceRandom1);
+
+		Models.Workspace workspaceRandom2 = new("Test2");
+		ViewModels.WorkspaceViewModel vmRandom2 = new(workspaceRandom2);
+
+		Assert.AreNotEqual(vmRandom1, vmRandom2);
+		Assert.IsFalse(vmRandom1 == vmRandom2);
+		Assert.IsTrue(vmRandom1 != vmRandom2);
+
+
+		Models.Workspace workspace1 = new("id1", "Test1");
+		ViewModels.WorkspaceViewModel vm1 = new(workspace1);
+
+		Models.Workspace workspace2 = new("id2", "Test2");
+		ViewModels.WorkspaceViewModel vm2 = new(workspace2);
+
+		Assert.AreNotEqual(vm1, vm2);
+		Assert.IsFalse(vm1 == vm2);
+		Assert.IsTrue(vm1 != vm2);
+
+
+		Models.Workspace workspace3 = new("id1", "Test3");
+		ViewModels.WorkspaceViewModel vm3 = new(workspace3);
+
+		Assert.AreEqual(vm1, vm3);
+		Assert.IsTrue(vm1 == vm3);
+		Assert.IsFalse(vm1 != vm3);
+	}
+
+	[TestMethod]
 	public void TestInput()
 	{
 		Models.Workspace workspace = new("Test");
