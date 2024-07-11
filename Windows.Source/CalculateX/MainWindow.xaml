@@ -73,6 +73,12 @@
 			</UniformGrid>
 		</Grid>
 
+<!--
+		<Button Margin="10" VerticalAlignment="Bottom" HorizontalAlignment="Right" Background="Transparent" Command="{Binding AddWorkspaceCommand}">
+			<Image Source="/CalculateX;component/Resources/add.png" Stretch="None" />
+		</Button>
+-->
+
 		<ListBox Grid.Row="1" Grid.Column="0"
 			Margin="0" Padding="0,5"
 			ItemsSource="{Binding TheWorkspaceViewModels}"
