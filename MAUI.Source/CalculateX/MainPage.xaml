@@ -20,9 +20,11 @@
 						 Command="{Binding AddWorkspaceCommand}"
 						 SemanticProperties.Hint="Tap to add workspace" />
 		-->
+		<!--
 		<ToolbarItem Text="Sync"
 						 Command="{Binding SynchronizeCommand}"
 						 CommandParameter="CalculateX.xml" />
+		-->
 		<ToolbarItem Text="About"
 						 IconImageSource="information.png"
 						 Command="{Binding AboutCommand}"

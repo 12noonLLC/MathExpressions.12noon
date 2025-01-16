@@ -133,8 +133,8 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-android|AnyCPU'">
     <ApplicationId>com.12noon.calculatex</ApplicationId>
-    <ApplicationDisplayVersion>2.0.20</ApplicationDisplayVersion>
-    <ApplicationVersion>20</ApplicationVersion>
+    <ApplicationDisplayVersion>2.0.22</ApplicationDisplayVersion>
+    <ApplicationVersion>22</ApplicationVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-ios|AnyCPU'">
@@ -151,14 +151,14 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0-windows10.0.20348.0|AnyCPU'">
     <ApplicationId>com.12noon.calculatex.maui</ApplicationId>
-    <ApplicationDisplayVersion>2.0.20</ApplicationDisplayVersion>
-    <ApplicationVersion>20</ApplicationVersion>
+    <ApplicationDisplayVersion>2.0.22</ApplicationDisplayVersion>
+    <ApplicationVersion>22</ApplicationVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-android|AnyCPU'">
     <ApplicationId>com.12noon.calculatex</ApplicationId>
-    <ApplicationDisplayVersion>2.0.20</ApplicationDisplayVersion>
-    <ApplicationVersion>20</ApplicationVersion>
+    <ApplicationDisplayVersion>2.0.22</ApplicationDisplayVersion>
+    <ApplicationVersion>22</ApplicationVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-ios|AnyCPU'">
@@ -175,8 +175,8 @@
 
   <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0-windows10.0.20348.0|AnyCPU'">
     <ApplicationId>com.12noon.calculatex</ApplicationId>
-    <ApplicationDisplayVersion>2.0.20</ApplicationDisplayVersion>
-    <ApplicationVersion>20</ApplicationVersion>
+    <ApplicationDisplayVersion>2.0.22</ApplicationDisplayVersion>
+    <ApplicationVersion>22</ApplicationVersion>
   </PropertyGroup>
 
 </Project>
