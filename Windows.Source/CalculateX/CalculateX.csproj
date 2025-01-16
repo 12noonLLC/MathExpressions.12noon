@@ -7,10 +7,10 @@
     <SignAssembly>True</SignAssembly>
     <AssemblyOriginatorKeyFile>Calculator.snk</AssemblyOriginatorKeyFile>
     <ApplicationIcon>CalculateX.ico</ApplicationIcon>
-    <Company>12noon</Company>
-    <Authors>12noon, Stefan K.S. Tucker</Authors>
+    <Company>12noon LLC</Company>
+    <Authors>12noon LLC</Authors>
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
-    <Copyright>\u00A9 2020-2024 12noon, Stefan K.S. Tucker</Copyright>
+    <Copyright>©️ 2020-2025 12noon LLC</Copyright>
     <Nullable>enable</Nullable>
     <RepositoryUrl>https://github.com/skst/CalculateX</RepositoryUrl>
     <RepositoryType>Git</RepositoryType>

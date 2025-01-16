@@ -1,4 +1,4 @@
-﻿# Calculate X by [12noon.com](https://12noon.com)
+﻿# Calculate X by [12noon LLC](https://12noon.com)
 
 [![build](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
 

@@ -37,8 +37,11 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.20348.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.20348.0</TargetPlatformMinVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
-		<Company>12noon</Company>
+		<Company>12noon LLC</Company>
 		<Authors>$(Authors)</Authors>
+		<Copyright>©️ 2021-2025 12noon LLC</Copyright>
+		<Title>Calculate X</Title>
+		<PackageProjectUrl>https://12noon.com</PackageProjectUrl>
 	</PropertyGroup>
 
 	<ItemGroup>
