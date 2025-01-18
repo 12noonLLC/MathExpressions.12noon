@@ -78,7 +78,7 @@ jobs:
       # https://docs.microsoft.com/en-us/dotnet/core/tools/
       - name: Build
         working-directory: ./Windows.Source
-        run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64 --property:DefineConstants=LICENSING
+        run: dotnet build ${{env.SOLUTION_FILE_PATH}} --nologo --self-contained --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64 --property:DefineConstants="LICENSING MY_WINDOWS_WPF"
 
       - name: Test
         working-directory: ./Windows.Source
@@ -89,7 +89,7 @@ jobs:
       - name: Build single-file deployment
         working-directory: ./Windows.Source
         # Publish to sibling `release` folder for github-tag-action step.
-        run: dotnet publish ${{env.SOLUTION_FILE_PATH}} --property:PublishProfile=FolderProfile --property:DefineConstants=LICENSING --output ../release/
+        run: dotnet publish ${{env.SOLUTION_FILE_PATH}} --property:PublishProfile=FolderProfile --property:DefineConstants="LICENSING MY_WINDOWS_WPF" --output ../release/
 
       - name: Copy Files to Publish
         run: |

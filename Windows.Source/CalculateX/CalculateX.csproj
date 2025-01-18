@@ -18,7 +18,7 @@
     <PackageIcon>CalculateX.png</PackageIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Version>3.10.2</Version>
+    <Version>3.10.3</Version>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
   </PropertyGroup>
 
@@ -55,6 +55,7 @@
   <ItemGroup>
     <None Remove="Calculator.snk" />
     <None Remove="Resources\add.png" />
+    <None Remove="Resources\arrow_refresh.png" />
     <None Remove="Resources\delete.png" />
     <None Remove="Resources\pencil.png" />
   </ItemGroup>
@@ -78,6 +79,7 @@
 
   <ItemGroup>
     <Resource Include="Resources\add.png" />
+    <Resource Include="Resources\arrow_refresh.png" />
     <Resource Include="Resources\delete.png" />
     <Resource Include="Resources\pencil.png" />
   </ItemGroup>
