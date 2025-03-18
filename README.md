@@ -9,7 +9,7 @@
 A calculator that evaluates math expressions.
 
 <a href="https://apps.microsoft.com/store/detail/9NWLKMVZPJD3?launch=true&mode=full">
-	<img width="300" src="https://get.microsoft.com/images/en-US%20dark.svg"/>
+	<img width="300" src="https://get.microsoft.com/images/en-us%20dark.svg"/>
 </a>
 
 ![Calculate X](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
