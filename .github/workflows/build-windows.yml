@@ -18,7 +18,7 @@ on:
       - '**/*.gitattributes'
       - '**/*.md'
       - 'LICENSE'
-      - '**/maui.yml'
+      - '**/build-maui.yml'
       - 'CalculateX.png'
   pull_request:
     branches: [ main, yaml ]
@@ -27,7 +27,7 @@ on:
       - '**/*.gitattributes'
       - '**/*.md'
       - 'LICENSE'
-      - '**/maui.yml'
+      - '**/build-maui.yml'
       - 'CalculateX.png'
   workflow_dispatch:
 
@@ -49,7 +49,7 @@ env:
   ARTIFACT_PACKAGE: package-calculatex
 
 concurrency:
-  group: calculatex-${{ github.sha }}
+  group: calculatex-windows-${{ github.sha }}
   cancel-in-progress: true
 
 # Jobs are run in parallel unless `needs` is specified.
@@ -294,11 +294,15 @@ jobs:
           #draft: ${{ (github.ref != 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/') && !startsWith(github.ref, 'refs/tags/v')) }}
           # There is also a `prerelease` property. (Example: if manual start, which implies no v tag)
           #prerelease: ${{ github.event_name == 'workflow_dispatch' }}
-          files: ${{env.ARTIFACT_NAME}}.zip
+          #
+          # Note: To encourage installations from the Microsoft Store, do not upload build targets.
+          #
+          #files: ${{env.ARTIFACT_NAME}}.zip
+          #
           generate_release_notes: true
           append_body: true
           body: |
-            <a href="https://apps.microsoft.com/detail/9WZDNCRDLVCN?referrer=appbadge&mode=direct">
+            <a href="https://apps.microsoft.com/detail/9NWLKMVZPJD3?referrer=appbadge&mode=direct">
               <img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
             </a>
         env:
