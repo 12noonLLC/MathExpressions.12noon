@@ -1,10 +1,10 @@
 ﻿# Calculate X by [12noon LLC](https://12noon.com)
 
-[![build](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml/badge.svg)](https://github.com/skst/CalculateX/actions/workflows/dotnet.yml)
+[![Build](https://github.com/12noonLLC/CalculateX/actions/workflows/build.yml/badge.svg)](https://github.com/12noonLLC/CalculateX/actions/workflows/build.yml)
 
-[![](https://img.shields.io/github/v/release/skst/CalculateX.svg?label=latest%20release&color=007edf)](https://github.com/skst/CalculateX/releases/latest)
+[![](https://img.shields.io/github/v/release/12noonLLC/CalculateX.svg?label=latest%20release&color=007edf)](https://github.com/12noonLLC/CalculateX/releases/latest)
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/skst/CalculateX)](https://github.com/skst/CalculateX)
+[![GitHub last commit](https://img.shields.io/github/last-commit/12noonLLC/CalculateX)](https://github.com/12noonLLC/CalculateX)
 
 A calculator that evaluates math expressions.
 
@@ -12,7 +12,7 @@ A calculator that evaluates math expressions.
 	<img width="300" src="https://get.microsoft.com/images/en-us%20dark.svg"/>
 </a>
 
-![Calculate X](https://github.com/skst/CalculateX/blob/master/CalculateX.png)
+![Calculate X](https://github.com/12noonLLC/CalculateX/blob/master/CalculateX.png)
 
 ## Features
 
