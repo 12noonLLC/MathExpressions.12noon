@@ -1,6 +1,7 @@
 ﻿# Calculate X by [12noon LLC](https://12noon.com)
 
-[![Build](https://github.com/12noonLLC/CalculateX/actions/workflows/build.yml/badge.svg)](https://github.com/12noonLLC/CalculateX/actions/workflows/build.yml)
+[![Build](https://github.com/12noonLLC/CalculateX/actions/workflows/build-windows.yml/badge.svg)](https://github.com/12noonLLC/CalculateX/actions/workflows/build-windows.yml)
+[![Build](https://github.com/12noonLLC/CalculateX/actions/workflows/build-maui.yml/badge.svg)](https://github.com/12noonLLC/CalculateX/actions/workflows/build-maui.yml)
 
 [![](https://img.shields.io/github/v/release/12noonLLC/CalculateX.svg?label=latest%20release&color=007edf)](https://github.com/12noonLLC/CalculateX/releases/latest)
 
@@ -12,7 +13,7 @@ A calculator that evaluates math expressions.
 	<img width="300" src="https://get.microsoft.com/images/en-us%20dark.svg"/>
 </a>
 
-![Calculate X](https://github.com/12noonLLC/CalculateX/blob/master/CalculateX.png)
+![Calculate X](CalculateX.png)
 
 ## Features
 
