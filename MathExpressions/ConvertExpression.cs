@@ -26,13 +26,13 @@ public class ConvertExpression : IExpression
 	/// <param name="expression">The conversion expression for this instance.</param>
 	public ConvertExpression(string expression)
 	{
-		if (!_conversionCache.ContainsKey(expression))
+		if (!_conversionCache.TryGetValue(expression, out ConversionMap? value))
 		{
-			throw new ArgumentException(String.Format(Resources.InvalidConversionExpression1, expression), nameof(expression));
+			throw new ArgumentException(string.Format(Resources.InvalidConversionExpression1, expression), nameof(expression));
 		}
 
 		this._expression = expression;
-		_current = _conversionCache[expression];
+		_current = value;
 	}
 
 	/// <summary>Gets the number of arguments this expression uses.</summary>
@@ -75,7 +75,7 @@ public class ConvertExpression : IExpression
 	public static bool IsConvertExpression(string expression)
 	{
 		//do basic checks before creating cache
-		if (String.IsNullOrEmpty(expression))
+		if (string.IsNullOrEmpty(expression))
 		{
 			return false;
 		}
@@ -121,7 +121,7 @@ public class ConvertExpression : IExpression
 
 				MemberInfo info = GetMemberInfo(enumType, Enum.GetName(enumType, i));
 
-				string key = String.Format(
+				string key = string.Format(
 					 CultureInfo.InvariantCulture,
 					 KeyExpressionFormat2,
 					 parentKey,
@@ -150,18 +150,11 @@ public class ConvertExpression : IExpression
 	public override string ToString() => _expression;
 
 
-	private class ConversionMap
+	private class ConversionMap(UnitType unitType, int fromUnit, int toUnit)
 	{
-		public ConversionMap(UnitType unitType, int fromUnit, int toUnit)
-		{
-			UnitType = unitType;
-			FromUnit = fromUnit;
-			ToUnit = toUnit;
-		}
-
-		public UnitType UnitType { get; }
-		public int FromUnit { get; }
-		public int ToUnit { get; }
+		public UnitType UnitType { get; } = unitType;
+		public int FromUnit { get; } = fromUnit;
+		public int ToUnit { get; } = toUnit;
 
 		public override string ToString() => $"{UnitType}, [{FromUnit}->{ToUnit}]";
 	}

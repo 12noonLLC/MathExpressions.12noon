@@ -18,7 +18,7 @@ namespace MathExpressions;
 public class OperatorExpression : IExpression
 {
 	/// <summary>The supported math operators by this class.</summary>
-	private static readonly char[] operatorSymbols = new char[] { '+', '-', '*', '/', '%', '^' };
+	private static readonly char[] operatorSymbols = ['+', '-', '*', '/', '%', '^'];
 
 	/// <summary>
 	/// Returns a higher value to represent the higher precedence of the passed operator.
@@ -28,8 +28,8 @@ public class OperatorExpression : IExpression
 	/// <returns>Returns a higher value for a higher operator precedence.</returns>
 	public static int Precedence(string c)
 	{
-		System.Diagnostics.Debug.Assert(c.Length == 1);
-		System.Diagnostics.Debug.Assert(IsSymbol(c.First()));
+		Debug.Assert(c.Length == 1);
+		Debug.Assert(IsSymbol(c.First()));
 
 		if (c[0] == '^')
 		{
@@ -77,7 +77,7 @@ public class OperatorExpression : IExpression
 			"/" => Divide(operands),
 			"%" => Modulo(operands),
 			"^" => Power(operands),
-			_ => throw new ArgumentException(String.Format(Resources.InvalidOperator1, _operator), nameof(_operator)),
+			_ => throw new ArgumentException(string.Format(Resources.InvalidOperator1, _operator), nameof(_operator)),
 		};
 	}
 

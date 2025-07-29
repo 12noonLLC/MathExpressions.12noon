@@ -1,7 +1,7 @@
-<Project Sdk="MSTest.Sdk/3.3.1">
+﻿<Project Sdk="MSTest.Sdk/3.3.1">
 
   <PropertyGroup>
-    <TargetFramework>net8.0-windows10.0.20348.0</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.20348</TargetFramework>
     <SupportedOSPlatformVersion>10.0.20348.0</SupportedOSPlatformVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
 
@@ -9,11 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\Shared.Source\MathExpressions.UnitTests\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\MathExpressions\MathExpressions.csproj" />
+    <ProjectReference Include="..\MathExpressions.Windows\MathExpressions.Windows.csproj" />
   </ItemGroup>
 
   <ItemGroup>
