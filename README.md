@@ -1,17 +1,23 @@
-﻿# Calculate X by [12noon LLC](https://12noon.com)
+﻿# MathExpressions by [12noon LLC](https://12noon.com)
 
-[![Build](https://github.com/12noonLLC/CalculateX/actions/workflows/build-windows.yml/badge.svg)](https://github.com/12noonLLC/CalculateX/actions/workflows/build-windows.yml)
-[![Build](https://github.com/12noonLLC/CalculateX/actions/workflows/build-maui.yml/badge.svg)](https://github.com/12noonLLC/CalculateX/actions/workflows/build-maui.yml)
+[![](https://github.com/12noonLLC/MathExpressions.12noon/actions/workflows/build.yml/badge.svg)](https://github.com/12noonLLC/MathExpressions.12noon/actions/workflows/build.yml)
 
-[![](https://img.shields.io/github/v/release/12noonLLC/CalculateX.svg?label=latest%20release&color=007edf)](https://github.com/12noonLLC/CalculateX/releases/latest)
+[![](https://img.shields.io/github/v/release/12noonLLC/MathExpressions.12noon.svg?label=latest%20release&color=007edf)](https://github.com/12noonLLC/MathExpressions.12noon/releases/latest)
 
-[![GitHub last commit](https://img.shields.io/github/last-commit/12noonLLC/CalculateX)](https://github.com/12noonLLC/CalculateX)
+[![](https://img.shields.io/github/last-commit/12noonLLC/MathExpressions.12noon)](https://github.com/12noonLLC/MathExpressions.12noon)
 
-A calculator that evaluates math expressions.
+A library that evaluates math expressions. This is used by the Calculate X applications from 12noon LLC.
 
-<a href="https://apps.microsoft.com/store/detail/9NWLKMVZPJD3?launch=true&mode=full">
-	<img width="300" src="https://get.microsoft.com/images/en-us%20dark.svg"/>
-</a>
+<p>
+   <a href="https://apps.microsoft.com/store/detail/9NWLKMVZPJD3?launch=true&mode=full">
+	   <img width="300" src="https://get.microsoft.com/images/en-us%20dark.svg"/>
+   </a>
+</p>
+<p>
+   <a href="https://play.google.com/store/apps/details?id=com.x12noon.calculatex">
+	   <img width="300" src="https://i0.wp.com/12noon.com/wordpress/wp-content/uploads/google-play-badge.png" />
+   </a>
+</p>
 
 ![Calculate X](CalculateX.png)
 
