@@ -131,13 +131,11 @@ jobs:
 
       - name: 🏗 Build application
         run: |
-          #dotnet build ${{env.PROJECT_APP_FILE_PATH}} --nologo `
-          #  --self-contained `
-          #  --runtime win-x64 `
-          #  --configuration ${{env.BUILD_CONFIGURATION}}
           dotnet build ${{env.PROJECT_APP_FILE_PATH}} --nologo `
             --configuration ${{env.BUILD_CONFIGURATION}} `
             --framework net8.0-android
+          #  --self-contained `
+          #  --runtime win-x64 `
 
       # https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
       # verbosity detailed, minimal
