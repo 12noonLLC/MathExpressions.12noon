@@ -1,21 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net9.0-windows10.0.20348</TargetFramework>
+    <TargetFramework>net9.0-windows10.0.20348.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <Copyright>(c) 2020-2025 12noon LLC</Copyright>
-    <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>MathExpressions.snk</AssemblyOriginatorKeyFile>
-    <Version>3.20.0.0</Version>
+    <Title>MathExpressions for Windows</Title>
+    <Product>MathExpressions.12noon.Windows</Product>
+    <Version>3.20.2.0</Version>
+    <AssemblyVersion>3.20.2.0</AssemblyVersion>
     <Platforms>AnyCPU;x64;x86</Platforms>
     <Authors>12noon LLC</Authors>
+    <Copyright>(c) 2020-2025 12noon LLC</Copyright>
+    <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
     <RepositoryUrl>https://github.com/12noonLLC/MathExpressions.12noon</RepositoryUrl>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Title>MathExpressions for Windows</Title>
-    <Product>MathExpressions.12noon.Windows</Product>
-    <AssemblyVersion>3.20.0.0</AssemblyVersion>
+    <Description>A library that evaluates math expressions, functions, and variables. It also saves and restores history and variables. This is used by the Calculate X applications from 12noon LLC.</Description>
   </PropertyGroup>
 
   <ItemGroup>

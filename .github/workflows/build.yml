@@ -1,5 +1,5 @@
 ﻿# .github/workflows/build.yml
-# Build and Release workflow for MathExpressions Android and Windows
+# Build and Release workflow for MathExpressions MAUI and Windows
 #
 # - Trigger on push to any branch, on version tags (e.g., v1.2.3), or on manual dispatch.
 # - If a version tag (e.g., v1.2.3) is pushed, create a GitHub release for that version if not already present.
@@ -35,7 +35,7 @@ permissions:
 env:
   # Path to the project files relative to the root of the project.
   PROJECT_WINDOWS_FILE_PATH: MathExpressions.Windows\MathExpressions.Windows.csproj
-  PROJECT_ANDROID_FILE_PATH: MathExpressions.MAUI\MathExpressions.MAUI.csproj
+  PROJECT_MAUI_FILE_PATH:    MathExpressions.MAUI\MathExpressions.MAUI.csproj
   PROJECT_TESTS_FILE_PATH:   MathExpressions.UnitTests\MathExpressions.UnitTests.csproj
 
   # Configuration type to build.
@@ -125,21 +125,37 @@ jobs:
           dotnet clean --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64
           dotnet nuget locals all --clear
 
+      - name: 🧩 Restore NuGet packages
+        run: |
+          dotnet restore
+
       - name: 🏗 Build application Windows
         run: |
           dotnet build ${{env.PROJECT_WINDOWS_FILE_PATH}} --nologo `
             --configuration ${{env.BUILD_CONFIGURATION}} `
-            --self-contained `
             --runtime win-x64 `
+            --self-contained `
             --property:DefineConstants="LICENSING MY_WINDOWS_WPF"
 
-      - name: 🏗 Build application Android
+      - name: 🏗 Build application MAUI
         run: |
-          dotnet build ${{env.PROJECT_ANDROID_FILE_PATH}} --nologo `
+          dotnet build ${{env.PROJECT_MAUI_FILE_PATH}} --nologo `
             --configuration ${{env.BUILD_CONFIGURATION}} `
             --framework net9.0-android
-          #  --self-contained `
-          #  --runtime win-x64 `
+          dotnet build ${{env.PROJECT_MAUI_FILE_PATH}} --nologo `
+            --configuration ${{env.BUILD_CONFIGURATION}} `
+            --framework net9.0-windows10.0.20348.0
+
+      - name: 🏗 Build unit tests
+        run: |
+          dotnet build ${{env.PROJECT_TESTS_FILE_PATH}} --nologo `
+            --configuration Release `
+            --framework net9.0-windows10.0.20348.0 `
+            --runtime win-x64
+          dotnet build ${{env.PROJECT_TESTS_FILE_PATH}} --nologo `
+            --configuration Debug `
+            --framework net9.0-windows10.0.20348.0 `
+            --runtime win-x64
 
       # https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
       # verbosity detailed, minimal
@@ -163,7 +179,7 @@ jobs:
             --nologo --no-restore --no-build `
             --configuration ${{env.BUILD_CONFIGURATION}} `
             --runtime win-x64 --output ./release/
-          dotnet pack ${{env.PROJECT_ANDROID_FILE_PATH}} `
+          dotnet pack ${{env.PROJECT_MAUI_FILE_PATH}} `
             --nologo --no-restore --no-build `
             --configuration ${{env.BUILD_CONFIGURATION}} `
             --runtime win-x64 --output ./release/
@@ -259,8 +275,9 @@ jobs:
       - name: 🧩 Publish NuGet package to GitHub Packages
         run: |
           dotnet nuget push ./release/*.nupkg \
-            --source "https://nuget.pkg.github.com/12noonLLC/index.json" \
-            --api-key ${{ secrets.GITHUB_TOKEN }}
+            --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
+            --api-key ${{ secrets.GITHUB_TOKEN }} \
+            --skip-duplicate
 
 #      - name: 📦 Zip Release folder
 #        working-directory: ./release
