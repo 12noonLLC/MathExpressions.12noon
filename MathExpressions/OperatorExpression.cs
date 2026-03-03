@@ -146,8 +146,8 @@ public class OperatorExpression : IExpression
 		// if they are all actual numbers, we perform the operation with Decimals for precision.
 		if (numbers.All(n => n.HasValue))
 		{
-			/// If the Decimal operation throws DivideByZeroException, we perform the operation with
-			/// Doubles to determine if the result is Double.PositiveInfinity or Double.NegativeInfinity.
+			// If the Decimal operation throws DivideByZeroException, we perform the operation with
+			// Doubles to determine if the result is Double.PositiveInfinity or Double.NegativeInfinity.
 			try
 			{
 				return numbers.Skip(1).Aggregate(numbers.First(), (accumulate, n) => new PreciseNumber(accumulate.Value / n.Value));

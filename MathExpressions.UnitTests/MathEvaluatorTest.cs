@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace MathExpressions.UnitTests;
@@ -6,7 +6,7 @@ namespace MathExpressions.UnitTests;
 [TestClass]
 public class MathEvaluatorTest
 {
-	//public TestContext TestContext { get; set; }
+	public TestContext TestContext { get; private set; }
 
 	private readonly MathEvaluator eval = new();
 
@@ -35,8 +35,8 @@ public class MathEvaluatorTest
 	[TestMethod]
 	public void EvaluateEmpty()
 	{
-		Assert.ThrowsException<ArgumentNullException>(() => eval.Evaluate(@"   "));
-		Assert.ThrowsException<ArgumentNullException>(() => eval.Evaluate(string.Empty));
+		Assert.Throws<ArgumentNullException>(() => eval.Evaluate(@"   "));
+		Assert.Throws<ArgumentNullException>(() => eval.Evaluate(string.Empty));
 	}
 
 
@@ -288,45 +288,42 @@ public class MathEvaluatorTest
 		Assert.AreEqual(expected, result);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow("(1,2)")]
-	[ExpectedException(typeof(ParseException))]
 	public void EvaluateBadSyntax(string expr)
 	{
-		eval.Evaluate(expr);
+		Assert.Throws<ParseException>(() => eval.Evaluate(expr));
 	}
 
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow("2*45,")]
 	[DataRow("min(,2,3)")]
 	[DataRow("sin(3,)")]
 	[DataRow("min(min(3,4),,4)")]
-	[ExpectedException(typeof(ParseException))]
 	public void EvaluateMisplacedComma(string expr)
 	{
-		eval.Evaluate(expr);
+		Assert.Throws<ParseException>(() => eval.Evaluate(expr));
 	}
 
 
-	[DataTestMethod]
+	[TestMethod]
 	// This results in 3 things being added to expression queue, when only 2 are expected by MIN function
 	[DataRow("min((1,2),3)")]
 	// This results in 4 things being added to expression queue, when only 2 are expected by MAX function
 	[DataRow("max(1,2,3,4)")]
-	[ExpectedException(typeof(ParseException))]
 	public void EvaluateBadArguments(string expr)
 	{
-		eval.Evaluate(expr);
+		Assert.Throws<ParseException>(() => eval.Evaluate(expr));
 	}
 
 
-	[DataTestMethod, ExpectedException(typeof(ParseException))]
+	[TestMethod]
 	[DataRow("min((1,2))")]
 	[DataRow("min((1))")]
 	public void EvaluateFunctionHasTooFewArguments(string expr)
 	{
-		eval.Evaluate(expr);
+		Assert.Throws<ParseException>(() => eval.Evaluate(expr));
 	}
 
 
@@ -407,7 +404,7 @@ public class MathEvaluatorTest
 		public PreciseNumber Evaluate(PreciseNumber[] numbers) => new(10m * numbers[0].Value);
 	}
 
-	[DataTestMethod]
+	[TestMethod]
 	[DataRow("MB10(5)", 50d)]
 	[DataRow("(MB10(5))", 50d)]
 	[DataRow("MB10(5) + 10", 60d)]

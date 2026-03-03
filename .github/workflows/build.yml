@@ -112,7 +112,7 @@ jobs:
       - name: 🛠️ Set up .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '9.0.x'
+          dotnet-version: '10.0.x'
           dotnet-quality: ga
 
       - name: Install MAUI workload
@@ -129,84 +129,84 @@ jobs:
         run: |
           dotnet restore
 
-      - name: 🏗 Build application Windows
+      - name: 🏗 Build application Windows, MAUI Android, and MAUI Windows
         run: |
-          dotnet build ${{env.PROJECT_WINDOWS_FILE_PATH}} --nologo `
+          dotnet build `
             --configuration ${{env.BUILD_CONFIGURATION}} `
-            --runtime win-x64 `
-            --self-contained `
             --property:DefineConstants="LICENSING MY_WINDOWS_WPF"
 
-      - name: 🏗 Build application MAUI
-        run: |
-          dotnet build ${{env.PROJECT_MAUI_FILE_PATH}} --nologo `
-            --configuration ${{env.BUILD_CONFIGURATION}} `
-            --framework net9.0-android
-          dotnet build ${{env.PROJECT_MAUI_FILE_PATH}} --nologo `
-            --configuration ${{env.BUILD_CONFIGURATION}} `
-            --framework net9.0-windows10.0.20348.0
-
-      - name: 🏗 Build unit tests
-        run: |
-          dotnet build ${{env.PROJECT_TESTS_FILE_PATH}} --nologo `
-            --configuration Release `
-            --framework net9.0-windows10.0.20348.0 `
-            --runtime win-x64
-          dotnet build ${{env.PROJECT_TESTS_FILE_PATH}} --nologo `
-            --configuration Debug `
-            --framework net9.0-windows10.0.20348.0 `
-            --runtime win-x64
-
       # https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
-      # verbosity detailed, minimal
+      # https://learn.microsoft.com/en-us/dotnet/core/testing/microsoft-testing-platform-intro
       - name: 💯 Run unit tests
         run: |
-          dotnet test ${{env.PROJECT_TESTS_FILE_PATH}} --nologo `
-            --verbosity normal --logger:"console;verbosity=normal" `
-            --runtime win-x64 `
-            --configuration Release
-          dotnet test ${{env.PROJECT_TESTS_FILE_PATH}} --nologo `
-            --verbosity normal --logger:"console;verbosity=normal" `
-            --runtime win-x64 `
+          dotnet test `
+            --project ${{env.PROJECT_TESTS_FILE_PATH}} `
+            --no-ansi `
+            --no-progress `
+            --output Detailed `
             --configuration Debug
+          dotnet test `
+            --project ${{env.PROJECT_TESTS_FILE_PATH}} `
+            --no-ansi `
+            --no-progress `
+            --output Detailed `
+            --configuration Release
 
+      #
+      # NUGET PACKAGE
+      #
       # Ensure pack works even if we do not release.
       - name: 🧰 Pack NuGet packages to `release` folder
         run: |
-          # pack => .\artifacts\package\release\LicenseManager_12noon.Client.1.2.3.4.nupkg
+          # pack => .\artifacts\package\release\MathExpressions.12noon.1.2.3.4.nupkg
           # No need to use --include-symbols because it is specified in the project file.
           dotnet pack ${{env.PROJECT_WINDOWS_FILE_PATH}} `
-            --nologo --no-restore --no-build `
+            --no-build `
             --configuration ${{env.BUILD_CONFIGURATION}} `
-            --runtime win-x64 --output ./release/
+            --output ./release/
           dotnet pack ${{env.PROJECT_MAUI_FILE_PATH}} `
-            --nologo --no-restore --no-build `
+            --no-build `
             --configuration ${{env.BUILD_CONFIGURATION}} `
-            --runtime win-x64 --output ./release/
+            --output ./release/
 
       - name: 🗒️ List folder
         run: |
           Get-ChildItem
           Get-ChildItem .\release\
 
-      - name: 🔍 Extract and inspect NuGet package
+      # MathExpressions.MAUI.A.B.C.nupkg
+      # MathExpressions.Windows.A.B.C.nupkg
+      - name: 🔍 Extract and inspect NuGet packages
+        shell: pwsh
         run: |
           # Use PowerShell syntax for variable handling
-          #$packageName = "MathExpressions.MAUI.$env:VERSION.nupkg"
-          $packageItem = Get-ChildItem ./release/*.nupkg | Select-Object -First 1
-          Write-Host "Package name: $packageItem.Name"
-          dir ./release/
-          mkdir temp
-          Copy-Item $packageItem.FullName ./temp/
-          cd temp
-          dir
-          Rename-Item -Path $packageItem.Name -NewName ($packageItem.Name + '.zip')
-          dir
-          Write-Host "unzip $packageName.zip"
-          Expand-Archive -Path ($packageItem.Name + '.zip') -DestinationPath ./
-          dir
-          Get-Content *.nuspec
-          cd ..
+          #$packageName = "MathExpressions.*.$env:VERSION.nupkg"
+          $packageItem = Get-ChildItem ./release/*.nupkg | ForEach-Object {
+            $packageItem = $_
+
+            Write-Host "Package name: $($packageItem.Name)"
+            dir ./release/
+  
+            # Create a temp folder per package to avoid collisions
+            $tempDir = Join-Path -Path (Get-Location) -ChildPath ("temp_" + [IO.Path]::GetFileNameWithoutExtension($packageItem.Name))
+            mkdir $tempDir -Force | Out-Null  
+
+            Copy-Item $packageItem.FullName $tempDir/
+            Set-Location $tempDir
+
+            dir
+
+            $zipName = "$($packageItem.Name).zip"
+            Rename-Item -Path $packageItem.Name -NewName $zipName
+
+            dir
+            Write-Host "unzip $zipName"
+            Expand-Archive -Path $zipName -DestinationPath ./ -Force
+            dir
+            Get-Content *.nuspec
+
+            Set-Location ..
+          }
 
       - name: 📂 Copy extra files to release folder
         run: |
@@ -250,7 +250,7 @@ jobs:
   # | Release (main)  | Yes   | Yes              | Production   | Yes           | Tag on main         |
   #
   release:
-    name: 🚀 Create GitHub package
+    name: 🚀 Create GitHub packages
     needs: build
     if: ${{ startsWith(github.ref, 'refs/tags/v') }}
     runs-on: ubuntu-latest
@@ -272,9 +272,10 @@ jobs:
       - name: 🗒️ List folder
         run: ls -la ./release/
 
-      - name: 🧩 Publish NuGet package to GitHub Packages
+      - name: 🧩 Publish NuGet packages to GitHub Packages
         run: |
-          dotnet nuget push ./release/*.nupkg \
+          dotnet nuget push \
+            ./release/*.nupkg \
             --source "https://nuget.pkg.github.com/${{ github.repository_owner }}/index.json" \
             --api-key ${{ secrets.GITHUB_TOKEN }} \
             --skip-duplicate

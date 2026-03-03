@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 
@@ -123,7 +123,7 @@ public class FunctionsTest
 		Assert.AreEqual(Math.Round(-12.5, 2), eval.Evaluate("Round(-12.5, 2)").GetValueOrDefault());
 		Assert.AreEqual(Math.Round(-12.6, 2), eval.Evaluate("ROUND(-12.6, 2)").GetValueOrDefault());
 
-		Assert.ThrowsException<ArgumentOutOfRangeException>(() => eval.Evaluate("Round(5.4, -12)"));
+		Assert.Throws<ArgumentOutOfRangeException>(() => eval.Evaluate("Round(5.4, -12)"));
 
 		Assert.AreEqual(Math.Round(189.12341324514355466, 4 + 3), eval.Evaluate("round(189.12341324514355466, 4 + 3)").GetValueOrDefault());
 
@@ -189,7 +189,7 @@ public class FunctionsTest
 	[TestMethod]
 	public void TestRandom1()
 	{
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("Random1(666)"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("Random1(666)"));
 
 		double max = 1;
 		double? r1 = eval.Evaluate("Random1()");
@@ -216,7 +216,7 @@ public class FunctionsTest
 	[TestMethod]
 	public void TestRandomN()
 	{
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("RandomN()"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("RandomN()"));
 
 		int max = 100;
 		double? r1 = eval.Evaluate($"RandomN({max})");
@@ -345,8 +345,8 @@ public class FunctionsTest
 	[TestMethod]
 	public void TestAtan2()
 	{
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("atan2(5)"));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("Atan2(0.5)"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("atan2(5)"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("Atan2(0.5)"));
 
 		Assert.AreEqual(Math.Atan2((double)(decimal)Math.PI, 99), eval.Evaluate("atan2(pi, 99)").GetValueOrDefault());
 

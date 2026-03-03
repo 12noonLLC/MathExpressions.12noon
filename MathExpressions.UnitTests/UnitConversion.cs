@@ -1,4 +1,4 @@
-﻿using MathExpressions.UnitConversion;
+using MathExpressions.UnitConversion;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MathExpressions.UnitTests;

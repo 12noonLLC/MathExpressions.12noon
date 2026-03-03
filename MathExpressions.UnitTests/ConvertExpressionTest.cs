@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace MathExpressions.UnitTests;
 
@@ -33,8 +33,8 @@ public class ConvertExpressionTest
 	public void ConvertSyntax()
 	{
 		MathEvaluator eval = new();
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("6789[ft<-mi]"));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("6789[ft-mi]"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("6789[ft<-mi]"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("6789[ft-mi]"));
 	}
 
 	[TestMethod]

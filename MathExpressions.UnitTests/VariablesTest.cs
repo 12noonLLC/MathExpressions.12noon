@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 
@@ -7,6 +7,9 @@ namespace MathExpressions.UnitTests;
 [TestClass]
 public class VariablesTest
 {
+	public TestContext TestContext { get; private set; }
+
+
 	private readonly MathEvaluator eval = new();
 
 	[ClassInitialize]
@@ -45,15 +48,17 @@ public class VariablesTest
 		Assert.AreEqual(Math.E, eval.Variables["e"]);
 		Assert.AreEqual(0d, eval.Variables[MathEvaluator.AnswerVariable]);
 
-		Assert.ThrowsException<KeyNotFoundException>(() => eval.Variables["y"]);
-		Assert.ThrowsException<KeyNotFoundException>(() => eval.Variables["today"]);
+		Assert.Throws<KeyNotFoundException>(() => eval.Variables["y"]);
+		Assert.Throws<KeyNotFoundException>(() => eval.Variables["today"]);
 	}
 
 
 	[TestMethod]
 	public void TestAnswer()
 	{
+#pragma warning disable MSTEST0032 // Assertion condition is always true
 		Assert.AreEqual("answer", MathEvaluator.AnswerVariable);
+#pragma warning restore MSTEST0032 // Assertion condition is always true
 
 		Assert.AreEqual((3 + 4) * 2, eval.Evaluate("(3 + 4) * 2"));
 		Assert.AreEqual(eval.Answer, eval.Evaluate("(3 + 4) * 2"));
@@ -147,7 +152,7 @@ public class VariablesTest
 		var x2 = 22d;
 		Assert.AreEqual(x1, eval.Evaluate("x_1=11"));
 		Assert.AreEqual(x2, eval.Evaluate("x2_=22"));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("_x3=33"), "Variables must start with letter.");
+		Assert.Throws<ParseException>(() => eval.Evaluate("_x3=33"), "Variables must start with letter.");
 		var answer = x1 * x2;
 		Assert.AreEqual(answer, eval.Evaluate("x_1 * x2_"));
 		Assert.AreEqual(answer + x1 - x2, eval.Evaluate("answer+x_1 -x2_"));
@@ -157,15 +162,15 @@ public class VariablesTest
 	public void TestVariableNameError()
 	{
 		VariableDictionary dct = new(new MathEvaluator());
-		Assert.ThrowsException<ArgumentException>(() => dct.Add("bad-name", 1));
-		Assert.ThrowsException<ArgumentException>(() => dct["bad-name2"] = 2);
+		Assert.Throws<ArgumentException>(() => dct.Add("bad-name", 1));
+		Assert.Throws<ArgumentException>(() => dct["bad-name2"] = 2);
 	}
 
 	[TestMethod]
 	public void TestVariableNameConflicts()
 	{
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("sqrt=3"));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("x = sqrt+3"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("sqrt=3"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("x = sqrt+3"));
 
 		Assert.AreEqual(Math.Sqrt(49), eval.Evaluate("sqrt(49)"));
 		var s = Math.Sqrt(49);
@@ -177,11 +182,11 @@ public class VariablesTest
 	{
 		Assert.AreEqual(800d, eval.Evaluate("x = 800"));
 		Assert.IsNull(eval.Evaluate(" x  =  "));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("  x "));
+		Assert.Throws<ParseException>(() => eval.Evaluate("  x "));
 
 		Assert.AreEqual(588, eval.Evaluate("morevar = 588"));
 		Assert.IsNull(eval.Evaluate("morevar="));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("morevar"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("morevar"));
 	}
 
 	[TestMethod]

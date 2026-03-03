@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+	<RunConfiguration>
+		<!-- Path relative to directory that contains .runsettings file-->
+		<ResultsDirectory>..\..\..\..\VSIntermediate\MathExpressions.12noon\artifacts\TestResults</ResultsDirectory>
+	</RunConfiguration>
+</RunSettings>

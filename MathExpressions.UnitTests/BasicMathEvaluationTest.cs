@@ -1,4 +1,4 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace MathExpressions.UnitTests;
@@ -6,6 +6,8 @@ namespace MathExpressions.UnitTests;
 [TestClass]
 public class BasicMathEvaluationTest
 {
+	public TestContext TestContext { get; private set; }
+
 	private readonly MathEvaluator eval = new();
 
 	[ClassInitialize]
@@ -45,16 +47,16 @@ public class BasicMathEvaluationTest
 		Assert.AreEqual((double)(decimal)Math.PI, eval.Evaluate("pi  "));
 
 		// We cannot remove whitespace from the expression.
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("4 12 + 4"));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("s q r t(16)"));
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("p i"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("4 12 + 4"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("s q r t(16)"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("p i"));
 	}
 
 
 	[TestMethod]
 	public void TestCommaErrors()
 	{
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate(","));
+		Assert.Throws<ParseException>(() => eval.Evaluate(","));
 	}
 
 
@@ -143,46 +145,46 @@ public class BasicMathEvaluationTest
 		Assert.AreEqual(expected, result);
 	}
 
-	[TestMethod, ExpectedException(typeof(ParseException))]
+	[TestMethod]
 	public void TestMultiplicationAlternate()
 	{
 		double expected = 128 * 45;
-		Assert.AreEqual(expected, eval.Evaluate("128 x 45"));
-		Assert.AreEqual(expected, eval.Evaluate("128x45"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("128 x 45"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("128x45"));
 
 		expected = 45 * 128;
-		Assert.AreEqual(expected, eval.Evaluate("45 x 128"));
-		Assert.AreEqual(expected, eval.Evaluate("45x128"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45 x 128"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45x128"));
 
 		expected = 10 + (45 * 128);
-		Assert.AreEqual(expected, eval.Evaluate("10 + 45 x 128"));
-		Assert.AreEqual(expected, eval.Evaluate("10+45x128"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("10 + 45 x 128"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("10+45x128"));
 
 		expected = (45 * 128) + 10;
-		Assert.AreEqual(expected, eval.Evaluate("45 x 128 + 10"));
-		Assert.AreEqual(expected, eval.Evaluate("45x128+10"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45 x 128 + 10"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45x128+10"));
 
 		expected = 45 * Math.Sqrt(25);
-		Assert.AreEqual(expected, eval.Evaluate("45 x sqrt(25)"));
-		Assert.AreEqual(expected, eval.Evaluate("45x sqrt(25)"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45 x sqrt(25)"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45x sqrt(25)"));
 
 		expected = (45 * 128);
-		Assert.AreEqual(expected, eval.Evaluate("(45 x 128)"));
-		Assert.AreEqual(expected, eval.Evaluate("(45x128)"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("(45 x 128)"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("(45x128)"));
 
 		expected = 45 * (128 + 14);
-		Assert.AreEqual(expected, eval.Evaluate("45 x (128 + 14)"));
-		Assert.AreEqual(expected, eval.Evaluate("45x(128+14)"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45 x (128 + 14)"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("45x(128+14)"));
 
 		expected = (45 * (128 + 14));
-		Assert.AreEqual(expected, eval.Evaluate("(45 x (128 + 14))"));
-		Assert.AreEqual(expected, eval.Evaluate("(45x(128+14))"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("(45 x (128 + 14))"));
+		Assert.ThrowsExactly<ParseException>(() => eval.Evaluate("(45x(128+14))"));
 	}
 
 	[TestMethod]
 	public void TestMultiplicationX()
 	{
-		Assert.ThrowsException<ParseException>(() => eval.Evaluate("(45xor(26))"));
+		Assert.Throws<ParseException>(() => eval.Evaluate("(45xor(26))"));
 	}
 
 	[TestMethod]
@@ -377,10 +379,10 @@ public class BasicMathEvaluationTest
 	public void TestPower()
 	{
 		// This quantity is too large to cast to a Decimal.
-		Assert.ThrowsException<OverflowException>(() => eval.Evaluate("128 ^ 45"));
+		Assert.Throws<OverflowException>(() => eval.Evaluate("128 ^ 45"));
 
-		Assert.ThrowsException<OverflowException>(() => eval.Evaluate("45^18"));
-		Assert.ThrowsException<OverflowException>(() => eval.Evaluate("(45 ^ 18)"));
+		Assert.Throws<OverflowException>(() => eval.Evaluate("45^18"));
+		Assert.Throws<OverflowException>(() => eval.Evaluate("(45 ^ 18)"));
 
 		double expected = Math.Pow(45, 16);
 		double result = eval.Evaluate("45 ^ 16").GetValueOrDefault();
