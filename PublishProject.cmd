@@ -14,7 +14,6 @@ if NOT EXIST "MathExpressions.slnx" (
 
 echo.
 echo Note: update the version in:
-echo - Package.appxmanifest
 echo - MathExpressions.MAUI.csproj
 echo - MathExpressions.Windows.csproj
 echo.

@@ -16,8 +16,8 @@
     <TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.26100.0</TargetPlatformMinVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'tizen'">6.5</SupportedOSPlatformVersion>
     <Title>MathExpressions for MAUI Android</Title>
-    <Version>3.20.3.0</Version>
-    <AssemblyVersion>3.20.3.0</AssemblyVersion>
+    <Version>3.21.0.0</Version>
+    <AssemblyVersion>3.21.0.0</AssemblyVersion>
     <Authors>12noon LLC</Authors>
     <Copyright>(c) 2020-2026 12noon LLC</Copyright>
     <PackageProjectUrl>https://12noon.com</PackageProjectUrl>
