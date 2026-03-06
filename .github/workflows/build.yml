@@ -291,85 +291,85 @@ jobs:
 #          short_sha=$(git rev-parse --short HEAD)
 #          echo "short_sha=$short_sha" >> $GITHUB_OUTPUT
 #          echo "short_sha=$short_sha"
-#
-#      # If the workflow was inititated by pushing a tag,
-#      # we need to know if it is on the 'main' branch.
-#      - name: 🧪 Check if tag is on main
-#        id: tag_on_main
-#        run: |
-#          # -n : non-empty, -z : unset or empty
-#          BASE_BRANCH=$(git branch -r --contains $GITHUB_SHA | grep 'main' || true)
-#          if [[ -n "$BASE_BRANCH" ]]; then
-#            echo "on_main=true" >> $GITHUB_OUTPUT
-#          else
-#            echo "on_main=false" >> $GITHUB_OUTPUT
-#          fi
-#          echo "on_main=$on_main"
-#
-#      # Determine the version/tag for the release
-#      # https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables
-#      - name: 🏷️ Get version tag and release name
-#        id: get_version
-#        run: |
-#          # Use the version tag
-#          tag="${GITHUB_REF##*/}"   # e.g., refs/tags/v1.2.3 -> v1.2.3
-#          name="${tag#v}"           # Remove 'v' prefix if present, e.g., v1.2.3 -> 1.2.3
-#          # If not on `main` branch, append short SHA for test releases
-#          if [[ "${{ steps.tag_on_main.outputs.on_main }}" != "true" ]]; then
-#            name="${name}-${{ steps.tag_sha.outputs.short_sha }}"
-#          fi
-#          echo "tag=$tag" >> $GITHUB_OUTPUT
-#          echo "name=$name" >> $GITHUB_OUTPUT
-#          echo "tag=$tag"
-#          echo "name=$name"
-#
-#      # Create a release only if one does not already exist for this name.
-#      # (We check the name instead of the tag because we
-#      # might have multiple test releases for a version.)
-#      # https://github.com/marketplace/actions/github-script
-#      - name: 🧪 Check if release exists with the same name
-#        id: check_release
-#        uses: actions/github-script@v7
-#        with:
-#          script: |
-#            const name = '${{ steps.get_version.outputs.name }}';
-#            const { data: releases } = await github.rest.repos.listReleases({
-#              owner: context.repo.owner,
-#              repo: context.repo.repo,
-#            });
-#            const exists = releases.some(r => r.name === name);
-#            return exists;
-#          result-encoding: string
-#
-#      # https://github.com/marketplace/actions/gh-release
-#      - name: 🚀 Create GitHub Release
-#        if: ${{ steps.check_release.outputs.result != 'true' }}
-#        uses: softprops/action-gh-release@v2
-#        with:
-#          tag_name: ${{ steps.get_version.outputs.tag }}
-#          name: ${{ steps.get_version.outputs.name }}
-#          # tag on 'main' => latest
-#          # else => draft
-#          make_latest: ${{ startsWith(github.ref, 'refs/tags/v') && (steps.tag_on_main.outputs.on_main == 'true') }}
-#          draft:     ${{ !(startsWith(github.ref, 'refs/tags/v') && (steps.tag_on_main.outputs.on_main == 'true')) }}
-#          #draft: ${{ (github.ref != 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/') && !startsWith(github.ref, 'refs/tags/v')) }}
-#          # There is also a `prerelease` property. (Example: if manual start, which implies no v tag)
-#          #prerelease: ${{ github.event_name == 'workflow_dispatch' }}
-#          files: ${{env.ARTIFACT_NAME}}.zip
-#          generate_release_notes: true
-#          append_body: true
-#          body: |
-#            <a href="https://apps.microsoft.com/detail/9WZDNCRDLVCN?referrer=appbadge&mode=direct">
-#              <img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
-#            </a>
-#        env:
-#          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#
-#      - name: 🗒️ Output release info
-#        if: ${{ steps.check_release.outputs.result != 'true' }}
-#        run: |
-#          echo "Release created for tag: ${{ steps.get_version.outputs.tag }}"
-#          echo "Release name: ${{ steps.get_version.outputs.name }}"
+
+      # If the workflow was inititated by pushing a tag,
+      # we need to know if it is on the 'main' branch.
+      - name: 🧪 Check if tag is on main
+        id: tag_on_main
+        run: |
+          # -n : non-empty, -z : unset or empty
+          BASE_BRANCH=$(git branch -r --contains $GITHUB_SHA | grep 'main' || true)
+          if [[ -n "$BASE_BRANCH" ]]; then
+            echo "on_main=true" >> $GITHUB_OUTPUT
+          else
+            echo "on_main=false" >> $GITHUB_OUTPUT
+          fi
+          echo "on_main=$on_main"
+
+      # Determine the version/tag for the release
+      # https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables
+      - name: 🏷️ Get version tag and release name
+        id: get_version
+        run: |
+          # Use the version tag
+          tag="${GITHUB_REF##*/}"   # e.g., refs/tags/v1.2.3 -> v1.2.3
+          name="${tag#v}"           # Remove 'v' prefix if present, e.g., v1.2.3 -> 1.2.3
+          # If not on `main` branch, append short SHA for test releases
+          if [[ "${{ steps.tag_on_main.outputs.on_main }}" != "true" ]]; then
+            name="${name}-${{ steps.tag_sha.outputs.short_sha }}"
+          fi
+          echo "tag=$tag" >> $GITHUB_OUTPUT
+          echo "name=$name" >> $GITHUB_OUTPUT
+          echo "tag=$tag"
+          echo "name=$name"
+
+      # Create a release only if one does not already exist for this name.
+      # (We check the name instead of the tag because we
+      # might have multiple test releases for a version.)
+      # https://github.com/marketplace/actions/github-script
+      - name: 🧪 Check if release exists with the same name
+        id: check_release
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const name = '${{ steps.get_version.outputs.name }}';
+            const { data: releases } = await github.rest.repos.listReleases({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+            });
+            const exists = releases.some(r => r.name === name);
+            return exists;
+          result-encoding: string
+
+      # https://github.com/marketplace/actions/gh-release
+      - name: 🚀 Create GitHub Release
+        if: ${{ steps.check_release.outputs.result != 'true' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.get_version.outputs.tag }}
+          name: ${{ steps.get_version.outputs.name }}
+          # tag on 'main' => latest
+          # else => draft
+          make_latest: ${{ startsWith(github.ref, 'refs/tags/v') && (steps.tag_on_main.outputs.on_main == 'true') }}
+          draft:     ${{ !(startsWith(github.ref, 'refs/tags/v') && (steps.tag_on_main.outputs.on_main == 'true')) }}
+          #draft: ${{ (github.ref != 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/') && !startsWith(github.ref, 'refs/tags/v')) }}
+          # There is also a `prerelease` property. (Example: if manual start, which implies no v tag)
+          #prerelease: ${{ github.event_name == 'workflow_dispatch' }}
+          files: ${{env.ARTIFACT_NAME}}.zip
+          generate_release_notes: true
+          append_body: true
+          body: |
+            <a href="https://apps.microsoft.com/detail/9WZDNCRDLVCN?referrer=appbadge&mode=direct">
+              <img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
+            </a>
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🗒️ Output release info
+        if: ${{ steps.check_release.outputs.result != 'true' }}
+        run: |
+          echo "Release created for tag: ${{ steps.get_version.outputs.tag }}"
+          echo "Release name: ${{ steps.get_version.outputs.name }}"
 
   #
   # https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-when-your-workflow-runs/using-conditions-to-control-job-execution
