@@ -5,17 +5,16 @@
   </Configurations>
   <Folder Name="/Solution Items/">
     <File Path=".github/workflows/build.yml" />
+    <File Path=".runsettings" />
     <File Path="Directory.Build.props" />
     <File Path="global.json" />
     <File Path="LICENSE" />
+    <File Path="PublishProject.cmd" />
     <File Path="README.md" />
   </Folder>
-  <Project Path="MathExpressions.MAUI/MathExpressions.MAUI.csproj" />
+  <Project Path="MathExpressions/MathExpressions.csproj" />
   <Project Path="MathExpressions.UnitTests/MathExpressions.UnitTests.csproj">
     <Platform Solution="*|x64" Project="x64" />
     <Build Solution="Release|Any CPU" Project="false" />
-  </Project>
-  <Project Path="MathExpressions.Windows/MathExpressions.Windows.csproj">
-    <Platform Solution="*|x64" Project="x64" />
   </Project>
 </Solution>

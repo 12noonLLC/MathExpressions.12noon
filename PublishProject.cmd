@@ -12,10 +12,16 @@ if NOT EXIST "MathExpressions.slnx" (
   goto :EOF
 )
 
+:: Prompt for version number if not passed as an argument
+if "%~1" == "" (
+	echo.
+	echo Usage: %~nx0 ^<version^>
+	exit /b 1
+)
+
 echo.
 echo Note: update the version in:
-echo - MathExpressions.MAUI.csproj
-echo - MathExpressions.Windows.csproj
+echo - MathExpressions.csproj
 echo.
 echo Exit Visual Studio to avoid directory locks, such as PackageLayout, etc.
 echo.
@@ -28,16 +34,9 @@ if errorlevel 2 (
 
 setlocal
 
-:: Prompt for version number if not passed as an argument
-if "%~1" == "" (
-	echo.
-	echo Usage: %~nx0 ^<version^>
-	exit /b 1
-)
-
 set VERSION=%~1
 
-set BuildOutputRoot=C:\VSIntermediate\MathExpressions.12noon
+set BuildOutputRoot=C:\VSIntermediate\MathExpressions
 
 set MSBUILD_PATH=C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\amd64
 
@@ -81,15 +80,8 @@ if %ERRORLEVEL% neq 0 exit /b 1
 ::
 
 dotnet pack ^
-	MathExpressions.Windows\MathExpressions.Windows.csproj ^
-	-p:Version=%VERSION% ^
-	--no-build ^
-	--configuration Release ^
-	--output "%BuildOutputRoot%\publish"
-
-dotnet pack ^
-	MathExpressions.MAUI\MathExpressions.MAUI.csproj ^
-	-p:Version=%VERSION% ^
+	MathExpressions\MathExpressions.csproj ^
+	--version %VERSION% ^
 	--no-build ^
 	--configuration Release ^
 	--output "%BuildOutputRoot%\publish"

@@ -15,7 +15,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-    <ProjectReference Include="..\MathExpressions.Windows\MathExpressions.Windows.csproj" />
+    <ProjectReference Include="..\MathExpressions\MathExpressions.csproj" />
   </ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Update="Microsoft.Testing.Extensions.CodeCoverage" Version="18.5.2" />
+	</ItemGroup>
 
 </Project>

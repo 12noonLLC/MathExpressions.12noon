@@ -3,11 +3,11 @@
 
 	<PropertyGroup>
 		<!--
-		<ArtifactsPath>C:\VSIntermediate\MathExpressions.12noon\artifacts\</ArtifactsPath>
+		<ArtifactsPath>C:\VSIntermediate\MathExpressions\artifacts\</ArtifactsPath>
 		-->
 
-		<BaseOutputPath>C:\VSIntermediate\MathExpressions.12noon\artifacts\bin\$(MSBuildProjectName)\</BaseOutputPath>
-		<BaseIntermediateOutputPath>C:\VSIntermediate\MathExpressions.12noon\artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
+		<BaseOutputPath>C:\VSIntermediate\MathExpressions\artifacts\bin\$(MSBuildProjectName)\</BaseOutputPath>
+		<BaseIntermediateOutputPath>C:\VSIntermediate\MathExpressions\artifacts\obj\$(MSBuildProjectName)\</BaseIntermediateOutputPath>
 	</PropertyGroup>
 	
 </Project>

@@ -1,12 +1,12 @@
-# .github/workflows/build.yml
-# Build and Release workflow for MathExpressions MAUI and Windows
+﻿# .github/workflows/build.yml
+# Build and Release workflow for MathExpressions
 #
 # - Trigger on push to any branch, on version tags (e.g., v1.2.3), or on manual dispatch.
 # - If a version tag (e.g., v1.2.3) is pushed, create a GitHub release for that version if not already present.
 # - If the version tag is not on the 'main' branch, mark the GitHub release as 'draft'.
 # - Manual dispatch builds the project but does not create a GitHub release.
 
-name: Build Windows and MAUI
+name: Build MathExpressions
 
 on:
   push:
@@ -34,16 +34,15 @@ permissions:
 
 env:
   # Path to the project files relative to the root of the project.
-  PROJECT_WINDOWS_FILE_PATH: MathExpressions.Windows\MathExpressions.Windows.csproj
-  PROJECT_MAUI_FILE_PATH:    MathExpressions.MAUI\MathExpressions.MAUI.csproj
-  PROJECT_TESTS_FILE_PATH:   MathExpressions.UnitTests\MathExpressions.UnitTests.csproj
+  PROJECT_LIBRARY_FILE_PATH:  MathExpressions\MathExpressions.csproj
+  PROJECT_TESTS_FILE_PATH:    MathExpressions.UnitTests\MathExpressions.UnitTests.csproj
 
   # Configuration type to build.
   # You can convert this to a build matrix if you need coverage of multiple configuration types.
   # https://docs.github.com/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
   BUILD_CONFIGURATION: Release
 
-#  ARTIFACT_NAME: MathExpressions
+  ARTIFACT_NAME: MathExpressions
   ARTIFACT_PACKAGE: package-mathexpressions
 
 concurrency:
@@ -112,12 +111,9 @@ jobs:
       - name: 🛠️ Set up .NET
         uses: actions/setup-dotnet@v5
         with:
-          dotnet-version: '10.0.x'
-          dotnet-quality: ga
-
-      - name: Install MAUI workload
-        run: dotnet workload install maui
-        #--ignore-failed-sources
+          #dotnet-version: '10.0.x'
+          #dotnet-quality: ga
+          global-json-file: global.json
 
       # Work around https://github.com/actions/setup-dotnet/issues/155
       - name: 🧹 Clean solution and NuGet
@@ -125,11 +121,11 @@ jobs:
           dotnet clean --configuration ${{env.BUILD_CONFIGURATION}} --runtime win-x64
           dotnet nuget locals all --clear
 
-      - name: 🧩 Restore NuGet packages
+      - name: 📦 Restore NuGet packages
         run: |
           dotnet restore
 
-      - name: 🏗 Build application Windows, MAUI Android, and MAUI Windows
+      - name: 🏗 Build MathExpressions library
         run: |
           dotnet build `
             --configuration ${{env.BUILD_CONFIGURATION}} `
@@ -144,13 +140,13 @@ jobs:
             --no-ansi `
             --no-progress `
             --output Detailed `
-            --configuration Debug
+            --configuration Release
           dotnet test `
             --project ${{env.PROJECT_TESTS_FILE_PATH}} `
             --no-ansi `
             --no-progress `
             --output Detailed `
-            --configuration Release
+            --configuration Debug
 
       #
       # NUGET PACKAGE
@@ -158,13 +154,9 @@ jobs:
       # Ensure pack works even if we do not release.
       - name: 🧰 Pack NuGet packages to `release` folder
         run: |
-          # pack => .\artifacts\package\release\MathExpressions.12noon.1.2.3.4.nupkg
+          # pack => .\artifacts\package\release\MathExpressions.1.2.3.4.nupkg
           # No need to use --include-symbols because it is specified in the project file.
-          dotnet pack ${{env.PROJECT_WINDOWS_FILE_PATH}} `
-            --no-build `
-            --configuration ${{env.BUILD_CONFIGURATION}} `
-            --output ./release/
-          dotnet pack ${{env.PROJECT_MAUI_FILE_PATH}} `
+          dotnet pack ${{env.PROJECT_LIBRARY_FILE_PATH}} `
             --no-build `
             --configuration ${{env.BUILD_CONFIGURATION}} `
             --output ./release/
@@ -174,8 +166,7 @@ jobs:
           Get-ChildItem
           Get-ChildItem .\release\
 
-      # MathExpressions.MAUI.A.B.C.nupkg
-      # MathExpressions.Windows.A.B.C.nupkg
+      # MathExpressions.A.B.C.nupkg
       - name: 🔍 Extract and inspect NuGet packages
         shell: pwsh
         run: |
@@ -210,13 +201,14 @@ jobs:
 
       - name: 📂 Copy extra files to release folder
         run: |
+          Copy-Item -Path README.md -Destination ./release/
           Copy-Item -Path LICENSE -Destination ./release/
 
       # Upload release artifact to share with next job
       # https://docs.github.com/en/actions/guides/storing-workflow-data-as-artifacts#about-workflow-artifacts
       # https://github.com/marketplace/actions/upload-a-build-artifact
       - name: 📤 Upload deployment folder as a build artifact
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v6
         with:
           name: ${{env.ARTIFACT_PACKAGE}}
           path: ./release/
@@ -261,10 +253,18 @@ jobs:
         with:
           fetch-depth: 0
 
+      # Required for the 'dotnet nuget' command
+      - name: 🛠️ Set up .NET
+        uses: actions/setup-dotnet@v5
+        with:
+          #dotnet-version: '10.0.x'
+          #dotnet-quality: ga
+          global-json-file: global.json
+
       # Download publish artifact from previous job
       # https://github.com/marketplace/actions/download-a-build-artifact
       - name: 📥 Download deployment folder as a build artifact
-        uses: actions/download-artifact@v8
+        uses: actions/download-artifact@v7
         with:
           name: ${{env.ARTIFACT_PACKAGE}}
           path: ./release/
@@ -280,17 +280,17 @@ jobs:
             --api-key ${{ secrets.GITHUB_TOKEN }} \
             --skip-duplicate
 
-#      - name: 📦 Zip Release folder
-#        working-directory: ./release
-#        run: |
-#          zip ../${{env.ARTIFACT_NAME}}.zip *
-#
-#      - name: 🏷️ Get short SHA of the tag
-#        id: tag_sha
-#        run: |
-#          short_sha=$(git rev-parse --short HEAD)
-#          echo "short_sha=$short_sha" >> $GITHUB_OUTPUT
-#          echo "short_sha=$short_sha"
+      - name: 📦 Zip Release folder
+        working-directory: ./release
+        run: |
+          zip ../${{env.ARTIFACT_NAME}}.zip *
+
+      - name: 🏷️ Get short SHA of the tag
+        id: tag_sha
+        run: |
+          short_sha=$(git rev-parse --short HEAD)
+          echo "short_sha=$short_sha" >> $GITHUB_OUTPUT
+          echo "short_sha=$short_sha"
 
       # If the workflow was inititated by pushing a tag,
       # we need to know if it is on the 'main' branch.
@@ -301,10 +301,11 @@ jobs:
           BASE_BRANCH=$(git branch -r --contains $GITHUB_SHA | grep 'main' || true)
           if [[ -n "$BASE_BRANCH" ]]; then
             echo "on_main=true" >> $GITHUB_OUTPUT
+            echo "on_main=true"
           else
             echo "on_main=false" >> $GITHUB_OUTPUT
+            echo "on_main=false"
           fi
-          echo "on_main=$on_main"
 
       # Determine the version/tag for the release
       # https://docs.github.com/en/actions/how-tos/writing-workflows/choosing-what-your-workflow-does/store-information-in-variables
@@ -351,7 +352,7 @@ jobs:
           # tag on 'main' => latest
           # else => draft
           make_latest: ${{ startsWith(github.ref, 'refs/tags/v') && (steps.tag_on_main.outputs.on_main == 'true') }}
-          draft:     ${{ !(startsWith(github.ref, 'refs/tags/v') && (steps.tag_on_main.outputs.on_main == 'true')) }}
+          draft:      ${{ !(startsWith(github.ref, 'refs/tags/v') && (steps.tag_on_main.outputs.on_main == 'true')) }}
           #draft: ${{ (github.ref != 'refs/heads/main') || (startsWith(github.ref, 'refs/tags/') && !startsWith(github.ref, 'refs/tags/v')) }}
           # There is also a `prerelease` property. (Example: if manual start, which implies no v tag)
           #prerelease: ${{ github.event_name == 'workflow_dispatch' }}

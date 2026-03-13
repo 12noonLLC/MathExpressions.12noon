@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RunSettings>
 	<RunConfiguration>
+
+		<!--
+			dotnet test (dash)(dash)results-directory "D:\MyResults"
+			(command-line switch takes an absolute path and overrides the runsettings value)
+		-->
 		<!-- Path relative to directory that contains .runsettings file-->
-		<ResultsDirectory>..\..\..\..\VSIntermediate\MathExpressions.12noon\artifacts\TestResults</ResultsDirectory>
+		<ResultsDirectory>..\..\..\..\VSIntermediate\MathExpressions\artifacts\TestResults</ResultsDirectory>
+
 	</RunConfiguration>
 </RunSettings>

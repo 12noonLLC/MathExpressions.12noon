@@ -1,10 +1,10 @@
 ﻿# MathExpressions by [12noon LLC](https://12noon.com)
 
-[![](https://github.com/12noonLLC/MathExpressions.12noon/actions/workflows/build.yml/badge.svg)](https://github.com/12noonLLC/MathExpressions.12noon/actions/workflows/build.yml)
+[![](https://github.com/12noonLLC/MathExpressions/actions/workflows/build.yml/badge.svg)](https://github.com/12noonLLC/MathExpressions/actions/workflows/build.yml)
 
-[![](https://img.shields.io/github/v/release/12noonLLC/MathExpressions.12noon.svg?label=latest%20release&color=007edf)](https://github.com/12noonLLC/MathExpressions.12noon/releases/latest)
+[![](https://img.shields.io/github/v/release/12noonLLC/MathExpressions.svg?label=latest%20release&color=007edf)](https://github.com/12noonLLC/MathExpressions/releases/latest)
 
-[![](https://img.shields.io/github/last-commit/12noonLLC/MathExpressions.12noon)](https://github.com/12noonLLC/MathExpressions.12noon)
+[![](https://img.shields.io/github/last-commit/12noonLLC/MathExpressions)](https://github.com/12noonLLC/MathExpressions)
 
 A library that evaluates math expressions. This is used by the Calculate X applications from 12noon LLC.
 
